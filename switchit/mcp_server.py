@@ -239,6 +239,7 @@ def _run_cli_tool(tool_name: str, arguments: dict) -> str:
                 "import": cli.cmd_import,
                 "map": cli.cmd_map,
                 "cases": cli.cmd_cases,
+                "profile": cli.cmd_profile,
                 "replay": cli.cmd_replay,
                 "report": cli.cmd_report,
                 "run": cli.cmd_run,
@@ -255,7 +256,7 @@ def _run_cli_tool(tool_name: str, arguments: dict) -> str:
 def _tool_status(arguments: dict) -> str:
     from pathlib import Path
 
-    from . import core
+    from .storage import load_store
 
     state_dir = Path((arguments or {}).get("state_dir") or ".switchit")
     lines = [f"state_dir: {state_dir}"]
@@ -271,7 +272,7 @@ def _tool_status(arguments: dict) -> str:
         lines.append(f"{label}: {'present' if path.exists() else 'missing'} ({path})")
     store_path = state_dir / "store.json"
     if store_path.exists():
-        store = core.load_store(store_path)
+        store = load_store(store_path)
         totals = store["totals"]
         lines.append(f"traces: {totals['traces']}  calls: {totals['calls']}")
         for basis in ("recorded", "estimated", "unknown"):
@@ -329,6 +330,17 @@ TOOL_HANDLERS = {
 }
 
 
+from .workflow_mcp import definitions as workflow_definitions, call as call_workflow
+TOOLS.extend(workflow_definitions())
+from .control_mcp import definitions as control_definitions, call as call_control
+TOOLS.extend(control_definitions())
+TOOL_HANDLERS.update({tool["name"]: (lambda arguments, name=tool["name"]: call_control(name, arguments))
+                      for tool in control_definitions()})
+TOOL_NAMES = tuple(tool["name"] for tool in TOOLS)
+TOOL_HANDLERS.update({tool["name"]: (lambda arguments, name=tool["name"]: call_workflow(name, arguments))
+                      for tool in workflow_definitions()})
+
+
 def handle_message(message: dict) -> dict | None:
     """Dispatch one decoded JSON-RPC message. Returns a response dict, or None
     for notifications and malformed requests."""
@@ -349,7 +361,7 @@ def handle_message(message: dict) -> dict | None:
                 "serverInfo": {"name": "switchit", "version": __version__},
             },
         }
-    if method == "notifications/initialized" or method.startswith("notifications/"):
+    if isinstance(method, str) and method.startswith("notifications/"):
         return None
     if method == "ping":
         return {"jsonrpc": "2.0", "id": request_id, "result": {}}

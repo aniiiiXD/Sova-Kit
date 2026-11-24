@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#151813">
+  <title>SwitchUP — Improvements</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/switchup.js" defer></script>
+</head>
+<body class="switchup-page">
+  <a href="#workspace" class="skip">Skip to workspace</a>
+  <aside class="rail">
+    <a class="wordmark" href="/improvements" aria-label="SwitchUP home">Switch<span>UP</span></a>
+    <a class="rail-link" href="/">Workflow evidence <span aria-hidden="true">↗</span></a>
+    <div class="rail-title"><span>Improvement projects</span><span class="local-dot">Local</span></div>
+    <nav id="projects" class="project-list" aria-label="Improvement projects"></nav>
+    <div class="rail-bottom"><span class="connection-dot"></span><span id="up-connection">Connecting</span></div>
+  </aside>
+  <main id="workspace">
+    <header class="topbar">
+      <div class="breadcrumb"><span>SwitchUP</span><span>/</span><strong>Improvements</strong></div>
+      <button id="up-refresh" class="button secondary" type="button">Refresh</button>
+    </header>
+    <div class="up-content">
+      <p id="up-message" role="status" class="result-note" hidden></p>
+      <section id="up-empty" class="up-empty" hidden>
+        <h1>Connect your first model</h1>
+        <p>Register a model connection and reviewed outcome checks from the SwitchUP CLI.</p>
+        <pre>switchup improve init --help</pre>
+      </section>
+      <section id="up-project" hidden>
+        <div class="up-heading">
+          <div><p id="up-provider" class="up-provider"></p><h1 id="up-name"></h1></div>
+          <button id="up-rollback" class="button secondary" type="button" hidden>Roll back version</button>
+        </div>
+        <dl class="up-facts">
+          <div><dt>Active recipe</dt><dd id="up-recipe"></dd></div>
+          <div><dt>Generation</dt><dd id="up-generation"></dd></div>
+          <div><dt>Captured events</dt><dd id="up-events"></dd></div>
+          <div><dt>Replay cases</dt><dd id="up-cases"></dd></div>
+        </dl>
+        <div class="up-layout">
+          <section aria-labelledby="up-rounds-title">
+            <h2 id="up-rounds-title">Improvement rounds</h2>
+            <div id="up-rounds" class="up-rounds"></div>
+          </section>
+          <section id="up-round" aria-live="polite" aria-label="Selected improvement round" class="up-detail"></section>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

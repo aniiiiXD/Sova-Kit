@@ -1,0 +1,18 @@
+{
+  "format": "aegis-task",
+  "version": 1,
+  "source_origin": "synthetic-aegis-store",
+  "source_task_id": "task-demo",
+  "source_repository": "/synthetic/example",
+  "prompt": "Synthetic example: fix search and verify the result",
+  "context": {"goal": "Fix search", "constraints": "Keep existing API", "decisions": "", "attempts": "", "unfinished": "Review changes", "next_action": "Review"},
+  "profile": {"version": 1, "instructions": [], "workflows": []},
+  "messages": [
+    {"id": "message-1", "run_id": "run-demo", "agent": "codex", "type": "user.message", "content": "Fix search", "timestamp": 1794280000, "sequence": 1},
+    {"id": "message-2", "run_id": "run-demo", "agent": "codex", "type": "assistant.message", "content": "Updated search; ready for review.", "timestamp": 1794280010, "sequence": 4}
+  ],
+  "findings": [{"id": "finding-demo", "file_path": "search.py", "start_line": 12, "end_line": null, "message": "Review empty queries", "status": "open", "repository_fingerprint": "synthetic-tree", "freshness": "historical"}],
+  "verifications": [{"id": "verification-demo", "command": ["python3", "-m", "unittest"], "exit_code": 0, "output": "Synthetic fixture: 3 tests passed", "repository_fingerprint": "synthetic-tree", "freshness": "historical"}],
+  "omissions": [],
+  "historical": true
+}

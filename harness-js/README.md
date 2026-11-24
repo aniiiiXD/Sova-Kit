@@ -1,53 +1,61 @@
-# SwitchIt! harness (JavaScript/TypeScript)
+# SwitchIt Node launchers
 
-The Node.js port of the SwitchIt! pipeline: import → profile → map → cases →
-replay → report. Zero runtime dependencies; Node 20+.
+This npm package forwards `switchit` and `switchit-mcp` to the **single Python SwitchIt engine**. It contains no separate parser, evaluator, replay implementation, or model-provider SDK.
 
-## Supported in v0.1 (JS)
+Requirements: Node.js 20+, Python 3.10+, and the Python `switchit-harness` package installed in the selected interpreter. There are no Node runtime dependencies. Installing this npm package does **not** install Python or the engine, and it makes no provider calls by itself.
 
-- **Import**: JSON/JSONL exports, Claude Code transcripts, Codex rollouts
-  (plain; `.zst` requires Python-side import for now)
-- **Canonical store** with secret redaction at import and token provenance
-  separation (recorded / estimated / unknown)
-- **Profile**: system prompts, tool inventory with schemas inferred from
-  observed calls, provider mix, error samples
-- **Workflow map**: TF-IDF cosine + tool-set overlap, uncertainty flags
-- **Replay cases** with default checks, **recorded tool fixtures**, chained
-  replay (`--chain`)
-- **Adapters**: recorded baseline, mock (mirror/echo/canned/degrade/fail),
-  live OpenAI-compatible (with grok/groq/deepseek/mistral/openrouter/together/
-  fireworks/ollama/vllm presets) and Anthropic — explicit `--remote` opt-in,
-  keys from the environment
-- **Report**: JSON + self-contained HTML, four verdicts, prioritized fixes
-- **MCP server**: `switchit-mcp`, six tools over stdio JSON-RPC
+## Upgrade to 0.2.0
 
-## Parity notes vs the Python harness (pip `switchit-harness`)
-
-Not yet in JS v0.1: OTLP/Langfuse/Parquet importers, Devin cloud importer,
-OpenCode/SQLite readers, workflow-edit preservation (`--keep-edits`), Bedrock
-adapter. These land in 0.2. For the full feature set today, use the Python
-package — the canonical store schema is identical.
-
-## Run
+**Breaking change from the 0.1.x npm package:** the independent TypeScript engine has been replaced by CLI/MCP launchers for the Python engine. Install or upgrade the Python engine before upgrading this package:
 
 ```sh
-switchit run --demo        # offline, no credentials
-switchit import --agents   # Claude Code + Codex local sessions
-switchit-mcp               # MCP server for any capable agent
+python3 -m pip install --upgrade "switchit-harness>=0.2.0"
+npm install --global switchit-harness@latest
+switchit --version
 ```
 
-Live providers:
+Use a Python virtual environment if your system Python requires it, and set `SWITCHIT_PYTHON` to its interpreter. Existing Python legacy replay commands remain available. New workflow contracts have their own schema and explicit review requirements; a legacy `workflows.json` grouping is not an executable workflow contract.
+
+## Select the engine
+
+Install the Python engine explicitly from a trusted release or a local checkout:
 
 ```sh
-export OPENAI_API_KEY=...  # or ANTHROPIC_API_KEY, XAI_API_KEY, ...
-switchit replay --target openai --remote
+python3 -m pip install /path/to/SwitchIt
+export SWITCHIT_PYTHON=/path/to/venv/bin/python
 ```
 
-## Build
+`SWITCHIT_PYTHON` is one executable name or path, not a shell command. Paths with spaces are supported. Without the variable, the bridge uses `python3` (`python` on Windows). The chosen interpreter must be able to import `switchit.cli` and `switchit.mcp_server`; activating a virtual environment also works.
+
+From this checkout, no npm installation or transpilation is needed:
 
 ```sh
-npm install && npm run build
+node bin/switchit.js --help
+node bin/switchit.js run --demo --state-dir /tmp/switchit-demo
+node bin/switchit-mcp.js
 ```
 
-Note: the repository path contains `SwitchIt!` — webpack-reserved `!` breaks
-some toolchains; the build uses plain `tsc`, which is unaffected.
+Once this package is installed, the equivalent commands are `switchit` and `switchit-mcp`. The Python and npm distributions expose the same command names; check your PATH if both are installed. Both routes ultimately execute Python.
+
+## Forwarding contract
+
+- CLI invokes `PYTHON -m switchit.cli` with the original argument array.
+- MCP invokes `PYTHON -m switchit.mcp_server` with inherited stdin/stdout/stderr. No banner or diagnostics are written to protocol stdout by the bridge.
+- The current directory and environment are preserved. Credentials remain an engine/runtime concern; the launcher does not read or persist them.
+- Exit codes are preserved. SIGINT/SIGTERM (and SIGHUP on POSIX) are forwarded to the Python child. POSIX signal termination is propagated back to the launcher's caller.
+- A silent, bounded import check runs before starting the selected entry point. Missing Python exits with code 127; an unavailable/incompatible engine exits with code 78 and an actionable stderr message.
+- Nothing is installed, upgraded, downloaded, published, or sent to providers automatically.
+
+All workflow, orchestration, and platform command availability comes from the installed Python engine. Use `switchit --help` and the relevant subcommand's `--help`; an older engine will not acquire newer capabilities merely by updating this launcher.
+
+## Development and packaging
+
+```sh
+npm run build  # syntax checks; there is no transpiled duplicate engine
+npm test       # argv/stdin/stdout/exit/signal forwarding and npm-pack checks
+npm pack --ignore-scripts
+```
+
+The packed artifact contains `bin/`, `lib/`, the synchronized companion skill, and this README. It excludes tests, old TypeScript engine sources, generated state, and personal traces.
+
+The repository's canonical companion skill is `skills/switchit/SKILL.md`; synchronize its copy here before a release. See the repository's `docs/distribution.md` for the three distinct distribution surfaces.

@@ -4,6 +4,12 @@ All notable changes to SwitchIt! are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [0.3.0] - 2026-11-25
+
+- Added SwitchUP Traces for capture, corrections, and session-level holdout suites.
+- Added the SwitchUP Improvement Loop for evidence-based instruction revisions with verified activation and rollback.
+- Documented direct Python integration and retained the CLI and MCP entry points.
+
 ## [0.1.5] - 2026-11-08
 
 ### Changed

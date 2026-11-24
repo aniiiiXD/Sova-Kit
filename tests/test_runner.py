@@ -263,7 +263,7 @@ class ChainedReplayTests(unittest.TestCase):
             },
         ])
         result = runner.replay_case(case, pv.RecordedBaselineAdapter(), target, chain=True)
-        self.assertEqual(result["verdict"], "pass")
+        self.assertEqual(result["verdict"], "uncertain")  # Legacy name-only fixtures do not prove fidelity.
         self.assertEqual(len(result["chain"]["turns"]), 2)
         self.assertEqual(result["chain"]["fixtures_used"], ["get_order_status"])
         self.assertEqual(result["chain"]["fixtures_missing"], [])

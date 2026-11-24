@@ -1,4 +1,8 @@
-# SwitchIt!
+# SwitchUP
+
+SwitchUP turns captured agent failures and corrections into reviewed updates to the instructions used by a connected model. It uses SwitchIt’s trace and replay engine to compare the active version and a candidate against the same cases, then activates the candidate with a rollback path when the evidence passes.
+
+The [SwitchUP guide](docs/switchup.md) covers model connections, trace capture, instruction proposals, stateful tool replay, and the local dashboard. Import the [Traces and Improvement Loop modules](docs/python-modules.md) directly from Python, or use `switchup improve` to operate a project and `switchup serve` to open its workspace.
 
 **Codex, Claude Code, Devin, Grok, and Muse remain the agents SwitchIt helps you move between: it captures workflows from their sessions, maps dependencies, and tests whether another agent can reproduce the required outcomes; the dynamic harness would adapt tools, context, and execution settings to make that transition work, wherever each agent’s APIs allow.**
 
@@ -10,18 +14,25 @@ The companion skill guides an agent through reviewing the evidence, resolving am
 
 First milestone — shipped in `switchit/`: JSON/JSONL, OTLP, Langfuse-style, and Parquet importers; one recorded baseline adapter; mock and live (OpenAI-compatible, Anthropic, Bedrock Converse) target adapters; and a complete offline replay loop with JSON + HTML reports on synthetic traces.
 
+For module ownership and the independently testable workflow APIs, see the [module map](docs/module-map.md) and [module contracts](docs/module-contracts.md). The new modules are connected through `workflow`, `sources`, `harness`, and `orchestrate` CLI commands and workflow MCP tools. The original replay commands remain available.
+
+Run the local evidence platform with `python3 -m switchit.cli serve`, then open http://127.0.0.1:8787. See the [workflow quickstart](docs/workflow-quickstart.md) for trace discovery, reviewed execution, exported skills, recipe comparison, and the development graph. The local platform verifies recorded fixtures; live vendor execution requires a separately configured runtime.
+
+Version 0.2.0 includes the modular workflow engine and the Python-backed npm launcher. See [release notes](docs/releases/0.2.0.md) for the npm migration and verification boundaries.
+
 ## Install
 
 ```sh
-pip install switchit-harness        # from PyPI, once published
-# or from this repository:
-pip install .
+# SwitchUP v0.3.0 from GitHub Releases
+python -m pip install https://github.com/aniiiiXD/SwitchIt/releases/download/v0.3.0/switchit_harness-0.3.0-py3-none-any.whl
+# Or from a checkout of this repository
+python -m pip install .
 
 switchit --version
 python3 -m switchit.cli --version   # same thing without the entry point
 ```
 
-The core is stdlib-only. Add extras only if you need them: `pip install 'switchit-harness[parquet]'` for Parquet imports, `'switchit-harness[bedrock]'` for the Bedrock adapter.
+The core uses the Python standard library. From a checkout, install `'.[parquet]'` for Parquet imports or `'.[bedrock]'` for the Bedrock adapter.
 
 To install the companion `$switchit` agent skill for tools that read `~/.agents/skills`:
 
@@ -55,6 +66,16 @@ python3 -m switchit.cli report --state-dir .switchit       # report.json + repor
 | `cases` | `cases.json` | One case per selected trace covering common, costly, risky, and failed workflows, with default checks. Edit to add explicit success checks — a historical model response alone is not proof of success. |
 | `replay` | `run/results.json` + `run/run_state.json` | Same cases through baseline and target adapters. Tool proposals are captured, never executed. Checkpointed after every case; a fingerprint refuses to resume after cases, adapters, or runner code changed. |
 | `report` | `run/report.json` + `run/report.html` | Verdicts (pass / fail / error / uncertain), failure groups, capability gaps, prioritized fixes, usage by provenance. Local, self-contained HTML. |
+
+## Aegis integration
+
+For local Aegis task exports and daemon imports, use `python3 -m switchit.cli sources aegis --file task.aegis.json --output .switchit/aegis`. The adapter preserves task/run evidence and historical verifications without claiming exact replay. See [Aegis integration](docs/aegis-integration.md) for local API collection and MCP usage.
+
+The local platform's **Import evidence** dialog also accepts Aegis task bundles and snapshots directly.
+
+## GitHub activity evidence
+
+Import selected GitHub PRs, issues, commits, reviews, and Actions run/job/step summaries with `python3 -m switchit.cli sources github --repo OWNER/REPO --pr 123 --remote --output .switchit/github`, or use `--file EXPORT.json` offline. The graph preserves observed relationships without inventing agent execution traces. See [GitHub evidence](docs/github-evidence.md) for scope, authentication, exports and limitations.
 
 ## Connectors
 

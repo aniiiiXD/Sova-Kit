@@ -1,6 +1,6 @@
 {
   "name": "switchit-skill",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "$switchit agent skill: plan and verify migration of an AI workflow from one model or provider to another using traces, adapters, and replay checks. One command installs the skill for any agent that reads ~/.agents/skills.",
   "license": "MIT",
   "author": "SwitchIt! contributors",
@@ -35,5 +35,9 @@
   },
   "bugs": {
     "url": "https://github.com/aniiiiXD/SwitchIt/issues"
-  }
+  },
+  "scripts": {
+    "test": "node --test test/*.test.cjs"
+  },
+  "homepage": "https://getswitchit.vercel.app"
 }

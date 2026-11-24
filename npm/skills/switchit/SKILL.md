@@ -1,45 +1,92 @@
 ---
 name: switchit
-description: Plan and verify migration of an AI workflow from one model or service to another using traces, adapters, and replay checks. Use when a user wants to switch an AI provider or make an agent workflow portable.
+description: Discover agent traces, reconstruct evidence-backed workflows, and verify a move between vendors using fixed checks and reproducible reports. Prepare and verify SwitchUP instruction updates from recorded corrections. Operate authorized orchestration plans and export reviewed workflows as skills.
 ---
 
 # SwitchIt!
 
-Help the user move an existing AI workflow to a different provider while preserving the behavior that matters to them. The skill can be invoked from any project with `$switchit`. It guides discovery and verification; it does not imply that every provider already has a working adapter.
+Move a user's workflow from a source agent or provider to a target while preserving its required outcomes. The shared workflow representation is the center: importing Codex, Claude Code, Devin, Grok, or Muse records does not itself establish that the target can execute that workflow.
 
-1. Inspect the current application, its provider configuration, prompts, tool schemas, and authorized traces. Identify the requested target and the workflow's success criteria from context. Ask only for information that cannot be discovered and materially affects the migration.
-2. Create a canonical map of sessions, model calls, tool calls, errors, latency, and usage. Preserve source IDs and distinguish provider-recorded tokens from estimates and missing usage. Keep credentials out of files and reports. Use redacted or synthetic examples when possible.
-3. Group traces by user task and choose representative replay cases, including common paths, costly paths, tool use, and observed failures. Keep uncertain labels visible. Never treat a tool attempt as proof of task success.
-4. Check the target provider's current capabilities and limits against the workflow: message format, tool calling, structured output, streaming, context size, caching, error handling, and data-handling constraints. Use official provider documentation when these details may have changed.
-5. Build or adapt the provider connector within the user's authorized scope. Replay the same cases on source and target, then compare task outcome, tool behavior, latency, and usage using the same checks. Keep recorded, estimated, and unknown values separate.
-6. Report what passes, what fails, what remains uncertain, and the concrete changes needed to switch. Do not claim migration readiness from category coverage or model confidence alone. Apply the switch only when the user has authorized that operational change.
+## Working discipline
 
-## Using the SwitchIt! harness
+1. Inspect the repository, authorized source locations, runtime configuration, and existing success criteria. Reuse authorization and constraints already present in the session or orchestration plan; ask only for missing information that materially affects execution. Do not repeatedly request approval already granted.
+2. Discover and import evidence with source IDs, revisions, tool identities, usage provenance, and diagnostics intact. Keep credentials out of artifacts. Keep raw personal trace files separate from public release artifacts; use synthetic or explicitly authorized sanitized fixtures for distribution.
+3. Reconstruct the execution graph. Distinguish recorded relationships from inferred order and retain missing/ambiguous links. Metadata-only records are discovery evidence, not executable recordings. Missing tool results must stay missing.
+4. Build a draft workflow, inspect its dependencies and branches, and establish explicit outcome checks. Parameterize inputs where recordings contain concrete values. An observed answer is not a success criterion by itself. Review must reflect the user's requirements or the standing plan policy; do not mark a draft reviewed merely to unblock a run.
+5. Validate with fixtures first. Use provider or command runtimes only within the authorized destinations, data-transfer scope, tool permissions, and budgets. Verify the target's current documented capabilities before implementing a native adapter; unsupported execution must be reported explicitly.
+6. Compare complete outcomes, tool sequence and arguments, artifacts/state where observable, and whole-run usage/latency. Keep pass, fail, error, and uncertain distinct. Never weaken fixed checks or move held-out cases into training to make a candidate pass.
+7. Export or publish only within the user's requested release scope. Exporting a skill, running a workflow, and publishing a package/deployment are different operations. Respect an existing no-push/no-publish instruction until the user changes that scope.
 
-If this project contains the SwitchIt! harness (a `switchit/` package), drive it with whichever surface your agent speaks:
+## Harness access
 
-- **MCP** (preferred for MCP-capable agents): register `switchit-mcp` (stdio) and call the tools — `switchit_import`, `switchit_map`, `switchit_cases`, `switchit_replay`, `switchit_report`, `switchit_run`, `switchit_status`, `switchit_read_report`, `switchit_list_providers`. Everything is offline until you pass `remote: true` with a live target.
-- **CLI**: all stages are offline unless `--remote` is passed; keys come from the environment, never from arguments.
+Use Python switchit-harness 0.2.0 or later for the workflow commands below. The Python package is the execution engine. The npm `switchit-harness` package is a thin CLI/MCP launcher, not a second implementation; it requires Python 3.10+ and the separately installed Python engine. Set `SWITCHIT_PYTHON` to the intended interpreter when using that launcher. It does not install anything automatically.
+
+For MCP-capable agents, register `switchit-mcp` and inspect its advertised tools. Its stdout is reserved for protocol messages. Use the CLI when a required operation is not exposed by the connected MCP server. The examples below run the Python engine directly from a checkout or installed environment.
+
+## SwitchUP improvement projects
+
+Use `improve status` to inspect the active recipe, generation, and recent rounds. `improve prepare --project PROJECT --output learning.json` exports recorded learning evidence for a pinned round. Use only that packet to author an instruction update. Submit JSON with `system_prompt`, `rationale`, and `evidence_ids` through `improve propose --proposal`. Cite actual event IDs and preserve the reviewed tool scope and outcomes.
+
+`improve verify` runs both versions using the pinned suite and requires explicit authorization for the configured model connection. Read the saved decision and replay evidence with `improve show`. Activate a verified round with `improve activate --expected-generation` only within the user's release scope. An activation is used for subsequent connected requests. See `docs/switchup.md` in the repository for project setup, capture, replay, and rollback. MCP tools with the `switchup_` prefix expose the same project state.
+
+## Evidence to reviewed workflow
 
 ```sh
-# Offline pipeline on the bundled synthetic data (no credentials needed):
+# Legacy offline smoke test:
 python3 -m switchit.cli run --demo --state-dir /tmp/switchit-demo
 
-# Real traces, step by step:
-python3 -m switchit.cli import --jsonl traces.jsonl --app-config app_config.json --state-dir .switchit
+# Build from a canonical events JSON artifact:
+python3 -m switchit.cli workflow build --events events.json --output .switchit/workflow-build
+
+# Execute a reviewed workflow and one matching case; fixture is the default runtime:
+python3 -m switchit.cli workflow run --workflow workflow.json --case case.json --output run.json --runtime fixture
+
+# Export the reviewed workflow as a standalone skill:
+python3 -m switchit.cli workflow export-skill --workflow workflow.json --output ./exported-skill
+```
+
+Use the artifact paths reported by `workflow build`; inspect the generated draft and diagnostics before execution. A changed workflow revision invalidates cases and recipes pinned to the previous revision. `--runtime provider` and `--runtime command` select additional execution modes; inspect `workflow run --help` for their configuration and authorization flags. Never treat selecting a runtime as permission to transmit private data or execute business tools.
+
+For explicitly scoped local trace roots, inspect `sources inventory --help` and `sources import --help`; inventory metadata before choosing recordings to import. For a reviewed workflow and its pinned evaluation suite, inspect `harness propose`, `harness compare`, `harness promote`, `harness rollback`, and `harness status` with `--help`. Keep recipes tied to the exact workflow revision and fixed checks. Local recipe promotion does not publish a package or authorize live tools.
+
+The older stages remain useful for imported model-call recordings:
+
+```sh
+python3 -m switchit.cli import --jsonl traces.jsonl --state-dir .switchit
+python3 -m switchit.cli profile --state-dir .switchit
 python3 -m switchit.cli map --keep-edits --state-dir .switchit
 python3 -m switchit.cli cases --state-dir .switchit
 python3 -m switchit.cli replay --state-dir .switchit
 python3 -m switchit.cli report --state-dir .switchit
 ```
 
-Where the agent's judgment comes in:
+After mapping, correct uncertain groups rather than guessing. After case generation, replace default checks with explicit required outcomes. Historical behavior is a reference, not ground truth. Legacy name-only tool fixtures do not prove full workflow fidelity.
 
-- After `map`: review `workflows.json`. Correct names, merge or split clusters by editing `trace_ids`, set `"edited": true` on every workflow you touched, and re-run `map --keep-edits`. Flag low-confidence and `single_trace_cluster` workflows to the user instead of guessing.
-- After `cases`: review `cases.json`. Replace defaults with explicit success checks where outcomes matter (`output_contains`, `tool_args_include`, `output_regex`, and the like). A historical model response alone is not proof of success; a judge model, if you add one by hand, is a fallible measurement tool, not ground truth.
-- Before `replay --target <live>`: confirm the user authorizes sending redacted case content to that provider, then pass `--remote` and set the key in the environment.
-- After `report`: walk the user through `prioritized_fixes` in order, and keep "uncertain" honest — unevaluable checks, mis-specified checks (they fail on the historical reference too), and un-checked tool drift are not passes.
+## Authorized orchestration plans
 
-The recorded adapter is the reference side of every comparison: it replays historical behavior, preserving its usage provenance, so the report can distinguish "the target changed" from "the check was wrong".
+```sh
+python3 -m switchit.cli orchestrate run --plan plan.json --output .switchit/orchestration
+python3 -m switchit.cli orchestrate status --output .switchit/orchestration
+python3 -m switchit.cli orchestrate run --plan plan.json --output .switchit/orchestration --resume
+python3 -m switchit.cli orchestrate cancel --output .switchit/orchestration
+```
 
-If no SwitchIt! harness is available in the project, implement only the smallest reproducible workflow needed for the user's actual system. Do not reuse assessment or third-party datasets outside their permitted scope.
+Inspect the plan before execution: declared nodes, dependencies, owned paths, evaluator contracts, attempt limits, resource budgets, and release policy must fit the user's scope. A resumable run must use matching plan and artifact revisions. Route failures to the owning module with evidence; stop at exhausted budgets or unresolved requirements instead of looping indefinitely. Coders must not rewrite independent evaluator criteria or publish around a failed release gate.
+
+To inspect and operate the local platform:
+
+```sh
+python3 -m switchit.cli serve --host 127.0.0.1 --port 8787 --data-dir .switchit/platform
+```
+
+Keep the default loopback binding for local use. Do not represent a local server or static marketing deployment as a production multi-user service.
+
+## Report honestly
+
+Explain the workflow, source evidence, target capabilities, checks performed, observed results, unresolved gaps, and next concrete action. Identify which results came from fixtures and which came from live executions. Usage estimates are not invoices; absent state, cost, or artifact evidence cannot be a passing check. Configuration rollback does not undo external tool effects.
+
+For configured coder/verifier repair, use `orchestrate repair --config REPAIR.json --output RUN_DIR` (add `--resume` for an interrupted run). The bounded loop preserves verifier and acceptance-file digests and feeds failure evidence into the next coder round. Worker commands and source scope must be configured; the harness does not infer native vendor CLI flags.
+
+For GitHub work evidence, use `sources github --file EXPORT.json --output DIR` offline, or `sources github --repo OWNER/REPO --pr NUMBER --remote --output DIR` for explicitly selected API reads (`--issue` and `--run` also supported). Credentials come from GH_TOKEN/GITHUB_TOKEN. Inspect coverage diagnostics. PRs, commits, reviews and CI summaries are activity evidence, not captured model/tool execution; do not claim CI success proves workflow portability. MCP exposes `switchit_sources_github` with the same controls.
+
+To connect imported GitHub activity with agent sessions, use `sources correlate --agent-events AGENT.json --github-events GITHUB.json --output DIR`, or MCP `switchit_sources_correlate`. Read correlation.json: exact references are noncausal and do not prove authorship; missing/ambiguous matches stay unresolved. Prefer active revisioned stores to mixed historical snapshots. Do not substitute repository metadata for executable steps or holdout cases.

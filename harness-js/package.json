@@ -1,16 +1,17 @@
 {
   "name": "switchit-harness",
-  "version": "0.1.1",
-  "description": "Evidence-based migration of AI workflows between providers: import traces, replay them through adapters, and report what survives the switch.",
+  "version": "0.2.0",
+  "description": "Node CLI and MCP launchers for the independently installed SwitchIt Python workflow engine.",
   "license": "MIT",
   "author": "SwitchIt! contributors",
   "type": "module",
   "bin": {
-    "switchit": "dist/cli.js",
-    "switchit-mcp": "dist/mcp.js"
+    "switchit": "bin/switchit.js",
+    "switchit-mcp": "bin/switchit-mcp.js"
   },
   "files": [
-    "dist/",
+    "bin/",
+    "lib/",
     "skills/",
     "README.md"
   ],
@@ -22,22 +23,14 @@
     "llm",
     "migration",
     "traces",
-    "otel",
     "evaluation",
-    "openai",
-    "anthropic",
-    "bedrock",
     "agents",
     "mcp",
     "switchit"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json && cp src/demo.jsonl dist/demo.jsonl",
-    "test": "node --test dist/test/*.test.js"
-  },
-  "devDependencies": {
-    "@types/node": "^22.0.0",
-    "typescript": "^5.6.0"
+    "build": "node --check lib/python-bridge.js && node --check bin/switchit.js && node --check bin/switchit-mcp.js",
+    "test": "node --test test/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -45,5 +38,6 @@
   },
   "bugs": {
     "url": "https://github.com/aniiiiXD/SwitchIt/issues"
-  }
+  },
+  "homepage": "https://getswitchit.vercel.app"
 }

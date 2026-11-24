@@ -1,0 +1,232 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1276" viewBox="0 0 1800 1276" role="img" aria-labelledby="title description">
+  <title id="title">How SwitchUP works</title>
+  <desc id="description">SwitchUP pins the active recipe for each connected text request and captures redacted evidence. A reviewed suite pins training and held-out cases. A Codex, operator, or model proposal uses learning evidence and produces an instruction update. The active and candidate recipes replay the same cases with independent copies of modeled state. A candidate must fix an observed failure and pass every required check before activation. The SQLite workspace retains evidence, run receipts, and rollback history.</desc>
+  <defs>
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="#e4e8ee" stroke-width=".6"/>
+    </pattern>
+    <style>
+      svg { display: block; width: 100%; height: 100%; background: #fafafa; }
+      text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #233040; }
+      .title { font-size: 48px; font-weight: 750; letter-spacing: -2px; }
+      .subtitle { font-size: 21px; fill: #4c5a6a; }
+      .section { font-size: 18px; font-weight: 700; letter-spacing: 1.4px; }
+      .heading { font-size: 22px; font-weight: 700; letter-spacing: -.4px; }
+      .small-heading { font-size: 20px; font-weight: 700; letter-spacing: -.45px; }
+      .body { font-size: 16px; fill: #435263; }
+      .note { font-size: 14px; fill: #526273; }
+      .tag { font-size: 13px; font-weight: 700; letter-spacing: 1px; }
+      .label { font-size: 14px; font-weight: 600; }
+      .panel { fill: #fff; fill-opacity: .93; stroke: #d2d9e3; stroke-width: 1.4; }
+      .card { fill: #fbfcfe; stroke: #cbd4df; stroke-width: 1.5; }
+      .live-card { fill: #edf6fc; stroke: #a8c5d8; }
+      .learn-card { fill: #f6f0fa; stroke: #bfacd0; }
+      .proof-card { fill: #fffaf1; stroke: #d3ae77; }
+      .release-card { fill: #edf7f0; stroke: #9abfa9; }
+      .blocked-card { fill: #fcf1f0; stroke: #d6aaa6; }
+      .line { fill: none; stroke: #667889; stroke-width: 1.8; stroke-linejoin: round; }
+      .live-line { stroke: #2f6d9b; }
+      .learn-line { stroke: #765191; }
+      .proof-line { stroke: #996521; }
+      .release-line { stroke: #287750; }
+      .blocked-line { stroke: #aa504c; }
+      .return { stroke-dasharray: 6 4; }
+      .blue { fill: #245b85; }
+      .purple { fill: #704488; }
+      .amber { fill: #82591f; }
+      .green { fill: #226441; }
+      .red { fill: #933f3b; }
+    </style>
+  </defs>
+
+  <rect width="1800" height="1276" fill="#fafafa"/>
+  <rect width="1800" height="1276" fill="url(#grid)"/>
+
+  <g id="overview">
+    <text x="48" y="77" class="title">Switch<tspan class="blue">UP</tspan></text>
+    <text x="50" y="112" class="subtitle">How agent traces become tested instruction updates</text>
+    <rect x="1442" y="42" width="310" height="35" rx="5" fill="#f0f3f7" stroke="#d6dde6"/>
+    <text x="1597" y="64" class="tag" text-anchor="middle">[ CHECKOUT · 25 NOV 2026 ]</text>
+    <path d="M48 127H1752" stroke="#cfd7e0" stroke-width="1.3"/>
+  </g>
+
+  <g id="live-requests">
+    <rect x="48" y="145" width="1704" height="257" rx="12" class="panel"/>
+    <text x="72" y="180" class="section blue">LIVE REQUESTS</text>
+    <text x="1728" y="180" class="tag blue" text-anchor="end">PROJECT-SCOPED TEXT CHAT</text>
+
+    <rect x="72" y="209" width="332" height="141" rx="8" class="card"/>
+    <text x="91" y="242" class="heading">App or agent</text>
+    <text x="91" y="272" class="body">Sends text and tool definitions</text>
+    <text x="91" y="298" class="body">Executes approved tools</text>
+    <text x="91" y="324" class="body">Reports observed tool results</text>
+
+    <rect x="547" y="209" width="535" height="141" rx="8" class="card live-card"/>
+    <text x="567" y="242" class="heading blue">SwitchUP invoke</text>
+    <text x="567" y="272" class="body">Reserves the request ID to prevent repeats</text>
+    <text x="567" y="298" class="body">Pins the active recipe and generation</text>
+    <text x="567" y="324" class="body">Adds its instructions and applies tool scope</text>
+
+    <rect x="1246" y="209" width="482" height="141" rx="8" class="card"/>
+    <text x="1266" y="242" class="heading">Connected model</text>
+    <text x="1266" y="272" class="body">OpenAI-compatible · Anthropic · Bedrock</text>
+    <text x="1266" y="298" class="body">Local or hosted text inference</text>
+    <text x="1266" y="324" class="body">Returns text and tool proposals</text>
+
+    <path d="M404 263H542" class="line live-line"/>
+    <path d="M536 258L547 263L536 268Z" fill="#2f6d9b"/>
+    <text x="475" y="251" class="label blue" text-anchor="middle">request</text>
+    <path d="M547 317H409" class="line live-line return"/>
+    <path d="M415 312L404 317L415 322Z" fill="#2f6d9b"/>
+    <text x="475" y="305" class="label blue" text-anchor="middle">reply + calls</text>
+    <path d="M1082 263H1241" class="line live-line"/>
+    <path d="M1235 258L1246 263L1235 268Z" fill="#2f6d9b"/>
+    <text x="1164" y="251" class="label blue" text-anchor="middle">model call</text>
+    <path d="M1246 317H1087" class="line live-line return"/>
+    <path d="M1093 312L1082 317L1093 322Z" fill="#2f6d9b"/>
+    <text x="1164" y="305" class="label blue" text-anchor="middle">model result</text>
+    <text x="72" y="386" class="note">Loopback API · live requests require explicit opt-in</text>
+  </g>
+
+  <g id="evidence-and-proposal">
+    <rect x="48" y="427" width="1704" height="280" rx="12" class="panel"/>
+    <text x="72" y="460" class="section purple">EVIDENCE AND PROPOSAL</text>
+
+    <rect x="72" y="500" width="332" height="172" rx="8" class="card"/>
+    <text x="91" y="534" class="heading">Imports and corrections</text>
+    <text x="91" y="565" class="body">Events, trace stores or calls</text>
+    <text x="91" y="591" class="body">Tool outcomes and corrections</text>
+    <text x="91" y="617" class="body">Feedback links to a trace ID</text>
+    <text x="91" y="649" class="note purple">ingest · feedback</text>
+
+    <rect x="460" y="500" width="365" height="172" rx="8" class="card"/>
+    <text x="479" y="534" class="heading">SQLite workspace</text>
+    <text x="479" y="565" class="body">Redacts payloads, deduplicates IDs</text>
+    <text x="479" y="591" class="body">Links sessions and provenance</text>
+    <text x="479" y="617" class="body">Keeps suites, rounds and history</text>
+    <text x="479" y="649" class="note purple">switchup.sqlite3</text>
+
+    <rect x="886" y="500" width="376" height="172" rx="8" class="card proof-card"/>
+    <text x="905" y="534" class="heading amber">Reviewed suite</text>
+    <text x="905" y="565" class="body">Workflow and case-specific checks</text>
+    <text x="905" y="591" class="body">Training and held-out sessions</text>
+    <text x="905" y="617" class="body">Pin cases by suite digest</text>
+    <text x="905" y="649" class="note amber">init · snapshot</text>
+
+    <rect x="1324" y="500" width="404" height="172" rx="8" class="card learn-card"/>
+    <text x="1343" y="534" class="heading purple">One instruction update</text>
+    <text x="1343" y="565" class="body">Codex, operator or optimizer model</text>
+    <text x="1343" y="591" class="body">Drafts prompt, rationale and event IDs</text>
+    <text x="1343" y="617" class="body">Pins generation, suite and evidence</text>
+    <text x="1343" y="649" class="note purple">prepare · propose</text>
+
+    <path d="M404 575H455" class="line"/>
+    <path d="M449 570L460 575L449 580Z" fill="#667889"/>
+    <path d="M825 575H881" class="line proof-line"/>
+    <path d="M875 570L886 575L875 580Z" fill="#996521"/>
+    <text x="855" y="563" class="label amber" text-anchor="middle">seal</text>
+    <path d="M1262 575H1319" class="line learn-line return"/>
+    <path d="M1313 570L1324 575L1313 580Z" fill="#765191"/>
+    <text x="1293" y="563" class="label purple" text-anchor="middle">pins</text>
+    <path d="M700 500V479H1526V495" class="line learn-line"/>
+    <path d="M1521 489H1531L1526 500Z" fill="#765191"/>
+    <text x="1113" y="468" class="label purple" text-anchor="middle">bounded learning evidence only</text>
+    <text x="72" y="694" class="note">Learning batches prioritize corrections and errors</text>
+  </g>
+
+  <g id="verification-and-release">
+    <rect x="48" y="780" width="1704" height="370" rx="12" class="panel"/>
+    <text x="72" y="815" class="section amber">PAIRED VERIFICATION AND RELEASE</text>
+    <text x="1728" y="815" class="tag amber" text-anchor="end">PINNED CHECKS · BOUNDED MODEL CALLS</text>
+
+    <rect x="72" y="853" width="932" height="259" rx="9" fill="#fffaf2" fill-opacity=".74" stroke="#c89554" stroke-width="1.6" stroke-dasharray="8 5"/>
+    <text x="92" y="882" class="small-heading amber">Replay environments</text>
+    <text x="982" y="882" class="note amber" text-anchor="end">Both runs call the pinned target model</text>
+
+    <rect x="93" y="935" width="222" height="100" rx="7" class="card"/>
+    <text x="110" y="965" class="small-heading">Each case</text>
+    <text x="110" y="991" class="body">Request + fixtures</text>
+    <text x="110" y="1017" class="body">Optional state seed</text>
+
+    <rect x="390" y="902" width="283" height="73" rx="7" class="card" stroke-dasharray="5 3"/>
+    <text x="407" y="932" class="small-heading">Run active recipe</text>
+    <text x="407" y="958" class="body">Copy of case and state</text>
+    <rect x="390" y="991" width="283" height="73" rx="7" class="card learn-card" stroke-dasharray="5 3"/>
+    <text x="407" y="1021" class="small-heading purple">Run candidate recipe</text>
+    <text x="407" y="1047" class="body">Independent state copy</text>
+
+    <path d="M315 985H351V939H385M351 985V1027H385" class="line proof-line"/>
+    <path d="M379 934L390 939L379 944ZM379 1022L390 1027L379 1032Z" fill="#996521"/>
+    <circle cx="351" cy="985" r="3.3" fill="#996521"/>
+
+    <rect x="746" y="918" width="234" height="124" rx="7" class="card"/>
+    <text x="763" y="946" class="small-heading">Compare outcomes</text>
+    <text x="763" y="971" class="body">Verdict + final state</text>
+    <text x="763" y="996" class="body">First divergent call</text>
+    <text x="763" y="1021" class="body">Per-case receipts</text>
+    <path d="M673 939H710V967H741" class="line"/>
+    <path d="M735 962L746 967L735 972Z" fill="#667889"/>
+    <path d="M673 1027H710V994H741" class="line learn-line"/>
+    <path d="M735 989L746 994L735 999Z" fill="#765191"/>
+
+    <path d="M93 1075H982" stroke="#e5d7bf" stroke-width="1"/>
+    <text x="93" y="1098" class="note amber">Reviewed JSON tool operations and exact recorded fixtures</text>
+
+    <rect x="1067" y="884" width="354" height="199" rx="8" class="card proof-card"/>
+    <text x="1086" y="919" class="heading amber">Release gate</text>
+    <text x="1086" y="953" class="body">Both runs complete every case</text>
+    <text x="1086" y="982" class="body">Repairs an observed failure</text>
+    <text x="1086" y="1011" class="body">Candidate passes every check</text>
+    <text x="1086" y="1058" class="note amber">verify</text>
+    <path d="M980 981H1062" class="line proof-line"/>
+    <path d="M1056 976L1067 981L1056 986Z" fill="#996521"/>
+
+    <rect x="1494" y="875" width="234" height="113" rx="8" class="card release-card"/>
+    <text x="1512" y="905" class="heading green">Activate</text>
+    <text x="1512" y="931" class="body">Recheck generation</text>
+    <text x="1512" y="956" class="body">Set recipe in SQLite</text>
+    <text x="1512" y="977" class="note green">Rollback restores prior</text>
+
+    <rect x="1494" y="1015" width="234" height="79" rx="8" class="card blocked-card"/>
+    <text x="1512" y="1045" class="heading red">Blocked</text>
+    <text x="1512" y="1073" class="body">Save run and reasons</text>
+
+    <path d="M1421 980H1455V929H1489" class="line release-line"/>
+    <path d="M1483 924L1494 929L1483 934Z" fill="#287750"/>
+    <path d="M1455 980V1055H1489" class="line blocked-line return"/>
+    <path d="M1483 1050L1494 1055L1483 1060Z" fill="#aa504c"/>
+    <circle cx="1455" cy="980" r="3.3" fill="#667889"/>
+    <text x="1470" y="918" class="label green" text-anchor="middle">pass</text>
+    <text x="1728" y="1128" class="note green" text-anchor="end">Activate a verified round on request</text>
+  </g>
+
+  <g id="cross-stage-connections">
+    <path d="M640 350V495" class="line live-line"/>
+    <path d="M635 489H645L640 500Z" fill="#2f6d9b"/>
+    <text x="657" y="420" class="label blue">capture redacted request and outcome</text>
+
+    <path d="M1043 672V731H502V848" class="line proof-line"/>
+    <path d="M497 842H507L502 853Z" fill="#996521"/>
+    <text x="772" y="722" class="label amber" text-anchor="middle">same sealed cases, including held-out cases</text>
+    <path d="M1526 672V757H656V848" class="line learn-line"/>
+    <path d="M651 842H661L656 853Z" fill="#765191"/>
+    <text x="1091" y="749" class="label purple" text-anchor="middle">pinned baseline and candidate recipes</text>
+
+    <path d="M1728 929H1773V378H940V355" class="line release-line return"/>
+    <path d="M935 361H945L940 350Z" fill="#287750"/>
+    <text x="1333" y="372" class="label green" text-anchor="middle">active recipe for new requests</text>
+  </g>
+
+  <g id="entry-points">
+    <rect x="48" y="1164" width="1704" height="77" rx="9" fill="#f0f3f7" stroke="#d2d9e3"/>
+    <path d="M570 1178V1227M1177 1178V1227" stroke="#cfd7e1" stroke-width="1"/>
+    <text x="72" y="1192" class="tag">CLI AND MCP</text>
+    <text x="72" y="1220" class="body">switchup improve cycle · switchup_*</text>
+    <text x="595" y="1192" class="tag">LOCAL API</text>
+    <text x="595" y="1220" class="body">/api/switchup/projects/{project}/invoke</text>
+    <text x="1201" y="1192" class="tag">DASHBOARD</text>
+    <text x="1201" y="1220" class="body">/improvements · compare, activate, roll back</text>
+    <text x="48" y="1263" class="note">The activated recipe becomes the baseline for the next round.</text>
+    <text x="1752" y="1263" class="note" text-anchor="end">Source · docs/switchup.md and local implementation</text>
+  </g>
+</svg>

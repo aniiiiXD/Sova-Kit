@@ -1,58 +1,51 @@
 # switchit-skill
 
-The **$switchit** agent skill: plan and verify migration of an AI workflow from
-one model or provider to another using traces, adapters, and replay checks.
+An installer for the **$switchit** companion agent skill. The skill guides trace discovery, workflow reconstruction, fixed-check evaluation, authorized orchestration, and reviewed workflow export.
 
-One command installs the skill for any agent that reads `~/.agents/skills`
-(Claude Code, Codex, OpenCode, Cursor, and others):
+The installer only copies its bundled `SKILL.md`. It does not install Python, the SwitchIt engine, npm dependencies, or native agent integrations.
 
-```sh
-npx switchit-skill
-```
+## Install
 
-## What the skill does
-
-When invoked with `$switchit` from any project, your agent walks a
-six-step migration discipline:
-
-1. Inspect the current app, its provider config, prompts, tool schemas, and
-   authorized traces.
-2. Build a canonical map of sessions, calls, tool calls, errors, latency, and
-   usage — provider-recorded tokens kept separate from estimates and unknowns.
-3. Group traces by task and choose representative replay cases, including
-   failures. Never treat a tool attempt as proof of task success.
-4. Check the target provider's current capabilities against the workflow.
-5. Replay the same cases on source and target, then compare outcomes, tool
-   behavior, latency, and usage.
-6. Report what passes, what fails, what remains uncertain, and the concrete
-   changes needed — apply the switch only on explicit authorization.
-
-## The full harness
-
-The skill guides; the **harness** executes. Install the Python package for the
-reproducible pipeline (imports from OTLP/JSONL/Langfuse/Parquet plus local
-coding-agent sessions, workflow mapping, replay against OpenAI/Anthropic/
-Bedrock/Grok/Groq/local vLLM and more, JSON+HTML migration reports):
+Install or refresh the companion skill and its separately installed engine:
 
 ```sh
-pip install switchit-harness
-switchit run --demo     # offline, no credentials
+python3 -m pip install --upgrade "switchit-harness>=0.2.0"
+npx switchit-skill@latest
 ```
 
-The harness also ships an MCP server (`switchit-mcp`, ten tools) so any
-MCP-capable agent can drive the pipeline natively.
+From this checkout:
 
-## Honest boundaries
+```sh
+node npm/bin/install.js
+node npm/bin/install.js --dest /tmp/switchit-skill-check
+```
 
-Workflow labels are triage aids, not measured accuracy. Proposed tool calls
-are captured, never executed. A historical model response is reference
-behavior, not proof of success. Usage provenance (recorded / estimated /
-unknown) stays separated. Full list lives in the harness README and in every
-generated report.
+The default destination is `~/.agents/skills/switchit`. `--dest DIRECTORY` installs `SKILL.md` directly inside that exact directory, allowing isolated installation tests. Repeating an installation with identical content is a no-op; updates replace the skill atomically.
 
-## Links
+After installing this package, use `switchit-skill` with the same arguments. Invoke `$switchit` in an agent that supports skills from the chosen location. The installer does not configure an agent's search paths.
 
-- Python harness: https://pypi.org/project/switchit-harness/
-- Repository: https://github.com/switchit-harness/switchit
+## Engine and launchers
+
+The Python engine is installed separately, for example from a local checkout:
+
+```sh
+python3 -m pip install /path/to/SwitchIt
+python3 -m switchit.cli run --demo
+```
+
+The npm package named `switchit-harness` is a thin Node launcher for that Python engine. It preserves the `switchit` and `switchit-mcp` command names and supports explicit interpreter selection through `SWITCHIT_PYTHON`. It is different from this skill installer.
+
+The skill documents newer `workflow`, `orchestrate`, and `serve` commands. Their availability depends on the Python engine version, not this installer version. Verify `python3 -m switchit.cli --help` before use. Use engine 0.2.0 or later for the commands in this skill.
+
+## Development
+
+```sh
+npm --prefix npm test
+npm --prefix npm pack --ignore-scripts
+```
+
+The canonical source is `skills/switchit/SKILL.md` at the repository root. Its copies in this package and `harness-js/skills/` must match before distribution. Tests cover explicit destinations, repeat installs, error handling, and package contents.
+
+Repository: [aniiiiXD/SwitchIt](https://github.com/aniiiiXD/SwitchIt)
 
 MIT license.

@@ -17,7 +17,24 @@ import os
 import sys
 from pathlib import Path
 
-from . import __version__, agent_sessions, core, demo_data, devin, providers as pv, runner
+from . import (
+    __version__,
+    aggregation,
+    cases,
+    demo_data,
+    devin,
+    normalization,
+    profiling,
+    providers as pv,
+    replay,
+    reporting,
+    session_catalog,
+    source_discovery,
+    storage,
+    workflow_discovery,
+    workflow_review,
+)
+from .importers import aider, files as file_importers, registry as agent_importers
 
 DEFAULT_STATE_DIR = ".switchit"
 
@@ -54,21 +71,21 @@ def _load_store_or_exit(args) -> dict:
     path = _store_path(args)
     if not path.exists():
         sys.exit(f"No store at {path}. Run 'import' first.")
-    return core.load_store(path)
+    return storage.load_store(path)
 
 
 def _load_workflows_or_exit(args) -> dict:
     path = _workflows_path(args)
     if not path.exists():
         sys.exit(f"No workflow map at {path}. Run 'map' first.")
-    return core.load_workflows(path)
+    return workflow_review.load_workflows(path)
 
 
 def _load_cases_or_exit(args) -> dict:
     path = _cases_path(args)
     if not path.exists():
         sys.exit(f"No cases at {path}. Run 'cases' first.")
-    return core.load_cases(path)
+    return cases.load_cases(path)
 
 
 def _print_usage_totals(store: dict) -> None:
@@ -169,30 +186,30 @@ def cmd_import(args) -> int:
     session_meta = None
     if demo:
         demo_calls = [
-            core.make_call(raw, "demo", "demo_data.py")
-            for raw in core.parse_jsonl_lines(demo_data.demo_lines(), "demo_data.py")
+            normalization.make_call(raw, "demo", "demo_data.py")
+            for raw in file_importers.parse_jsonl_lines(demo_data.demo_lines(), "demo_data.py")
         ]
         calls.extend(demo_calls)
         source_files.append({"importer": "demo", "path": "demo_data.py", "records": len(demo_calls)})
         notes.append("Includes the bundled synthetic demo dataset (demo_data.py).")
     if agents:
-        discovered = agent_sessions.discover_agent_sessions(limit=args.agent_limit)
+        discovered = source_discovery.discover_agent_sessions(limit=args.agent_limit)
         if discovered:
             by_agent = {}
             for entry in discovered:
                 by_agent[entry["agent"]] = by_agent.get(entry["agent"], 0) + 1
             summary = ", ".join(f"{agent}: {count}" for agent, count in sorted(by_agent.items()))
             print(f"Discovered coding-agent sessions ({summary}); importing…")
-            agent_calls = agent_sessions.import_agent_sessions(discovered)
+            agent_calls = agent_importers.import_agent_sessions(discovered)
             calls.extend(
-                core.make_call(raw, "agents", "local-session-folders") for raw in agent_calls
+                normalization.make_call(raw, "agents", "local-session-folders") for raw in agent_calls
             )
-            session_meta = agent_sessions.collect_session_meta(discovered)
-            catalog = agent_sessions.codex_thread_catalog()
+            session_meta = session_catalog.collect_session_meta(discovered)
+            catalog = session_catalog.codex_thread_catalog()
             existing = {call["trace_id"] for call in calls}
-            stub_calls = agent_sessions.catalog_stub_calls(catalog, existing)
+            stub_calls = session_catalog.catalog_stub_calls(catalog, existing)
             if stub_calls:
-                calls.extend(core.make_call(raw, "agents", "codex-thread-catalog") for raw in stub_calls)
+                calls.extend(normalization.make_call(raw, "agents", "codex-thread-catalog") for raw in stub_calls)
                 session_meta = session_meta or {}
                 for raw in stub_calls:
                     if raw.get("origin"):
@@ -213,8 +230,8 @@ def cmd_import(args) -> int:
         else:
             print("No coding-agent session folders found.")
     for aider_path in getattr(args, "aider", None) or []:
-        aider_calls = agent_sessions.import_aider(aider_path)
-        calls.extend(core.make_call(raw, "agents", str(aider_path)) for raw in aider_calls)
+        aider_calls = aider.import_aider(aider_path)
+        calls.extend(normalization.make_call(raw, "agents", str(aider_path)) for raw in aider_calls)
         source_files.append({"importer": "agents", "path": str(aider_path), "records": len(aider_calls)})
         if aider_calls:
             notes.append(
@@ -224,7 +241,7 @@ def cmd_import(args) -> int:
     if getattr(args, "devin", False):
         print("Devin import opted in: querying the official Devin API (api.devin.ai)…")
         devin_calls = devin.import_devin_remote(limit=getattr(args, "agent_limit", 50))
-        calls.extend(core.make_call(raw, "devin", "api.devin.ai") for raw in devin_calls)
+        calls.extend(normalization.make_call(raw, "devin", "api.devin.ai") for raw in devin_calls)
         source_files.append({"importer": "devin", "path": "api.devin.ai/v3 sessions", "records": len(devin_calls)})
         notes.append(
             "Devin cloud sessions are task-level metadata from the official API "
@@ -236,11 +253,11 @@ def cmd_import(args) -> int:
             if raw.get("origin"):
                 session_meta[raw["trace_id"]] = {"origin": raw["origin"]}
     for kind, paths in inputs.items():
-        importer = core.IMPORTERS[kind]
+        importer = file_importers.IMPORTERS[kind]
         for path in paths:
             raw_calls = importer(path)
             for raw in raw_calls:
-                calls.append(core.make_call(raw, kind, str(path)))
+                calls.append(normalization.make_call(raw, kind, str(path)))
             source_files.append({"importer": kind, "path": str(path), "records": len(raw_calls)})
     app_config = None
     if args.app_config:
@@ -256,9 +273,9 @@ def cmd_import(args) -> int:
         all_notes.append(
             "App configuration supplies prompts and tool definitions; it is descriptive, not evidence of behavior."
         )
-    store = core.build_store(calls, app_config=app_config, source_files=source_files,
+    store = storage.build_store(calls, app_config=app_config, source_files=source_files,
                              notes=all_notes, session_meta=session_meta if agents else None)
-    core.save_store(store, _store_path(args))
+    storage.save_store(store, _store_path(args))
     print(f"Imported to {_store_path(args)}")
     _print_usage_totals(store)
     return 0
@@ -268,11 +285,11 @@ def cmd_map(args) -> int:
     store = _load_store_or_exit(args)
     previous = None
     if getattr(args, "keep_edits", False) and _workflows_path(args).exists():
-        previous = core.load_workflows(_workflows_path(args))
-    workflow_map = core.group_workflows(store, threshold=getattr(args, "threshold", 0.34))
+        previous = workflow_review.load_workflows(_workflows_path(args))
+    workflow_map = workflow_discovery.group_workflows(store, threshold=getattr(args, "threshold", 0.34))
     if previous:
-        workflow_map = core.apply_edits(workflow_map, previous)
-    core.save_workflows(workflow_map, _workflows_path(args))
+        workflow_map = workflow_review.apply_edits(workflow_map, previous)
+    workflow_review.save_workflows(workflow_map, _workflows_path(args))
     print(f"Workflow map written to {_workflows_path(args)}")
     for workflow in workflow_map["workflows"]:
         flags = ",".join(workflow["uncertainty"]) or "-"
@@ -289,8 +306,8 @@ def cmd_map(args) -> int:
 def cmd_cases(args) -> int:
     store = _load_store_or_exit(args)
     workflow_map = _load_workflows_or_exit(args)
-    cases_doc = core.select_cases(store, workflow_map, max_cases=getattr(args, "max_cases", 24))
-    core.save_cases(cases_doc, _cases_path(args))
+    cases_doc = cases.select_cases(store, workflow_map, max_cases=getattr(args, "max_cases", 24))
+    cases.save_cases(cases_doc, _cases_path(args))
     print(f"Replay set written to {_cases_path(args)} ({len(cases_doc['cases'])} cases)")
     for case in cases_doc["cases"]:
         origins = ",".join(case["origins"])
@@ -305,11 +322,11 @@ def cmd_profile(args) -> int:
     schemas, provider mix, errors. Writes profile.json and an editable
     app_config.inferred.json."""
     store = _load_store_or_exit(args)
-    document = core.build_profile(store)
+    document = profiling.build_profile(store)
     profile_path = _state_dir(args) / "profile.json"
     inferred_path = _state_dir(args) / "app_config.inferred.json"
-    core.atomic_write_json(profile_path, document["profile"])
-    core.atomic_write_json(inferred_path, document["app_config_inferred"])
+    storage.atomic_write_json(profile_path, document["profile"])
+    storage.atomic_write_json(inferred_path, document["app_config_inferred"])
     profile = document["profile"]
     totals = profile["totals"]
     print(f"Profile written to {profile_path}")
@@ -336,7 +353,7 @@ def cmd_replay(args) -> int:
     if not cases_doc.get("cases"):
         sys.exit("cases.json contains no cases; nothing to replay.")
     baseline_adapter, target_adapter, baseline_spec, target_spec = _build_adapters(args)
-    results_doc = runner.run_replay(
+    results_doc = replay.run_replay(
         cases_doc,
         baseline_adapter,
         target_adapter,
@@ -365,8 +382,8 @@ def cmd_report(args) -> int:
     target_kind = (results_doc.get("target_spec") or {}).get("kind", "mock")
     capabilities_baseline = pv.build_adapter(baseline_kind, {}, remote=False).capabilities()
     capabilities_target = pv.build_adapter(target_kind, (results_doc.get("target_spec") or {}), remote=False).capabilities()
-    summary = runner.aggregate(results_doc, cases_doc, capabilities_baseline, capabilities_target)
-    report = runner.build_report(
+    summary = aggregation.aggregate(results_doc, cases_doc, capabilities_baseline, capabilities_target)
+    report = reporting.build_report(
         results_doc,
         summary,
         cases_doc,
@@ -375,7 +392,7 @@ def cmd_report(args) -> int:
             "capabilities": {"baseline": capabilities_baseline, "target": capabilities_target},
         },
     )
-    paths = runner.write_report(report, run_dir)
+    paths = reporting.write_report(report, run_dir)
     verdicts = summary["verdicts"]
     print(f"Report written to {paths['html']} and {paths['json']}")
     print(
@@ -407,7 +424,7 @@ def cmd_run(args) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python -m switchit.cli",
-        description="SwitchIt! — evidence-based AI provider migration harness.",
+        description="SwitchUP — evidence-based agent improvement and provider switching.",
     )
     parser.add_argument("--version", action="version", version=f"switchit {__version__}")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -488,6 +505,16 @@ def build_parser() -> argparse.ArgumentParser:
     add_state_args(sub)
     sub.add_argument("--demo", action="store_true", help="Use the bundled synthetic demo dataset")
     sub.set_defaults(func=cmd_run)
+    from .workflow_commands import register as register_workflows
+    from .control_commands import register as register_control
+    register_workflows(subparsers)
+    register_control(subparsers)
+    from .source_commands import register as register_sources
+    from .harness_commands import register as register_harness
+    from .switchup.commands import register as register_switchup
+    register_sources(subparsers)
+    register_harness(subparsers)
+    register_switchup(subparsers)
     return parser
 
 
@@ -502,6 +529,8 @@ def main(argv=None) -> int:
         sys.exit(f"provider error: {error}")
     except RuntimeError as error:
         sys.exit(str(error))
+    except OSError as error:
+        sys.exit(f"filesystem error: {error}")
     except ValueError as error:
         sys.exit(f"input error: {error}")
 

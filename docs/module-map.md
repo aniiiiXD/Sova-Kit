@@ -1,6 +1,6 @@
 # SwitchIt! module map
 
-Mapped from the repository on 9 November 2026, commit `bc8b369`. This describes existing source organization; proposed modules are marked separately. Python package: 0.1.5. JavaScript package: 0.1.1.
+Updated on 9 November 2026 for the local Python module extraction based on commit `461bf79`. This describes the working tree; proposed capabilities are marked separately. Python package: 0.1.5. JavaScript package: 0.1.1. Release versions remain unchanged. Following extraction, independent workflow modules and replay correctness fixes were added locally; see the implementation contracts below.
 
 ## Product-level flow
 
@@ -21,22 +21,32 @@ The default Python `run` command executes import → map → cases → replay �
 
 ## Python implementation: primary harness
 
-The following are logical modules. Several live together in the same large source file today.
+The Python implementation now has explicit source modules. The previous `core.py`, `agent_sessions.py`, and `runner.py` paths remain compatibility facades; new implementation code and tests should target the owners below. The CLI imports those owners directly.
 
 | Logical module | Responsibility | Implementation | Main output |
 | --- | --- | --- | --- |
 | Entry points and orchestration | Parse commands, choose paths and adapters, run stages | [cli.py](../switchit/cli.py), [__main__.py](../switchit/__main__.py), [pyproject.toml](../pyproject.toml) | Stage execution and console output |
-| File importers | Parse JSON/JSONL, OTLP, Langfuse-style exports, Parquet | [core.py](../switchit/core.py): `import_jsonl`, `import_otlp`, `import_langfuse`, `import_parquet` | Imported call records |
-| Agent-session importers | Discover and read supported local agent formats; collect session metadata | [agent_sessions.py](../switchit/agent_sessions.py) | Raw calls and provenance |
+| Source discovery | Find supported local session files without parsing transcripts | [source_discovery.py](../switchit/source_discovery.py) | Agent/path inventory |
+| Session catalog | Read Codex catalog metadata, collect titles/origins, create discovery-only stubs | [session_catalog.py](../switchit/session_catalog.py) | Metadata and task-level records |
+| File importers | Parse JSON/JSONL, OTLP, Langfuse-style exports, Parquet | [importers/files.py](../switchit/importers/files.py) | Raw call records |
+| Agent-session importers | Read each agent format; dispatch explicitly selected paths | [importers/](../switchit/importers), [registry.py](../switchit/importers/registry.py), [common.py](../switchit/importers/common.py) | Raw calls and source IDs |
 | Devin importer | Fetch authorized cloud session metadata and convert it to task records | [devin.py](../switchit/devin.py) | Task-level metadata, not full model-call recordings |
-| Normalization and storage | Redact, normalize messages/tools/results, distinguish usage provenance, build calls/traces/sessions | [core.py](../switchit/core.py): `make_call`, `build_store`, `save_store` | `store.json` |
-| Profile analysis | Extract prompts, tool inventory, inferred argument schemas, provider mix, usage and errors | [core.py](../switchit/core.py): `build_profile`, `infer_tool_schema` | `profile.json`, `app_config.inferred.json` |
-| Workflow discovery | Group traces using text similarity and tool overlap; preserve reviewed edits when requested | [core.py](../switchit/core.py): `group_workflows`, `apply_edits` | `workflows.json` |
-| Case selection | Select common, costly, risky, failed cases; attach reference behavior, default checks and tool fixtures | [core.py](../switchit/core.py): `select_cases`, `default_checks` | `cases.json` |
+| Import orchestration | Run selected file importers, normalize records, assemble a store | [ingestion.py](../switchit/ingestion.py): `import_store` | Canonical store document |
+| Redaction | Redact messages, tool schemas, values, and bounded excerpts | [redaction.py](../switchit/redaction.py) | Sanitized content |
+| Normalization | Convert raw records into the existing canonical call format | [normalization.py](../switchit/normalization.py): `make_call` | Canonical calls |
+| Usage accounting | Normalize and aggregate recorded, estimated, and unknown usage separately | [usage.py](../switchit/usage.py) | Usage counters with provenance |
+| Trace/session hierarchy | Aggregate ordered calls into traces and group traces into sessions | [hierarchy.py](../switchit/hierarchy.py): `build_traces`, `build_sessions` | Existing containment hierarchy, not a causal execution graph |
+| Store and persistence | Assemble the store and atomically write local JSON artifacts | [storage.py](../switchit/storage.py) | `store.json` and shared persistence helpers |
+| Profile analysis | Extract prompts, tool inventory, inferred argument schemas, provider mix, usage and errors | [profiling.py](../switchit/profiling.py): `build_profile`, `infer_tool_schema` | `profile.json`, `app_config.inferred.json` |
+| Workflow discovery | Group traces using text similarity and tool overlap | [workflow_discovery.py](../switchit/workflow_discovery.py): `group_workflows` | Provisional workflow groups |
+| Workflow review | Save/load maps and preserve reviewed edits when requested | [workflow_review.py](../switchit/workflow_review.py): `apply_edits` | `workflows.json`; not an executable workflow builder |
+| Case selection and fixtures | Select common, costly, risky, failed cases; attach reference behavior, default checks and recorded tool fixtures | [cases.py](../switchit/cases.py): `select_cases`, `default_checks` | `cases.json` |
 | Provider adapters | Convert requests/responses and provide recorded, mock, OpenAI-compatible, Anthropic and Bedrock interfaces | [providers.py](../switchit/providers.py) | Normalized replay results and capability declarations |
-| Replay engine | Run selected cases, optionally continue with recorded fixtures, checkpoint and resume | [runner.py](../switchit/runner.py): `run_replay`, `replay_case`, `_chain_target_turns` | `results.json`, `run_state.json` |
-| Evaluation | Evaluate declared checks, compare tools, classify pass/fail/error/uncertain | [runner.py](../switchit/runner.py): `evaluate_check`, `compare_tools`, `finalize_case` | Per-case verdicts and findings |
-| Reporting | Aggregate findings, usage and capability gaps; prioritize fixes; render a local report | [runner.py](../switchit/runner.py): `aggregate`, `build_report`, `render_html` | `report.json`, `report.html` |
+| Replay engine | Run selected cases, optionally continue with recorded fixtures, checkpoint and resume | [replay.py](../switchit/replay.py): `run_replay`, `replay_case`, `_chain_target_turns` | `results.json`, `run_state.json` |
+| Checkpoints | Calculate run identity and load resumable state | [checkpoints.py](../switchit/checkpoints.py) | Run fingerprint and saved state |
+| Evaluation | Evaluate declared checks, compare tools, classify pass/fail/error/uncertain | [evaluation.py](../switchit/evaluation.py): `evaluate_check`, `compare_tools`, `finalize_case` | Per-case verdicts and findings |
+| Aggregation | Aggregate findings, usage and capability gaps; prioritize fixes | [aggregation.py](../switchit/aggregation.py): `aggregate` | Run summary |
+| Reporting | Assemble/persist reports and render self-contained HTML | [reporting.py](../switchit/reporting.py), [report_html.py](../switchit/report_html.py) | `report.json`, `report.html` |
 | MCP interface | Expose pipeline and inspection operations through stdio JSON-RPC | [mcp_server.py](../switchit/mcp_server.py) | Agent-callable tools |
 | Synthetic demonstration | Provide bundled records without reading personal traces | [demo_data.py](../switchit/demo_data.py), [examples](../examples) | Demonstration inputs |
 
@@ -44,25 +54,53 @@ Local importer functions cover Claude Code, Codex, Cursor, OpenCode, Cline, Aide
 
 Capability presence is not a correctness certification. The preceding review documented replay and adapter defects; see the [prospectus](switchit-prospectus-2026-11-09.md).
 
+## Independent workflow implementation
+
+The evidence-to-workflow path is available as independent modules and through `workflow`, `sources`, and `harness` CLI namespaces. The original replay pipeline remains available. See [module-contracts.md](module-contracts.md) for APIs, data contracts, individual test commands, the offline demo, and integration limits.
+
+```text
+source_inventory → import_pipeline → events/event_store
+                                     ↓
+execution_graph → dependencies + workflow_patterns
+                                     ↓
+workflow_builder → workflow_cases + fixtures
+                                     ↓
+recipes/composer → runtime_adapters + workflow_runner
+                                     ↓
+workflow_evaluation → promotions
+```
+
+The original `hierarchy.py` still provides legacy call/trace/session containment; `execution_graph.py` owns the richer event graph. Likewise, `workflow_review.py` handles legacy grouping edits while `workflow_builder.py` owns the new reviewed specification. These are different formats, not duplicate implementations of the same contract.
+
 ## Actual dependency structure
 
 ```mermaid
 flowchart TD
     Skill[Companion skill] -. guides agent .-> MCP[mcp_server.py]
     MCP --> CLI[cli.py]
-    CLI --> Import[agent_sessions.py and devin.py]
-    CLI --> Core[core.py]
+    CLI --> Discovery[source_discovery.py and session_catalog.py]
+    CLI --> Import[importers/ and devin.py]
+    Import --> Helpers[Shared parsing helpers]
+    CLI --> Normalize[normalization.py and redaction.py]
+    CLI --> Store[storage.py]
+    Store --> Hierarchy[hierarchy.py and usage.py]
+    CLI --> Analysis[profiling.py / workflow_discovery.py / workflow_review.py / cases.py]
     CLI --> Providers[providers.py]
-    CLI --> Runner[runner.py]
+    CLI --> Replay[replay.py]
+    Replay --> Evaluation[evaluation.py]
+    Replay --> Checkpoints[checkpoints.py]
+    CLI --> Reports[aggregation.py / reporting.py / report_html.py]
     CLI --> Demo[demo_data.py]
     MCP --> Providers
-    Runner --> Providers
-    CLI --> Disk[Local JSON artifacts]
-    Core --> Disk
-    Runner --> Disk
+    Replay -. calls supplied adapter .-> Providers
+    Store --> Disk[Local JSON artifacts]
+    Replay --> Store
+    Reports --> Store
 ```
 
 The CLI is the orchestrator. The MCP server invokes command handlers for pipeline work and contains its own status/report-reading operations. The skill supplies agent instructions; it does not execute the harness by itself.
+
+Domain modules do not import the legacy facades. Importing a parser, discovery, hierarchy, workflow discovery, or evaluation module does not eagerly load the CLI, providers, replay, or reporting. Package-level `switchit.core`, `switchit.providers`, and `switchit.runner` attributes are resolved lazily for compatibility.
 
 Python exposes ten MCP tool names: `switchit_import`, `switchit_profile`, `switchit_map`, `switchit_cases`, `switchit_replay`, `switchit_report`, `switchit_run`, `switchit_status`, `switchit_read_report`, and `switchit_list_providers`. This is an inventory of declared tools, not a fresh functional test of every route.
 
@@ -90,20 +128,15 @@ Live model replay requires explicit remote opt-in. Devin import is a separate ex
 
 ## TypeScript implementation: separate port
 
-The Node package is an independent implementation, not a wrapper around Python.
+The Node package is now a thin launcher for the single Python engine.
 
-| File under `harness-js/src/` | Role | Python equivalent |
-| --- | --- | --- |
-| [core.ts](../harness-js/src/core.ts) | Types, normalization, redaction, canonical store | Parts of `core.py` |
-| [importers.ts](../harness-js/src/importers.ts) | JSON/JSONL, Claude Code and plain Codex imports | Parts of `core.py` and `agent_sessions.py` |
-| [analysis.ts](../harness-js/src/analysis.ts) | Profiling, workflow grouping, case selection | Analysis sections of `core.py` |
-| [providers.ts](../harness-js/src/providers.ts) | Recorded/mock/OpenAI-compatible/Anthropic adapters | Subset of `providers.py` |
-| [runner.ts](../harness-js/src/runner.ts) | Replay, checks and checkpointing | Replay/evaluation sections of `runner.py` |
-| [report.ts](../harness-js/src/report.ts) | Aggregation and report rendering | Reporting sections of `runner.py` |
-| [cli.ts](../harness-js/src/cli.ts) | Node command orchestration | `cli.py` |
-| [mcp.ts](../harness-js/src/mcp.ts) | Six MCP tools; launches the Node CLI as a child process | Subset of `mcp_server.py` |
+| File | Responsibility |
+| --- | --- |
+| [python-bridge.js](../harness-js/lib/python-bridge.js) | Validate the selected Python interpreter and forward arguments, streams, exit codes and signals |
+| [switchit.js](../harness-js/bin/switchit.js) | Launch `python -m switchit.cli` |
+| [switchit-mcp.js](../harness-js/bin/switchit-mcp.js) | Launch `python -m switchit.mcp_server` without contaminating protocol stdout |
 
-The [Node README](../harness-js/README.md) documents missing parity, including Bedrock, several import formats, Devin, and preservation of reviewed workflow edits. Both packages expose `switchit` and `switchit-mcp`, so documentation should identify which installation it describes.
+The duplicate TypeScript engine has been removed. Node users install the Python engine separately, and may select its executable through `SWITCHIT_PYTHON`. See [distribution](distribution.md) for packaging and installer checks.
 
 ## Agent skill and packaging
 
@@ -137,27 +170,55 @@ The skill installer and the JavaScript harness are distinct npm packages with di
 
 The synthetic demo does not call providers or the harness. `marketing/index.html` and `docs/index.html` are additional static website files outside the Next.js app. Research Markdown and SVG architecture diagrams also live in `docs/`.
 
+## GitHub evidence source
+
+The adjacent Aegis integration is owned by [`aegis_source.py`](../switchit/aegis_source.py) (bounded local GET collection) and [`importers/aegis.py`](../switchit/importers/aegis.py) (bundle/snapshot normalization). `sources aegis` / `switchit_sources_aegis` feed revisioned stores and the existing graph/platform pipeline. [Aegis integration](aegis-integration.md) documents the evidence-only boundary and compatibility tests.
+
+[`github_source.py`](../switchit/github_source.py) performs bounded, explicitly scoped read-only REST collection. [`importers/github.py`](../switchit/importers/github.py) converts saved or collected bundles into canonical metadata-only events, hierarchy, noncausal references and coverage diagnostics. `sources github` and `switchit_sources_github` expose it. The platform accepts the emitted events as inspectable activity evidence; these records do not become replayable model/tool steps. See [GitHub evidence](github-evidence.md).
+
+[`evidence_correlation.py`](../switchit/evidence_correlation.py) resolves exact, repository-scoped references between agent and GitHub events. It preserves ambiguous/missing matches and emits noncausal links; the graph exposes them while workflow construction excludes them from execution dependencies. `sources correlate` / `switchit_sources_correlate` combine explicitly supplied event documents.
+
+## Local execution platform and development graph
+
+| Module | Responsibility |
+| --- | --- |
+| [workflow_commands.py](../switchit/workflow_commands.py) | Build, explicitly review, generate cases, execute and export workflows |
+| [workflow_mcp.py](../switchit/workflow_mcp.py), [control_mcp.py](../switchit/control_mcp.py) | Expose workflow/source/harness operations through MCP |
+| [source_commands.py](../switchit/source_commands.py) | Scoped inventory and revisioned ingestion |
+| [harness_commands.py](../switchit/harness_commands.py) | Bounded recipe proposals, comparisons, local promotions and rollback |
+| [skill_export.py](../switchit/skill_export.py) | Reviewed contract, optional cases, manifest and executable fixture verifier |
+| [orchestration/](../switchit/orchestration) | Durable command DAGs, bounded parallel workers and configured development plans |
+| [platform/](../switchit/platform) | Local HTTP API, persistent workflow jobs, same-origin evidence UI |
+
+The local platform is served by `switchit serve`; its assets are included in the Python wheel. The marketing site remains a separate static deployment. Development workers use explicitly configured commands and directories; importing a vendor's logs does not install or authorize a native worker for that vendor.
+
 ## Verification modules
 
 Python tests are organized around core import/analysis, provider conversion, runner behavior, CLI, MCP, catalog stubs, and Muse/Grok importers. See [tests](../tests). Sample JSON/JSONL/OTLP/config inputs live in [examples](../examples).
 
-The prior review found the JavaScript test command ran zero tests. This mapping task did not rerun the suites or change executable code. Documentation paths and formatting were checked.
+The suite covers independent module contracts, replay correctness, public commands, packaging, orchestration and platform jobs. Optional-format tests skip when their dependencies are unavailable. The extraction-only baseline matched before/after artifacts; subsequent intentional fixes change repeated-call comparison, chain accounting, and legacy fixture verdicts. See [module-contracts.md](module-contracts.md) for the current checks and limits.
+
+The Node launcher and skill installer have substantive protocol, process, packaging and isolated-install tests. Business logic is shared by forwarding to Python.
 
 ## Proposed extensions and their attachment points
 
 | Proposed module — not implemented | Attaches to | Purpose |
 | --- | --- | --- |
+| Additional vendor relationship capture | Source importers and `execution_graph.py` | Extend tested source schemas and recover more explicitly recorded relationships |
+| App-specific workflow templates | `workflow_builder.py` and dependency manifests | Supply reviewed parameterization, business outcomes and representative cases |
+| Native agent runtime integrations | `runtime_adapters.py` and `composer.py` | Implement/test vendor-specific wrappers and live compatibility rather than assuming execution from importer support |
 | Hermes/OpenClaw capture adapters | Import boundary and canonical store | Capture host-specific actions, IDs, skills, configuration and outcomes |
 | Native Hermes plugin | MCP/CLI plus host hooks | Make selected capture and assessment available inside Hermes |
-| Workflow contract format | Cases and evaluation | Represent required outcomes, ordering, approvals and allowed variation |
 | Isolated environment runner | Replay engine | Prepare/reset memory and tool state; validate effects in staging |
 | Versioned workflow registry | Artifact persistence | Store reusable contracts, fixtures and test history |
 | CI/team reporting | Reports and run metadata | Apply reviewed thresholds and share change evidence |
 
 Supermemory belongs at the business-tool/context boundary in this design. It should not be added as a chat-model provider. Dedicated live memory evaluation would require new adapters and controlled state.
 
-## Suggested code boundaries for future maintenance
+## Working on a module
 
-`core.py` currently combines importing, normalization, storage, profiling, grouping and case selection. `runner.py` combines execution, evaluation, aggregation and HTML generation. Those are the main candidates for eventual separation into focused modules. The TypeScript port already separates `analysis.ts` and `report.ts`, but duplicated behavior still needs a shared compatibility contract.
+Edit the owner module, not the compatibility facade. Existing dictionary-based inputs/outputs and function signatures remain the contracts for this extraction. Agent discovery and importer dispatch also accept explicit registries for isolated use; their old facade signatures continue to honor `AGENT_DEFAULTS` and `IMPORTERS_BY_AGENT` overrides.
 
-Recommended order: repair replay correctness; define shared case/result contracts; then extract modules when implementation work benefits from it. This map does not propose an immediate repository-wide refactor.
+Run the relevant existing tests and the module boundary tests, then the full offline suite with `python3 -m unittest discover -s tests`. Parser fixtures belong at the importer boundary; hierarchy fixtures should test recorded containment; workflow quality evals and richer causal-graph tests belong with the future implementations rather than being implied by this structural move.
+
+Replay correctness fixes and independent workflow modules are now implemented. Their scope is documented explicitly: source coverage is uneven, workflow grouping remains heuristic, native agent wrappers are not supplied, and live workflow portability has not been established by synthetic tests.

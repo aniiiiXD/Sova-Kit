@@ -279,13 +279,12 @@ def _content_to_str(content) -> str:
 def to_openai_messages(messages: list) -> list:
     """Map canonical messages to OpenAI chat format.
 
-    Historical assistant tool_calls get fabricated ids (``call_N``) and the
-    following tool-role messages are matched to them in order. This is a
-    lossy but explicit reconstruction from telemetry that did not preserve
-    provider call ids.
+    Preserve explicit IDs. For legacy calls without IDs, generate unique
+    call_N IDs and match following tool results in order.
     """
     converted = []
     pending_calls = []
+    generated_count = 0
     for message in messages or []:
         role = message.get("role") or "user"
         content = _content_to_str(message.get("content"))
@@ -295,7 +294,8 @@ def to_openai_messages(messages: list) -> list:
             if historical_calls:
                 mapped = []
                 for position, call in enumerate(historical_calls):
-                    call_id = f"call_{len(pending_calls) + position}"
+                    call_id = call.get("id") or f"call_{generated_count}"
+                    generated_count += 1
                     pending_calls.append(call_id)
                     mapped.append(
                         {
@@ -313,6 +313,8 @@ def to_openai_messages(messages: list) -> list:
             tool_call_id = message.get("tool_call_id")
             if not tool_call_id and pending_calls:
                 tool_call_id = pending_calls.pop(0)
+            elif tool_call_id in pending_calls:
+                pending_calls.remove(tool_call_id)
             converted.append(
                 {
                     "role": "tool",
@@ -342,10 +344,8 @@ def to_openai_tools(tools: list) -> list:
 def to_anthropic_messages(messages: list) -> tuple:
     """Split canonical messages into (system_text, anthropic_messages).
 
-    Tool-role messages become user turns containing a readable ``[tool]``
-    line: historical telemetry does not preserve the tool_use ids Anthropic
-    requires, and replay is for comparison, not for continuing a live tool
-    conversation.
+    Preserved tool IDs become native tool_use/tool_result blocks. Legacy
+    messages without IDs retain their explicit text-only fallback.
     """
     system_parts = []
     converted = []
@@ -357,9 +357,23 @@ def to_anthropic_messages(messages: list) -> tuple:
                 system_parts.append(content)
             continue
         if role == "tool":
-            converted.append({"role": "user", "content": f"[tool result] {content}"})
+            if message.get("tool_call_id"):
+                block = {"type": "tool_result", "tool_use_id": message["tool_call_id"], "content": content}
+                if converted and converted[-1]["role"] == "user" and isinstance(converted[-1]["content"], list):
+                    converted[-1]["content"].append(block)
+                else:
+                    converted.append({"role": "user", "content": [block]})
+            else:
+                converted.append({"role": "user", "content": f"[tool result] {content}"})
         elif role == "assistant":
-            converted.append({"role": "assistant", "content": content or "(assistant tool call)"})
+            calls = message.get("tool_calls") or []
+            if calls and all(call.get("id") for call in calls):
+                blocks = ([{"type": "text", "text": content}] if content else []) + [
+                    {"type": "tool_use", "id": call["id"], "name": call.get("name", ""),
+                     "input": call.get("arguments") or {}} for call in calls]
+                converted.append({"role": "assistant", "content": blocks})
+            else:
+                converted.append({"role": "assistant", "content": content or "(assistant tool call)"})
         else:
             converted.append({"role": "user", "content": content})
     if converted and converted[0]["role"] != "user":
@@ -381,6 +395,20 @@ def to_anthropic_tools(tools: list) -> list:
 def to_bedrock_messages(messages: list) -> tuple:
     """Split canonical messages into (system_text, bedrock_converse_messages)."""
     system_text, converted = to_anthropic_messages(messages)
+    for message in converted:
+        blocks = message["content"]
+        if isinstance(blocks, str):
+            message["content"] = [{"text": blocks}]
+            continue
+        content = []
+        for block in blocks:
+            if block["type"] == "text":
+                content.append({"text": block["text"]})
+            elif block["type"] == "tool_use":
+                content.append({"toolUse": {"toolUseId": block["id"], "name": block["name"], "input": block["input"]}})
+            elif block["type"] == "tool_result":
+                content.append({"toolResult": {"toolUseId": block["tool_use_id"], "content": [{"text": block["content"]}]}})
+        message["content"] = content
     return system_text, converted
 
 
@@ -417,7 +445,7 @@ class OpenAICompatibleAdapter(ProviderAdapter):
 
     def __init__(self, model: str, api_key: str | None = None, base_url: str | None = None,
                  timeout: int = DEFAULT_TIMEOUT_SECONDS, remote: bool = False,
-                 label: str | None = None, key_envs: tuple | None = None):
+                 label: str | None = None, key_envs: tuple | None = None, api_key_required: bool = True):
         self.model = model
         self.api_key = api_key
         self.base_url = (base_url or "https://api.openai.com/v1").rstrip("/")
@@ -425,6 +453,7 @@ class OpenAICompatibleAdapter(ProviderAdapter):
         self.remote = bool(remote)
         self.label = label or "openai"
         self.key_envs = key_envs or ("SWITCHIT_OPENAI_API_KEY", "OPENAI_API_KEY")
+        self.api_key_required = api_key_required
 
     def capabilities(self) -> dict:
         return {
@@ -445,7 +474,7 @@ class OpenAICompatibleAdapter(ProviderAdapter):
                 f"The '{self.label}' adapter is a live provider. It is disabled by default; "
                 "re-run the replay command with --remote to enable data transfer to this provider."
             )
-        if not self.api_key:
+        if self.api_key_required and not self.api_key:
             env_hint = " or ".join(self.key_envs)
             raise ProviderError(
                 f"Missing API key for '{self.label}'. Set {env_hint} in the environment; "
@@ -476,11 +505,13 @@ class OpenAICompatibleAdapter(ProviderAdapter):
         return self.parse_response(body, latency_ms)
 
     def _headers(self) -> dict:
-        return {
-            "Authorization": f"Bearer {self.api_key}",
+        headers = {
             "Content-Type": "application/json",
             "User-Agent": USER_AGENT,
         }
+        if self.api_key:
+            headers["Authorization"] = f"Bearer {self.api_key}"
+        return headers
 
     def _error_result(self, error, started) -> dict:
         detail = ""
@@ -969,6 +1000,7 @@ def build_adapter(kind: str, config: dict | None = None, remote: bool = False) -
             remote=remote,
             label=config.get("preset") or config.get("label") or "openai",
             key_envs=tuple(config.get("key_envs") or ("SWITCHIT_OPENAI_API_KEY", "OPENAI_API_KEY")),
+            api_key_required=config.get("api_key_required", True),
         )
     if kind == "anthropic":
         return AnthropicAdapter(
