@@ -1,0 +1,2 @@
+{"id":"eval-fixture-1","document_id":"eval-document-1","context":"Fictional held-out software-test record. Revenue was 120 units in 2025 and 150 units in 2026.","question":"What was the percentage growth?","choices":{"A":"25 percent","B":"50 percent"},"answer":"A","split":"eval"}
+{"id":"eval-fixture-2","document_id":"eval-document-2","context":"Independent fictional held-out test record. The agreement expires on 30 June.","question":"In what month does the agreement expire?","choices":{"A":"June","B":"March"},"answer":"A","split":"eval"}

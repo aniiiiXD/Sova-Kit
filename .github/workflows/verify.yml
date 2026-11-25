@@ -7,6 +7,9 @@ permissions:
 jobs:
   python:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: SwitchIt
     strategy:
       matrix:
         python: ['3.10', '3.12', '3.14']
@@ -27,6 +30,6 @@ jobs:
         with:
           node-version: '20'
       - run: npm test
-        working-directory: harness-js
+        working-directory: SwitchIt/harness-js
       - run: npm test
-        working-directory: npm
+        working-directory: SwitchIt/npm

@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 960" width="1440" height="960" role="img" aria-labelledby="title description">
+  <title id="title">SOVA Cache Handoff developer interface</title>
+  <desc id="description">An agent supplies a cache scope, shared prefix token IDs and a worker-specific suffix. Cache Handoff finds the longest compatible native prefix and passes a private copy, or no cache, to the model engine. The module returns the engine output and counts of reused and processed tokens. The diagram shows the public calls and engine callbacks for the in-process Python preview.</desc>
+  <defs>
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="#d5dce4" stroke-width=".65"/>
+    </pattern>
+    <marker id="arrow" viewBox="0 0 9 8" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="m1 1 6 3-6 3" fill="none" stroke="#52748c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <style>
+      text { font-family: 'IBM Plex Mono', 'SF Mono', Menlo, Consolas, monospace; fill: #1e2c38 }
+      .heading { font-size: 48px; font-weight: 700; letter-spacing: -2.2px }
+      .subtitle { font-size: 17px; fill: #435567 }
+      .label { font-size: 12px; font-weight: 700; letter-spacing: 1.45px; fill: #455e73 }
+      .card-title { font-size: 21px; font-weight: 700; letter-spacing: -.5px }
+      .body { font-size: 14px; fill: #435567 }
+      .small { font-size: 12px; fill: #46596a }
+      .code { font-size: 15px; font-weight: 700; fill: #234a6c }
+      .metric { font-size: 15px; font-weight: 700; fill: #f0f6fb }
+      .output-note { font-size: 13px; fill: #c8d9e7 }
+      .green { fill: #22614a }
+      .amber { fill: #89581e }
+      .violet { fill: #654775 }
+      .white { fill: #fff }
+      .panel { fill: #fff; stroke: #bccbd7; stroke-width: 1 }
+      .divider { stroke: #d8e0e8; stroke-width: 1 }
+      .route { stroke: #52748c; stroke-width: 1.6; fill: none; marker-end: url(#arrow) }
+    </style>
+  </defs>
+
+  <rect width="1440" height="960" fill="#f5f7fa"/>
+  <rect width="1440" height="960" fill="url(#grid)" opacity=".63"/>
+  <path d="M0 0h1440v7H0z" fill="#234a6c"/>
+
+  <g aria-label="Title and scope">
+    <text class="label" x="48" y="57">PYTHON MODULE</text>
+    <text class="label" x="1392" y="57" text-anchor="end">[ DEVELOPER PREVIEW · V0.1.0 ]</text>
+    <text class="heading" x="46" y="114">SOVA Cache Handoff</text>
+    <text class="subtitle" x="49" y="148">Process shared context once. Let each agent branch from it with its own task.</text>
+    <path d="M48 176h1344" stroke="#9fb1c1"/>
+  </g>
+
+  <g aria-label="Inputs from the agent and tokenizer">
+    <rect class="panel" x="48" y="203" width="395" height="254" rx="9"/>
+    <text class="label" x="72" y="231">AGENT RUNTIME</text>
+    <text class="card-title" x="72" y="262">Render and tokenize</text>
+    <rect x="72" y="280" width="347" height="40" rx="5" fill="#edf3fa"/>
+    <text class="code" x="84" y="305">prefix · Iterable[int]</text>
+    <text class="small" x="84" y="337">Shared history, code, tool results, or logs</text>
+    <rect x="72" y="350" width="347" height="40" rx="5" fill="#f2edf8"/>
+    <text class="code violet" x="84" y="375">suffix · Iterable[int]</text>
+    <text class="small" x="84" y="407">At least one token for the worker's task</text>
+    <text class="small" x="72" y="435">CacheScope · tenant / model / tokenizer / layout</text>
+  </g>
+
+  <path class="route" d="M443 326h47"/>
+
+  <g aria-label="Cache Handoff looks up and clones compatible state">
+    <rect x="494" y="203" width="420" height="254" rx="9" fill="#fbfdff" stroke="#5782a3" stroke-width="1.5"/>
+    <path d="M506 204h396" stroke="#5782a3" stroke-width="3.5" stroke-linecap="round"/>
+    <text class="label" x="518" y="231">SOVA CACHE HANDOFF</text>
+    <text class="card-title" x="518" y="262">Find the longest prefix</text>
+    <text class="small" x="518" y="285">Match scope and exact leading token IDs.</text>
+
+    <rect x="518" y="300" width="372" height="32" rx="4" fill="#eaf4ee"/>
+    <text class="small green" x="529" y="321" font-weight="700">FULL HIT</text>
+    <text class="small green" x="637" y="321">Private cache + worker suffix</text>
+    <rect x="518" y="339" width="372" height="32" rx="4" fill="#eaf1f9"/>
+    <text class="small" x="529" y="360" font-weight="700">PARTIAL HIT</text>
+    <text class="small" x="637" y="360">Cache + uncached tail + suffix</text>
+    <rect x="518" y="378" width="372" height="32" rx="4" fill="#faf0e1"/>
+    <text class="small amber" x="529" y="399" font-weight="700">MISS</text>
+    <text class="small amber" x="637" y="399">Full prompt, starting at zero</text>
+    <text class="small" x="518" y="435">Same model · in-process registry · TTL and LRU</text>
+  </g>
+
+  <path class="route" d="M914 326h47"/>
+
+  <g aria-label="The developer's model engine advances the request">
+    <rect class="panel" x="965" y="203" width="427" height="254" rx="9"/>
+    <text class="label" x="989" y="231">MODEL ENGINE</text>
+    <text class="card-title" x="989" y="262">Run the remaining tokens</text>
+    <rect x="989" y="280" width="379" height="78" rx="5" fill="#edf3fa"/>
+    <text class="code" x="1004" y="309">advance(scope, tokens, cache)</text>
+    <text class="code" x="1004" y="337">→ (output, updated_cache)</text>
+    <text class="body" x="989" y="387">Your engine owns the model and KV state.</text>
+    <text class="small" x="989" y="415">tokens is tuple[int, ...] · cache is None on miss</text>
+    <text class="small" x="989" y="435">On a hit, the worker gets its own cache copy.</text>
+  </g>
+
+  <path class="route" d="M1179 457v29"/>
+
+  <g aria-label="Result returned by Cache Handoff">
+    <rect x="48" y="490" width="1344" height="84" rx="8" fill="#203648"/>
+    <text class="output-note" x="72" y="520">RETURNED TO CALLER</text>
+    <text class="metric" x="72" y="548">HandoffResult[T]</text>
+    <path d="M344 508v48m343-48v48m365-48v48" stroke="#496478"/>
+    <text class="metric" x="368" y="524">output · T</text>
+    <text class="output-note" x="368" y="548">Your engine's result</text>
+    <text class="metric" x="711" y="524">reused_tokens · int</text>
+    <text class="output-note" x="711" y="548">Prefix tokens served from cache</text>
+    <text class="metric" x="1076" y="524">processed_tokens · int</text>
+    <text class="output-note" x="1076" y="548">New input tokens sent to the engine</text>
+  </g>
+
+  <g aria-label="Public Python calls">
+    <text class="label" x="48" y="617">PUBLIC PYTHON API</text>
+    <rect class="panel" x="48" y="635" width="671" height="200" rx="8"/>
+    <text class="code" x="72" y="666">prime(scope, prefix) → bool</text>
+    <text class="small" x="72" y="687">Prepare a shared prefix once. True means the cache is retained.</text>
+    <path class="divider" d="M72 702h623"/>
+    <text class="code" x="72" y="728">remember(scope, prefix, state) → bool</text>
+    <text class="small" x="72" y="749">Register native KV state your engine has already computed.</text>
+    <path class="divider" d="M72 764h623"/>
+    <text class="code" x="72" y="790">run(scope, prefix, suffix) → HandoffResult[T]</text>
+    <text class="small" x="72" y="811">Reuse what matches and pass the remaining tokens to the engine.</text>
+  </g>
+
+  <g aria-label="Engine adapter callbacks">
+    <text class="label" x="743" y="617">WHAT YOUR ADAPTER SUPPLIES</text>
+    <rect class="panel" x="743" y="635" width="649" height="200" rx="8"/>
+    <text class="code" x="767" y="666">advance(scope, tokens, cache)</text>
+    <text class="small" x="767" y="687">Run the checkpoint in scope and return the output and updated KV.</text>
+    <path class="divider" d="M767 702h601"/>
+    <text class="code" x="767" y="728">clone_cache(state) → state</text>
+    <text class="small" x="767" y="749">Return an independent, writable copy for the next worker.</text>
+    <path class="divider" d="M767 764h601"/>
+    <text class="code" x="767" y="790">cache_bytes(state) → int</text>
+    <text class="small" x="767" y="811">Report retained bytes. State also implements get_seq_length().</text>
+  </g>
+
+  <g aria-label="Offline example and integration detail">
+    <rect x="48" y="861" width="1344" height="58" rx="7" fill="#e9f1f8" stroke="#b8ccd9"/>
+    <text class="label" x="72" y="895">TRY OFFLINE</text>
+    <text class="code" x="220" y="895">kvverify handoff-smoke</text>
+    <text class="small" x="1392" y="944" text-anchor="end">Split the rendered prompt after tokenization · derive scope from authenticated tenant and exact engine configuration</text>
+  </g>
+</svg>

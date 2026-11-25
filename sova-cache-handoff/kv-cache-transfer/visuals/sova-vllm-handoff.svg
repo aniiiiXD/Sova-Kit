@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 940" width="1440" height="940" role="img" aria-labelledby="title description">
+  <title id="title">SOVA Cache Handoff in vLLM</title>
+  <desc id="description">A source worker processes a prompt and exports complete native KV blocks. A same-checkpoint receiver can load them directly. A cross-model handoff prepares a separate receiver artifact with the mapper. The receiving scheduler matches scope, token IDs, checkpoint and cache geometry, then imports matching blocks before processing its suffix. A miss uses full prefill, and a failed import invalidates blocks for recomputation.</desc>
+  <defs>
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="#d3dde4" stroke-width=".68"/>
+    </pattern>
+    <marker id="arrow" viewBox="0 0 9 8" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="m1 1 6 3-6 3" fill="none" stroke="#406987" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="fallback" viewBox="0 0 9 8" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="m1 1 6 3-6 3" fill="none" stroke="#986b36" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <style>
+      text { font-family: 'IBM Plex Mono', 'SF Mono', Menlo, Consolas, monospace; fill: #203040 }
+      .heading { font-size: 46px; font-weight: 700; letter-spacing: -2.1px }
+      .sub { font-size: 16px; fill: #45596b }
+      .label { font-size: 12px; font-weight: 700; letter-spacing: 1.35px; fill: #47647a }
+      .card-title { font-size: 20px; font-weight: 700; letter-spacing: -.55px }
+      .body { font-size: 13px; fill: #405466 }
+      .small { font-size: 12px; fill: #42596a }
+      .code { font-size: 14px; font-weight: 700; fill: #244c70 }
+      .violet { fill: #655178 }
+      .green { fill: #215c45 }
+      .amber { fill: #754b1c }
+      .panel { fill: #fff; stroke: #bccbd6 }
+      .route { fill: none; stroke: #406987; stroke-width: 1.65; marker-end: url(#arrow) }
+      .recover { fill: none; stroke: #986b36; stroke-width: 1.45; stroke-dasharray: 5,4; marker-end: url(#fallback) }
+      .separator { stroke: #d8e1e8 }
+    </style>
+  </defs>
+
+  <rect width="1440" height="940" fill="#f5f7fa"/>
+  <rect width="1440" height="940" fill="url(#grid)" opacity=".67"/>
+  <path d="M0 0h1440v7H0z" fill="#234a6a"/>
+
+  <g aria-label="Title">
+    <text class="label" x="48" y="55">SOVAKIT / INFERENCE</text>
+    <text class="label" x="1392" y="55" text-anchor="end">[ VLLM 0.34.0 · DEVELOPER PREVIEW ]</text>
+    <text class="heading" x="46" y="111">SOVA Cache Handoff in vLLM</text>
+    <text class="sub" x="49" y="146">Two workers share a prompt prefix. The receiver loads prepared KV and processes its own suffix.</text>
+    <path d="M48 169h1344" stroke="#a4b6c4"/>
+  </g>
+
+  <g aria-label="Two requests share the exact leading token IDs">
+    <rect class="panel" x="48" y="189" width="430" height="78" rx="7"/>
+    <text class="label" x="67" y="212">SOURCE REQUEST</text>
+    <rect x="67" y="225" width="230" height="27" rx="4" fill="#e9f1fa"/>
+    <rect x="305" y="225" width="154" height="27" rx="4" fill="#f1ecf7"/>
+    <text class="small" x="77" y="243">Shared prefix token IDs</text>
+    <text class="small violet" x="315" y="243">Source task suffix</text>
+
+    <rect class="panel" x="866" y="189" width="526" height="78" rx="7"/>
+    <text class="label" x="884" y="212">RECEIVER REQUEST</text>
+    <rect x="884" y="225" width="271" height="27" rx="4" fill="#e9f1fa"/>
+    <rect x="1163" y="225" width="211" height="27" rx="4" fill="#f1ecf7"/>
+    <text class="small" x="894" y="243">Same leading token IDs</text>
+    <text class="small violet" x="1173" y="243">Receiver task suffix</text>
+    <path class="route" d="M196 267v27"/>
+    <path class="route" d="M915 267v27"/>
+  </g>
+
+  <g aria-label="Source worker exports native cache blocks">
+    <rect class="panel" x="48" y="298" width="296" height="259" rx="8"/>
+    <text class="label" x="70" y="327">SOURCE WORKER</text>
+    <text class="card-title" x="70" y="357">Export native KV</text>
+    <text class="body" x="70" y="387">Run the source prompt.</text>
+    <text class="body" x="70" y="411">Gather complete prefix blocks.</text>
+    <rect x="70" y="433" width="252" height="67" rx="5" fill="#e9f1fa"/>
+    <text class="code" x="82" y="459">Native artifact</text>
+    <text class="small" x="82" y="482">Source checkpoint · FP16/BF16</text>
+    <text class="small" x="70" y="530">Export runs after the forward.</text>
+  </g>
+
+  <path class="route" d="M344 420h37"/>
+
+  <g aria-label="Prepare cache for the receiver">
+    <rect class="panel" x="385" y="298" width="315" height="259" rx="8"/>
+    <text class="label" x="407" y="327">CACHE PREPARATION</text>
+    <text class="card-title" x="407" y="357">Choose the artifact</text>
+    <rect x="407" y="375" width="271" height="60" rx="5" fill="#eaf4ed"/>
+    <text class="small green" x="419" y="398" font-weight="700">SAME CHECKPOINT</text>
+    <text class="small green" x="419" y="419">Use the native artifact.</text>
+    <rect x="407" y="446" width="271" height="60" rx="5" fill="#f0edf6"/>
+    <text class="small violet" x="419" y="469" font-weight="700">DIFFERENT CHECKPOINT</text>
+    <text class="small violet" x="419" y="490">Map KV to the receiver layout.</text>
+    <text class="small" x="407" y="530">Optional native receiver head.</text>
+  </g>
+
+  <path class="route" d="M700 420h37"/>
+
+  <g aria-label="The receiving scheduler checks the artifact identity and layout">
+    <rect x="741" y="298" width="307" height="259" rx="8" fill="#fbfdff" stroke="#5a83a2" stroke-width="1.5"/>
+    <path d="M753 299h283" stroke="#5a83a2" stroke-width="3" stroke-linecap="round"/>
+    <text class="label" x="763" y="327">RECEIVER SCHEDULER</text>
+    <text class="card-title" x="763" y="357">Match exact context</text>
+    <rect x="763" y="374" width="263" height="131" rx="5" fill="#edf3f9"/>
+    <text class="small" x="775" y="399">Scope + handoff ID</text>
+    <text class="small" x="775" y="425">Prefix token digest + count</text>
+    <text class="small" x="775" y="451">Checkpoint + mapper revision</text>
+    <text class="small" x="775" y="477">Tokenizer + dtype + geometry</text>
+    <text class="small" x="763" y="530">Check readiness before skipping.</text>
+  </g>
+
+  <path class="route" d="M1048 420h37"/>
+
+  <g aria-label="Receiver loads blocks and processes the suffix">
+    <rect class="panel" x="1089" y="298" width="303" height="259" rx="8"/>
+    <text class="label" x="1111" y="327">RECEIVER WORKER</text>
+    <text class="card-title" x="1111" y="357">Load into paged KV</text>
+    <text class="body" x="1111" y="387">Read the prepared artifact.</text>
+    <text class="body" x="1111" y="411">Fill receiver block slots.</text>
+    <text class="body" x="1111" y="435">Process the new suffix tokens.</text>
+    <rect x="1111" y="461" width="259" height="39" rx="5" fill="#eaf4ed"/>
+    <text class="code green" x="1123" y="486">First token → response</text>
+    <text class="small" x="1111" y="530">Confirm the load in worker logs.</text>
+  </g>
+
+  <path class="recover" d="M872 557v53"/>
+  <path class="recover" d="M1241 557v53"/>
+
+  <g aria-label="Shared artifact format">
+    <rect class="panel" x="48" y="614" width="652" height="85" rx="7"/>
+    <text class="label" x="70" y="644">PRIVATE SHARED DIRECTORY</text>
+    <text class="small" x="70" y="672">One host · short-lived cache files</text>
+    <path class="separator" d="M363 630v52"/>
+    <text class="label" x="387" y="644">SAFETENSORS · ONE TENSOR PER LAYER</text>
+    <text class="code" x="387" y="672">[2, tokens, kv_heads, head_dim]</text>
+  </g>
+
+  <g aria-label="Normal prefill and failed-load recovery">
+    <rect x="741" y="614" width="651" height="85" rx="7" fill="#faf1e4" stroke="#d9be9c"/>
+    <text class="label amber" x="763" y="644">CACHE MISS</text>
+    <text class="small amber" x="763" y="672">Process the full prompt.</text>
+    <path d="M1054 630v52" stroke="#dbc8af"/>
+    <text class="label amber" x="1078" y="644">LOAD FAILED</text>
+    <text class="small amber" x="1078" y="672">Mark blocks invalid → recompute.</text>
+  </g>
+
+  <g aria-label="Operational and verification details">
+    <path d="M48 739h1344" stroke="#a4b6c4"/>
+    <rect class="panel" x="48" y="763" width="430" height="110" rx="7"/>
+    <text class="label" x="70" y="793">REQUEST METADATA</text>
+    <text class="small" x="70" y="819">cache_salt · authorized scope</text>
+    <text class="small" x="70" y="842">kv_transfer_params.sova · op / ID / prefix count</text>
+
+    <rect class="panel" x="505" y="763" width="430" height="110" rx="7"/>
+    <text class="label" x="527" y="793">LOCAL VALIDATION</text>
+    <text class="small" x="527" y="819">Block export, import, and recompute fixtures</text>
+    <text class="small" x="527" y="842">Affine and residual mapper paths tested on CPU</text>
+
+    <rect class="panel" x="962" y="763" width="430" height="110" rx="7"/>
+    <text class="label" x="984" y="793">LIVE GPU CHECKS PENDING</text>
+    <text class="small" x="984" y="819">Same-model first-token and logprob parity</text>
+    <text class="small" x="984" y="842">Cross-model quality, TTFT, and workflow cost</text>
+
+    <text class="small" x="1392" y="911" text-anchor="end">Synchronous file transfer · one CUDA worker per model · dense full-attention Qwen3</text>
+  </g>
+</svg>

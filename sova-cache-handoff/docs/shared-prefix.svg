@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="382" viewBox="0 0 1000 382" role="img" aria-labelledby="title description" font-family="monospace" fill="#233247">
+  <title id="title">Cache Handoff · Share a prefix</title>
+  <desc id="description">An engine stores native KV state for exact shared starting tokens and a compatible scope. Workers each receive an independent copy and add their own task. A miss processes the full input.</desc>
+  <defs>
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="#e2e7ec" stroke-width=".65"/>
+    </pattern>
+    <style>
+      .title { font-size: 29px; font-weight: 700; letter-spacing: -.8px; }
+      .subtitle { font-size: 15px; fill: #4a5a70; }
+      .tag, .kicker { font-size: 12px; font-weight: 700; letter-spacing: .8px; }
+      .tag { fill: #52647b; }
+      .heading { font-size: 19px; font-weight: 700; letter-spacing: -.3px; }
+      .body { font-size: 14px; fill: #40516a; }
+      .note, .label { font-size: 14px; fill: #475b72; }
+      .strip { fill: #f1f4f7; stroke: #c8d3de; }
+      .flow { fill: none; stroke: #64758a; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+      .dash { stroke-dasharray: 4 4; }
+    </style>
+  </defs>
+
+  <rect width="1000" height="382" fill="#fafafa"/>
+  <rect width="1000" height="382" fill="url(#grid)"/>
+  <text x="36" y="52" class="title">Cache Handoff · Share a prefix</text>
+  <text x="36" y="79" class="subtitle">Reuse native model state across workers in one process</text>
+  <text x="964" y="50" class="tag" text-anchor="end">[ KV REUSE ]</text>
+  <path d="M36 96H964" stroke="#c8d3de"/>
+
+  <path d="M298 198H339" class="flow"/>
+  <polygon points="330,194 339,198 330,202" fill="#64758a"/>
+
+  <path d="M614 198H639V165H667" class="flow"/>
+  <polygon points="658,161 667,165 658,169" fill="#64758a"/>
+
+  <path d="M639 198V275H667" class="flow"/>
+  <polygon points="658,271 667,275 658,279" fill="#64758a"/>
+
+  <g>
+    <rect x="36" y="142" width="262" height="112" rx="9" fill="#edf5fc" stroke="#a3bfd8" stroke-width="1.2"/>
+    <text x="53" y="167" class="kicker" fill="#255b88">SHARED INPUT</text>
+    <text x="53" y="192" class="heading">Common context</text>
+    <text x="53" y="216" class="body">Identical prefix tokens</text>
+    <text x="53" y="237" class="body">and compatible scope</text>
+  </g>
+
+  <g>
+    <rect x="342" y="142" width="272" height="112" rx="9" fill="#edf7f0" stroke="#a6c6b0" stroke-width="1.2"/>
+    <text x="359" y="167" class="kicker" fill="#236547">ENGINE ADAPTER</text>
+    <text x="359" y="192" class="heading">Native KV state</text>
+    <text x="359" y="216" class="body">Store the shared prefix</text>
+    <text x="359" y="237" class="body">and clone it on reuse</text>
+  </g>
+
+  <g>
+    <rect x="670" y="112" width="294" height="94" rx="9" fill="#f6effa" stroke="#cbb7d9" stroke-width="1.2"/>
+    <text x="687" y="137" class="kicker" fill="#64418a">WORKER A</text>
+    <text x="687" y="162" class="heading">Review the API change</text>
+    <text x="687" y="186" class="body">Own cache copy + review task</text>
+  </g>
+
+  <g>
+    <rect x="670" y="222" width="294" height="94" rx="9" fill="#f6effa" stroke="#cbb7d9" stroke-width="1.2"/>
+    <text x="687" y="247" class="kicker" fill="#64418a">WORKER B</text>
+    <text x="687" y="272" class="heading">Draft release notes</text>
+    <text x="687" y="296" class="body">Own cache copy + writing task</text>
+  </g>
+
+  <rect x="36" y="322" width="928" height="42" rx="7" class="strip"/>
+  <text x="52" y="348" class="note">On a cache miss, the engine processes the full input.</text>
+</svg>

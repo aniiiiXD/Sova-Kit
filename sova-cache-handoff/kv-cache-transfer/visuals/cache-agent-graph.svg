@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1530" viewBox="0 0 1500 1530" role="img" aria-labelledby="title description">
+<title id="title">SOVA cache handoff and async build graph</title>
+<desc id="description">A small worker escalates to a larger model by reusing a native prefix or translating a compatible source cache. In the engineering loop, modules join at native verification, a candidate is profiled and trained, Astra reviews the results, and independent confirmation is required for success.</desc>
+<defs>
+  <pattern id="grid" width="22" height="22" patternUnits="userSpaceOnUse"><path d="M22 0H0V22" fill="none" stroke="#e5e8ee" stroke-width="1"/></pattern>
+  <marker id="arrow" markerWidth="8" markerHeight="8" refX="7.2" refY="3.8" orient="auto"><path d="M0 0L8 3.8L0 7.6z" fill="#62718a"/></marker>
+  <marker id="retry" markerWidth="8" markerHeight="8" refX="7.2" refY="3.8" orient="auto"><path d="M0 0L8 3.8L0 7.6z" fill="#a26c24"/></marker>
+  <marker id="failure" markerWidth="8" markerHeight="8" refX="7.2" refY="3.8" orient="auto"><path d="M0 0L8 3.8L0 7.6z" fill="#a8574c"/></marker>
+  <style>
+    text {font-family: "SF Mono", Menlo, Consolas, monospace; fill: #182435;}
+    .headline {font-size: 42px; font-weight: 700; letter-spacing: -1.7px;}
+    .sub {font-size: 17px; fill: #52627a;}
+    .tag {font-size: 13px; font-weight: 700; letter-spacing: 1.7px;}
+    .section {font-size: 24px; font-weight: 700; letter-spacing: -.55px;}
+    .node {font-size: 17px; font-weight: 700;}
+    .detail {font-size: 13px; fill: #4d5b70;}
+    .note {font-size: 13px; fill: #4d5b70;}
+    .edge {font-size: 12px; fill: #4d5b70;}
+  </style>
+</defs>
+<rect width="1500" height="1530" fill="#fafafa"/>
+<rect width="1500" height="1530" fill="url(#grid)"/>
+<text x="65" y="57" class="tag" text-anchor="start" style="fill:#146187">[ SOVA / SYSTEM DESIGN ]</text>
+<text x="65" y="113" class="headline" text-anchor="start">Cross-model cache handoff</text>
+<text x="67" y="149" class="sub" text-anchor="start">How agents share evidence at runtime, and how we build and verify the system.</text>
+<rect x="56" y="185" width="1388" height="366" rx="15" fill="#ffffff" stroke="#d1d7e1"/>
+<text x="87" y="224" class="tag" text-anchor="start" style="fill:#146187">01</text>
+<text x="128" y="226" class="section" text-anchor="start">Runtime · one escalation</text>
+<path d="M304 343H368" fill="none" stroke="#7a88a0" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M608 343H655V307H701" fill="none" stroke="#7a88a0" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M655 343V409H701" fill="none" stroke="#7a88a0" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M488 381V435" fill="none" stroke="#7a88a0" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M1055 307H1090V356H1128" fill="none" stroke="#7a88a0" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M1055 409H1090V356" fill="none" stroke="#7a88a0" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M876 371V342" fill="none" stroke="#a26c24" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="6 5" marker-end="url(#retry)"/>
+<text x="894" y="361" class="edge" text-anchor="start" style="fill:#865417">invalid or late → native</text>
+<text x="506" y="414" class="edge" text-anchor="start">no escalation</text>
+<rect x="87" y="305" width="217" height="76" rx="8" fill="#eaf5fc" stroke="#a8cfe9"/>
+<text x="195.5" y="340.0" class="node" text-anchor="middle" style="fill:#146187">1.7B worker</text>
+<text x="195.5" y="359.0" class="detail" text-anchor="middle">Read evidence and answer</text>
+<rect x="368" y="305" width="240" height="76" rx="8" fill="#f3edfa" stroke="#c9b6e2"/>
+<text x="488.0" y="340.0" class="node" text-anchor="middle" style="fill:#68438c">Escalation router</text>
+<text x="488.0" y="359.0" class="detail" text-anchor="middle">Check cache identity</text>
+<rect x="368" y="435" width="240" height="52" rx="8" fill="#f7f8fa" stroke="#ced3dc"/>
+<text x="488.0" y="467.0" class="node" text-anchor="middle" style="fill:#485469">Return worker answer</text>
+<rect x="701" y="272" width="354" height="70" rx="8" fill="#eaf5fc" stroke="#a8cfe9"/>
+<text x="878.0" y="304.0" class="node" text-anchor="middle" style="fill:#146187">Native 8B path</text>
+<text x="878.0" y="323.0" class="detail" text-anchor="middle">Reuse longest prefix, read remainder</text>
+<rect x="701" y="371" width="354" height="76" rx="8" fill="#f3edfa" stroke="#c9b6e2"/>
+<text x="878.0" y="406.0" class="node" text-anchor="middle" style="fill:#68438c">Transfer when eligible</text>
+<text x="878.0" y="425.0" class="detail" text-anchor="middle">Convert exact source prefix and validate</text>
+<rect x="1128" y="306" width="284" height="100" rx="8" fill="#e7f5eb" stroke="#9bceaa"/>
+<text x="1270.0" y="344.0" class="node" text-anchor="middle" style="fill:#23623a">8B orchestrator</text>
+<text x="1270.0" y="363.0" class="detail" text-anchor="middle">Read private review suffix</text>
+<text x="1270.0" y="380.0" class="detail" text-anchor="middle">Return answer and trace</text>
+<path d="M87 507H1412" fill="none" stroke="#7a88a0" stroke-width="1.6" stroke-linejoin="round"/>
+<text x="87" y="531" class="note" text-anchor="start">Shared prefix stays immutable. Each agent owns the suffix it appends.</text>
+<rect x="56" y="576" width="1388" height="897" rx="15" fill="#ffffff" stroke="#d1d7e1"/>
+<text x="87" y="615" class="tag" text-anchor="start" style="fill:#68438c">02</text>
+<text x="128" y="617" class="section" text-anchor="start">Engineering · async build and review</text>
+<text x="1412" y="615" class="tag" text-anchor="end" style="fill:#68438c">[ DURABLE CONTROLLER ]</text>
+<path d="M556 704V724" fill="none" stroke="#7a88a0" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M229 747V724H883V747" fill="none" stroke="#7a88a0" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M229 724V747" fill="none" stroke="#7a88a0" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M556 724V747" fill="none" stroke="#7a88a0" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M883 724V747" fill="none" stroke="#7a88a0" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M229 822V841H883V822" fill="none" stroke="#7a88a0" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M556 822V863" fill="none" stroke="#7a88a0" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M556 925V941H322V958" fill="none" stroke="#7a88a0" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M556 941H790V958" fill="none" stroke="#7a88a0" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M322 1022V1037H790V1022" fill="none" stroke="#7a88a0" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M556 1037V1060" fill="none" stroke="#7a88a0" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M556 1126V1152" fill="none" stroke="#7a88a0" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M556 1216V1242" fill="none" stroke="#7a88a0" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M556 1306V1350" fill="none" stroke="#7a88a0" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M1028 1093H1094" fill="none" stroke="#a26c24" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="6 5" marker-end="url(#retry)"/>
+<path d="M1420 1074H1430V724H886" fill="none" stroke="#a26c24" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="6 5" marker-end="url(#retry)"/>
+<path d="M1028 1274H1094" fill="none" stroke="#a8574c" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="6 5" marker-end="url(#failure)"/>
+<text x="624" y="1145" class="edge" text-anchor="start" style="fill:#23623a">development gates pass</text>
+<text x="624" y="1338" class="edge" text-anchor="start" style="fill:#23623a">all final gates pass</text>
+<rect x="84" y="649" width="944" height="55" rx="8" fill="#f7f8fa" stroke="#ced3dc"/>
+<text x="556.0" y="682.5" class="node" text-anchor="middle" style="fill:#485469">Freeze goal, thresholds and budget</text>
+<rect x="84" y="747" width="290" height="75" rx="8" fill="#eaf5fc" stroke="#a8cfe9"/>
+<text x="229.0" y="781.5" class="node" text-anchor="middle" style="fill:#146187">Cache contract</text>
+<text x="229.0" y="800.5" class="detail" text-anchor="middle">Exact prefix, keys, isolation</text>
+<rect x="411" y="747" width="290" height="75" rx="8" fill="#eaf5fc" stroke="#a8cfe9"/>
+<text x="556.0" y="781.5" class="node" text-anchor="middle" style="fill:#146187">Replay protocol</text>
+<text x="556.0" y="800.5" class="detail" text-anchor="middle">Trace, scorer, grouped splits</text>
+<rect x="738" y="747" width="290" height="75" rx="8" fill="#eaf5fc" stroke="#a8cfe9"/>
+<text x="883.0" y="781.5" class="node" text-anchor="middle" style="fill:#146187">Async controller</text>
+<text x="883.0" y="800.5" class="detail" text-anchor="middle">Leases and atomic GPU budget</text>
+<rect x="84" y="863" width="944" height="62" rx="8" fill="#eaf5fc" stroke="#a8cfe9"/>
+<text x="556.0" y="891.0" class="node" text-anchor="middle" style="fill:#146187">Join tested modules · verify native cache reuse</text>
+<text x="556.0" y="910.0" class="detail" text-anchor="middle">Registry + receiver + replay harness · Astra reviews native controls</text>
+<rect x="84" y="958" width="476" height="64" rx="8" fill="#f3edfa" stroke="#c9b6e2"/>
+<text x="322.0" y="987.0" class="node" text-anchor="middle" style="fill:#68438c">Profile conversion</text>
+<text x="322.0" y="1006.0" class="detail" text-anchor="middle">Estimate break-even against native prefill</text>
+<rect x="586" y="958" width="442" height="64" rx="8" fill="#f3edfa" stroke="#c9b6e2"/>
+<text x="807.0" y="987.0" class="node" text-anchor="middle" style="fill:#68438c">Fit one candidate</text>
+<text x="807.0" y="1006.0" class="detail" text-anchor="middle">Train adapter on separate documents</text>
+<rect x="84" y="1060" width="944" height="66" rx="8" fill="#f3edfa" stroke="#c9b6e2"/>
+<text x="556.0" y="1090.0" class="node" text-anchor="middle" style="fill:#68438c">Test candidate · Astra reviews development results</text>
+<text x="556.0" y="1109.0" class="detail" text-anchor="middle">Score direct transfer and the full policy with fallback</text>
+<rect x="1094" y="1036" width="326" height="75" rx="8" fill="#fff4e2" stroke="#e5c08b"/>
+<text x="1257.0" y="1061.5" class="node" text-anchor="middle" style="fill:#865417">Fix and retry</text>
+<text x="1257.0" y="1080.5" class="detail" text-anchor="middle">Controller reruns only</text>
+<text x="1257.0" y="1097.5" class="detail" text-anchor="middle">affected nodes</text>
+<rect x="84" y="1152" width="944" height="64" rx="8" fill="#f3edfa" stroke="#c9b6e2"/>
+<text x="556.0" y="1181.0" class="node" text-anchor="middle" style="fill:#68438c">Freeze candidate and run held-out confirmation</text>
+<text x="556.0" y="1200.0" class="detail" text-anchor="middle">Independent evaluator owns first access to the locked set</text>
+<rect x="84" y="1242" width="944" height="64" rx="8" fill="#f3edfa" stroke="#c9b6e2"/>
+<text x="556.0" y="1271.0" class="node" text-anchor="middle" style="fill:#68438c">Verify raw evidence · Astra reviews final verdict</text>
+<text x="556.0" y="1290.0" class="detail" text-anchor="middle">Quality, coverage, latency and cost must all pass</text>
+<rect x="1094" y="1239" width="326" height="75" rx="8" fill="#fbefed" stroke="#e4b5ad"/>
+<text x="1257.0" y="1264.5" class="node" text-anchor="middle" style="fill:#91443a">Record non-success</text>
+<text x="1257.0" y="1283.5" class="detail" text-anchor="middle">Blocked, inconclusive, rejected</text>
+<text x="1257.0" y="1300.5" class="detail" text-anchor="middle">or budget exhausted</text>
+<rect x="84" y="1350" width="944" height="60" rx="8" fill="#e7f5eb" stroke="#9bceaa"/>
+<text x="556.0" y="1386.0" class="node" text-anchor="middle" style="fill:#23623a">Goal achieved</text>
+<text x="87" y="1448" class="note" text-anchor="start">A passing module unlocks its dependents. Only independent confirmation can mark the goal achieved.</text>
+</svg>

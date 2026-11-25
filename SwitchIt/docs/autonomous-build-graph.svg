@@ -1,0 +1,218 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="2040" viewBox="0 0 1600 2040" role="img" aria-labelledby="title description">
+<title id="title">SwitchIt autonomous development graph</title>
+<desc id="description">Proposed fanout orchestration: source and vendor investigators produce a vendor-neutral workflow package; isolated coders build source adapters, core workflows, target adapters and fixtures; independent verifiers test the integrated revision. Failed checks return only to their owners. Accepted work branches into skill, harness and platform packaging. A single release controller publishes only under an enabled standing release policy. Current publishing remains disabled.</desc>
+<defs><pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#e5e5e5" stroke-width="0.65"/></pattern>
+<marker id="a-line" viewBox="0 0 10 10" markerWidth="7" markerHeight="7" refX="9" refY="5" orient="auto-start-reverse"><path d="M0 1L9 5L0 9Z" fill="#b7bfc5"/></marker>
+<marker id="a-blue" viewBox="0 0 10 10" markerWidth="7" markerHeight="7" refX="9" refY="5" orient="auto-start-reverse"><path d="M0 1L9 5L0 9Z" fill="#3498db"/></marker>
+<marker id="a-purple" viewBox="0 0 10 10" markerWidth="7" markerHeight="7" refX="9" refY="5" orient="auto-start-reverse"><path d="M0 1L9 5L0 9Z" fill="#9b59b6"/></marker>
+<marker id="a-green" viewBox="0 0 10 10" markerWidth="7" markerHeight="7" refX="9" refY="5" orient="auto-start-reverse"><path d="M0 1L9 5L0 9Z" fill="#27ae60"/></marker>
+<marker id="a-red" viewBox="0 0 10 10" markerWidth="7" markerHeight="7" refX="9" refY="5" orient="auto-start-reverse"><path d="M0 1L9 5L0 9Z" fill="#e74c3c"/></marker>
+<marker id="a-orange" viewBox="0 0 10 10" markerWidth="7" markerHeight="7" refX="9" refY="5" orient="auto-start-reverse"><path d="M0 1L9 5L0 9Z" fill="#f39c12"/></marker>
+</defs>
+<rect width="1600" height="2040" fill="#fafafa"/><rect width="1600" height="2040" fill="url(#grid)"/>
+<text x="64" y="73" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="31" font-weight="bold" fill="#333333" text-anchor="start" >SWITCHIT / AUTONOMOUS BUILD GRAPH</text>
+<text x="1536" y="72" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" font-weight="normal" fill="#666666" text-anchor="end" >[ PROPOSED ]</text>
+<text x="64" y="112" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="18" font-weight="normal" fill="#666666" text-anchor="start" >Investigate in parallel. Build independently. Verify before release.</text>
+<rect x="64" y="153" width="1472" height="144" rx="10" fill="#f4f7fa" stroke="#d8dfe4" stroke-width="1.5"/>
+<text x="88" y="178" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="bold" fill="#666666" text-anchor="start" >THE PRODUCT FLOW</text>
+<text x="108" y="221" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="22" font-weight="bold" fill="#3498db" text-anchor="start" >VENDOR 1</text>
+<text x="108" y="250" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" font-weight="normal" fill="#666666" text-anchor="start" >recorded traces</text>
+<path d="M315 224H407" fill="none" stroke="#3498db" stroke-width="2" stroke-linejoin="round" marker-end="url(#a-blue)"/>
+<rect x="421" y="192" width="768" height="80" rx="8" fill="#ffffff" stroke="#3498db" stroke-width="1.5"/>
+<text x="805" y="224" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="21" font-weight="bold" fill="#3498db" text-anchor="middle" >VENDOR-NEUTRAL WORKFLOW PACKAGE</text>
+<text x="805" y="250" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" font-weight="normal" fill="#666666" text-anchor="middle" >evidence + structure + dependencies + success criteria</text>
+<path d="M1203 224H1295" fill="none" stroke="#3498db" stroke-width="2" stroke-linejoin="round" marker-end="url(#a-blue)"/>
+<text x="1320" y="221" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="22" font-weight="bold" fill="#3498db" text-anchor="start" >VENDOR 2</text>
+<text x="1320" y="250" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" font-weight="normal" fill="#666666" text-anchor="start" >verified execution</text>
+<text x="64" y="329" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="bold" fill="#666666" text-anchor="start" >THE DEVELOPMENT GRAPH</text>
+<text x="1536" y="329" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="normal" fill="#666666" text-anchor="end" >1 coordinator  /  3 active worker slots initially  /  more tasks queued</text>
+<rect x="510" y="363" width="630" height="98" rx="8" fill="#ffffff" stroke="#3498db" stroke-width="1.5"/>
+<rect x="510" y="377" width="3" height="70" fill="#3498db"/>
+<text x="530" y="393" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" font-weight="bold" fill="#3498db" text-anchor="start" >COORDINATOR + DURABLE SCHEDULER</text>
+<text x="530" y="418" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >objective · source scope · budgets · release policy</text>
+<text x="530" y="437" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >task state · checkpoints · leases · dependency tracking</text>
+<path d="M825 461V494" fill="none" stroke="#3498db" stroke-width="2" stroke-linejoin="round"/>
+<path d="M345 494H1305" fill="none" stroke="#3498db" stroke-width="2" stroke-linejoin="round"/>
+<path d="M345 494V540" fill="none" stroke="#3498db" stroke-width="2" stroke-linejoin="round" marker-end="url(#a-blue)"/>
+<path d="M665 494V540" fill="none" stroke="#3498db" stroke-width="2" stroke-linejoin="round" marker-end="url(#a-blue)"/>
+<path d="M985 494V540" fill="none" stroke="#3498db" stroke-width="2" stroke-linejoin="round" marker-end="url(#a-blue)"/>
+<path d="M1305 494V540" fill="none" stroke="#3498db" stroke-width="2" stroke-linejoin="round" marker-end="url(#a-blue)"/>
+<circle cx="825" cy="494" r="4" fill="#3498db"/>
+<text x="66" y="572" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="30" font-weight="bold" fill="#b7bfc5" text-anchor="start" >01</text>
+<text x="66" y="595" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="bold" fill="#666666" text-anchor="start" >INVESTIGATE</text>
+<rect x="210" y="540" width="270" height="100" rx="8" fill="#ffffff" stroke="#3498db" stroke-width="1.5"/>
+<rect x="210" y="554" width="3" height="72" fill="#3498db"/>
+<text x="230" y="570" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" font-weight="bold" fill="#3498db" text-anchor="start" >DOWNLOADS INVESTIGATOR</text>
+<text x="230" y="595" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >classify exports + archives</text>
+<text x="230" y="614" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >route formats to parsers</text>
+<rect x="530" y="540" width="270" height="100" rx="8" fill="#ffffff" stroke="#3498db" stroke-width="1.5"/>
+<rect x="530" y="554" width="3" height="72" fill="#3498db"/>
+<text x="550" y="570" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" font-weight="bold" fill="#3498db" text-anchor="start" >CLAUDE CODE INVESTIGATOR</text>
+<text x="550" y="595" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >sessions + tools + subagents</text>
+<text x="550" y="614" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >preserve explicit identities</text>
+<rect x="850" y="540" width="270" height="100" rx="8" fill="#ffffff" stroke="#3498db" stroke-width="1.5"/>
+<rect x="850" y="554" width="3" height="72" fill="#3498db"/>
+<text x="870" y="570" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" font-weight="bold" fill="#3498db" text-anchor="start" >CODEX INVESTIGATOR</text>
+<text x="870" y="595" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >rollouts + catalog metadata</text>
+<text x="870" y="614" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >recover recorded relationships</text>
+<rect x="1170" y="540" width="270" height="100" rx="8" fill="#ffffff" stroke="#3498db" stroke-width="1.5"/>
+<rect x="1170" y="554" width="3" height="72" fill="#3498db"/>
+<text x="1190" y="570" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" font-weight="bold" fill="#3498db" text-anchor="start" >VENDOR INVESTIGATORS</text>
+<text x="1190" y="595" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >source schemas + API limits</text>
+<text x="1190" y="614" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >target execution capabilities</text>
+<path d="M345 640V672" fill="none" stroke="#3498db" stroke-width="2" stroke-linejoin="round"/>
+<path d="M665 640V672" fill="none" stroke="#3498db" stroke-width="2" stroke-linejoin="round"/>
+<path d="M985 640V672" fill="none" stroke="#3498db" stroke-width="2" stroke-linejoin="round"/>
+<path d="M1305 640V672" fill="none" stroke="#3498db" stroke-width="2" stroke-linejoin="round"/>
+<path d="M345 672H1305" fill="none" stroke="#3498db" stroke-width="2" stroke-linejoin="round"/>
+<path d="M825 672V704" fill="none" stroke="#3498db" stroke-width="2" stroke-linejoin="round" marker-end="url(#a-blue)"/>
+<rect x="210" y="704" width="1230" height="154" rx="10" fill="#f0f7fd" stroke="#3498db" stroke-width="1.5"/>
+<text x="236" y="739" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="22" font-weight="bold" fill="#3498db" text-anchor="start" >JOIN / FREEZE THE SHARED CONTRACT</text>
+<text x="1414" y="737" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="normal" fill="#666666" text-anchor="end" >PRIVATE EVIDENCE → REVIEWED ARTIFACTS</text>
+<rect x="236" y="762" width="183" height="40" rx="4" fill="#ffffff" stroke="#c8ddef" stroke-width="1.5"/>
+<text x="327.5" y="787" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="bold" fill="#3498db" text-anchor="middle" >EVENTS + PROVENANCE</text>
+<rect x="435" y="762" width="183" height="40" rx="4" fill="#ffffff" stroke="#c8ddef" stroke-width="1.5"/>
+<text x="526.5" y="787" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="bold" fill="#3498db" text-anchor="middle" >EXECUTION GRAPH</text>
+<rect x="634" y="762" width="183" height="40" rx="4" fill="#ffffff" stroke="#c8ddef" stroke-width="1.5"/>
+<text x="725.5" y="787" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="bold" fill="#3498db" text-anchor="middle" >DEPENDENCIES</text>
+<rect x="833" y="762" width="183" height="40" rx="4" fill="#ffffff" stroke="#c8ddef" stroke-width="1.5"/>
+<text x="924.5" y="787" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="bold" fill="#3498db" text-anchor="middle" >WORKFLOW SPEC</text>
+<rect x="1032" y="762" width="183" height="40" rx="4" fill="#ffffff" stroke="#c8ddef" stroke-width="1.5"/>
+<text x="1123.5" y="787" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="bold" fill="#3498db" text-anchor="middle" >FIXTURES + CASES</text>
+<rect x="1231" y="762" width="183" height="40" rx="4" fill="#ffffff" stroke="#c8ddef" stroke-width="1.5"/>
+<text x="1322.5" y="787" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="bold" fill="#3498db" text-anchor="middle" >SUCCESS CHECKS</text>
+<text x="236" y="831" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >Single-writer merge · explicit gaps · immutable revisions · acceptance criteria fixed before coding</text>
+<path d="M825 858V909" fill="none" stroke="#9b59b6" stroke-width="2" stroke-linejoin="round"/>
+<path d="M345 909H1305" fill="none" stroke="#9b59b6" stroke-width="2" stroke-linejoin="round"/>
+<path d="M345 909V950" fill="none" stroke="#9b59b6" stroke-width="2" stroke-linejoin="round" marker-end="url(#a-purple)"/>
+<path d="M665 909V950" fill="none" stroke="#9b59b6" stroke-width="2" stroke-linejoin="round" marker-end="url(#a-purple)"/>
+<path d="M985 909V950" fill="none" stroke="#9b59b6" stroke-width="2" stroke-linejoin="round" marker-end="url(#a-purple)"/>
+<path d="M1305 909V950" fill="none" stroke="#9b59b6" stroke-width="2" stroke-linejoin="round" marker-end="url(#a-purple)"/>
+<circle cx="825" cy="909" r="4" fill="#9b59b6"/>
+<text x="66" y="980" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="30" font-weight="bold" fill="#b7bfc5" text-anchor="start" >02</text>
+<text x="66" y="1003" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="bold" fill="#666666" text-anchor="start" >BUILD</text>
+<rect x="210" y="950" width="270" height="100" rx="8" fill="#ffffff" stroke="#9b59b6" stroke-width="1.5"/>
+<rect x="210" y="964" width="3" height="72" fill="#9b59b6"/>
+<text x="230" y="980" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" font-weight="bold" fill="#9b59b6" text-anchor="start" >SOURCE ADAPTER CODER</text>
+<text x="230" y="1005" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >parsers + source coverage</text>
+<text x="230" y="1024" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >format and identity contracts</text>
+<rect x="530" y="950" width="270" height="100" rx="8" fill="#ffffff" stroke="#9b59b6" stroke-width="1.5"/>
+<rect x="530" y="964" width="3" height="72" fill="#9b59b6"/>
+<text x="550" y="980" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" font-weight="bold" fill="#9b59b6" text-anchor="start" >WORKFLOW CORE CODER</text>
+<text x="550" y="1005" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >events → graph → workflow</text>
+<text x="550" y="1024" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >dependencies + specifications</text>
+<rect x="850" y="950" width="270" height="100" rx="8" fill="#ffffff" stroke="#9b59b6" stroke-width="1.5"/>
+<rect x="850" y="964" width="3" height="72" fill="#9b59b6"/>
+<text x="870" y="980" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" font-weight="bold" fill="#9b59b6" text-anchor="start" >TARGET ADAPTER CODER</text>
+<text x="870" y="1005" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >vendor execution wrappers</text>
+<text x="870" y="1024" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >capability + protocol mapping</text>
+<rect x="1170" y="950" width="270" height="100" rx="8" fill="#ffffff" stroke="#9b59b6" stroke-width="1.5"/>
+<rect x="1170" y="964" width="3" height="72" fill="#9b59b6"/>
+<text x="1190" y="980" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" font-weight="bold" fill="#9b59b6" text-anchor="start" >FIXTURE / ENV CODER</text>
+<text x="1190" y="1005" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >exact fixtures + state setup</text>
+<text x="1190" y="1024" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >development + validation sets</text>
+<path d="M345 1050V1083" fill="none" stroke="#9b59b6" stroke-width="2" stroke-linejoin="round"/>
+<path d="M665 1050V1083" fill="none" stroke="#9b59b6" stroke-width="2" stroke-linejoin="round"/>
+<path d="M985 1050V1083" fill="none" stroke="#9b59b6" stroke-width="2" stroke-linejoin="round"/>
+<path d="M1305 1050V1083" fill="none" stroke="#9b59b6" stroke-width="2" stroke-linejoin="round"/>
+<path d="M345 1083H1305" fill="none" stroke="#9b59b6" stroke-width="2" stroke-linejoin="round"/>
+<path d="M825 1083V1115" fill="none" stroke="#9b59b6" stroke-width="2" stroke-linejoin="round" marker-end="url(#a-purple)"/>
+<rect x="510" y="1115" width="630" height="76" rx="8" fill="#ffffff" stroke="#9b59b6" stroke-width="1.5"/>
+<rect x="510" y="1129" width="3" height="48" fill="#9b59b6"/>
+<text x="530" y="1145" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" font-weight="bold" fill="#9b59b6" text-anchor="start" >SINGLE INTEGRATOR</text>
+<text x="530" y="1170" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >isolated patches → one candidate revision + build digest</text>
+<path d="M825 1191V1226" fill="none" stroke="#f39c12" stroke-width="2" stroke-linejoin="round"/>
+<path d="M345 1226H1305" fill="none" stroke="#f39c12" stroke-width="2" stroke-linejoin="round"/>
+<path d="M345 1226V1260" fill="none" stroke="#f39c12" stroke-width="2" stroke-linejoin="round" marker-end="url(#a-orange)"/>
+<path d="M665 1226V1260" fill="none" stroke="#f39c12" stroke-width="2" stroke-linejoin="round" marker-end="url(#a-orange)"/>
+<path d="M985 1226V1260" fill="none" stroke="#f39c12" stroke-width="2" stroke-linejoin="round" marker-end="url(#a-orange)"/>
+<path d="M1305 1226V1260" fill="none" stroke="#f39c12" stroke-width="2" stroke-linejoin="round" marker-end="url(#a-orange)"/>
+<circle cx="825" cy="1226" r="4" fill="#f39c12"/>
+<text x="66" y="1292" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="30" font-weight="bold" fill="#b7bfc5" text-anchor="start" >03</text>
+<text x="66" y="1315" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="bold" fill="#666666" text-anchor="start" >VERIFY</text>
+<rect x="210" y="1260" width="270" height="100" rx="8" fill="#ffffff" stroke="#f39c12" stroke-width="1.5"/>
+<rect x="210" y="1274" width="3" height="72" fill="#f39c12"/>
+<text x="230" y="1290" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" font-weight="bold" fill="#f39c12" text-anchor="start" >PARSER VERIFIER</text>
+<text x="230" y="1315" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >coverage + malformed inputs</text>
+<text x="230" y="1334" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >source versions + regressions</text>
+<rect x="530" y="1260" width="270" height="100" rx="8" fill="#ffffff" stroke="#f39c12" stroke-width="1.5"/>
+<rect x="530" y="1274" width="3" height="72" fill="#f39c12"/>
+<text x="550" y="1290" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" font-weight="bold" fill="#f39c12" text-anchor="start" >GRAPH / WORKFLOW EVALS</text>
+<text x="550" y="1315" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >hierarchy + task boundaries</text>
+<text x="550" y="1334" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >required workflow outcomes</text>
+<rect x="850" y="1260" width="270" height="100" rx="8" fill="#ffffff" stroke="#f39c12" stroke-width="1.5"/>
+<rect x="850" y="1274" width="3" height="72" fill="#f39c12"/>
+<text x="870" y="1290" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" font-weight="bold" fill="#f39c12" text-anchor="start" >PROTOCOL VERIFIER</text>
+<text x="870" y="1315" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >runtime capabilities + IDs</text>
+<text x="870" y="1334" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >permissions + failure modes</text>
+<rect x="1170" y="1260" width="270" height="100" rx="8" fill="#ffffff" stroke="#f39c12" stroke-width="1.5"/>
+<rect x="1170" y="1274" width="3" height="72" fill="#f39c12"/>
+<text x="1190" y="1290" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" font-weight="bold" fill="#f39c12" text-anchor="start" >PORTABILITY EVALUATOR</text>
+<text x="1190" y="1315" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >vendor 1 baseline vs vendor 2</text>
+<text x="1190" y="1334" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >artifacts + state + cost</text>
+<path d="M345 1360V1394" fill="none" stroke="#f39c12" stroke-width="2" stroke-linejoin="round"/>
+<path d="M665 1360V1394" fill="none" stroke="#f39c12" stroke-width="2" stroke-linejoin="round"/>
+<path d="M985 1360V1394" fill="none" stroke="#f39c12" stroke-width="2" stroke-linejoin="round"/>
+<path d="M1305 1360V1394" fill="none" stroke="#f39c12" stroke-width="2" stroke-linejoin="round"/>
+<path d="M345 1394H1305" fill="none" stroke="#f39c12" stroke-width="2" stroke-linejoin="round"/>
+<path d="M825 1394V1430" fill="none" stroke="#f39c12" stroke-width="2" stroke-linejoin="round" marker-end="url(#a-orange)"/>
+<rect x="510" y="1430" width="630" height="90" rx="8" fill="#ffffff" stroke="#f39c12" stroke-width="1.5"/>
+<rect x="510" y="1444" width="3" height="62" fill="#f39c12"/>
+<text x="530" y="1460" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" font-weight="bold" fill="#f39c12" text-anchor="start" >INDEPENDENT ACCEPTANCE GATE</text>
+<text x="530" y="1485" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >fixed checks · comparable evidence · exact tested revision</text>
+<text x="530" y="1504" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >coders cannot weaken checks to pass</text>
+<path d="M1140 1475H1515V909H1305" fill="none" stroke="#e74c3c" stroke-width="2" stroke-linejoin="round" stroke-dasharray="7 6" marker-end="url(#a-red)"/>
+<text x="1540" y="1200" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="normal" fill="#e74c3c" text-anchor="middle" transform="rotate(-90 1540 1200)">FAIL → owning coder · bounded repairs</text>
+<path d="M510 1475H173V494H345" fill="none" stroke="#e74c3c" stroke-width="2" stroke-linejoin="round" stroke-dasharray="7 6" marker-end="url(#a-red)"/>
+<text x="153" y="1090" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="normal" fill="#e74c3c" text-anchor="middle" transform="rotate(-90 153 1090)">MISSING EVIDENCE → investigator</text>
+<path d="M825 1520V1558" fill="none" stroke="#27ae60" stroke-width="2" stroke-linejoin="round"/>
+<path d="M385 1558H1265" fill="none" stroke="#27ae60" stroke-width="2" stroke-linejoin="round"/>
+<path d="M385 1558V1595" fill="none" stroke="#27ae60" stroke-width="2" stroke-linejoin="round" marker-end="url(#a-green)"/>
+<path d="M825 1558V1595" fill="none" stroke="#27ae60" stroke-width="2" stroke-linejoin="round" marker-end="url(#a-green)"/>
+<path d="M1265 1558V1595" fill="none" stroke="#27ae60" stroke-width="2" stroke-linejoin="round" marker-end="url(#a-green)"/>
+<circle cx="825" cy="1558" r="4" fill="#27ae60"/>
+<text x="66" y="1626" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="30" font-weight="bold" fill="#b7bfc5" text-anchor="start" >04</text>
+<text x="66" y="1649" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="bold" fill="#666666" text-anchor="start" >PACKAGE</text>
+<rect x="210" y="1595" width="350" height="95" rx="8" fill="#ffffff" stroke="#27ae60" stroke-width="1.5"/>
+<rect x="210" y="1609" width="3" height="67" fill="#27ae60"/>
+<text x="230" y="1625" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" font-weight="bold" fill="#27ae60" text-anchor="start" >SKILL</text>
+<text x="230" y="1650" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >instructions + installable package</text>
+<text x="230" y="1669" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >isolated install + invocation tests</text>
+<rect x="650" y="1595" width="350" height="95" rx="8" fill="#ffffff" stroke="#27ae60" stroke-width="1.5"/>
+<rect x="650" y="1609" width="3" height="67" fill="#27ae60"/>
+<text x="670" y="1625" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" font-weight="bold" fill="#27ae60" text-anchor="start" >HARNESS</text>
+<text x="670" y="1650" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >versioned wheel / package</text>
+<text x="670" y="1669" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >clean install + CLI + MCP tests</text>
+<rect x="1090" y="1595" width="350" height="95" rx="8" fill="#ffffff" stroke="#27ae60" stroke-width="1.5"/>
+<rect x="1090" y="1609" width="3" height="67" fill="#27ae60"/>
+<text x="1110" y="1625" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" font-weight="bold" fill="#27ae60" text-anchor="start" >PLATFORM</text>
+<text x="1110" y="1650" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >API + workers + evidence UI</text>
+<text x="1110" y="1669" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >job lifecycle + browser tests</text>
+<path d="M385 1690V1720" fill="none" stroke="#27ae60" stroke-width="2" stroke-linejoin="round"/>
+<path d="M825 1690V1720" fill="none" stroke="#27ae60" stroke-width="2" stroke-linejoin="round"/>
+<path d="M1265 1690V1720" fill="none" stroke="#27ae60" stroke-width="2" stroke-linejoin="round"/>
+<path d="M385 1720H1265" fill="none" stroke="#27ae60" stroke-width="2" stroke-linejoin="round"/>
+<path d="M825 1720V1750" fill="none" stroke="#27ae60" stroke-width="2" stroke-linejoin="round" marker-end="url(#a-green)"/>
+<rect x="510" y="1750" width="630" height="85" rx="8" fill="#ffffff" stroke="#27ae60" stroke-width="1.5"/>
+<rect x="510" y="1764" width="3" height="57" fill="#27ae60"/>
+<text x="530" y="1780" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" font-weight="bold" fill="#27ae60" text-anchor="start" >SINGLE RELEASE CONTROLLER</text>
+<text x="530" y="1805" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >final holdout · pinned artifact hashes · release rules</text>
+<text x="530" y="1824" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >publish only when every required branch is accepted</text>
+<path d="M1140 1793H1205" fill="none" stroke="#b7bfc5" stroke-width="2" stroke-linejoin="round" marker-end="url(#a-line)"/>
+<rect x="1215" y="1750" width="280" height="85" rx="8" fill="#ffffff" stroke="#b7bfc5" stroke-width="1.5"/>
+<rect x="1215" y="1764" width="3" height="57" fill="#b7bfc5"/>
+<text x="1235" y="1780" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" font-weight="bold" fill="#b7bfc5" text-anchor="start" >VERIFIED / HELD</text>
+<text x="1235" y="1805" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >when publishing is disabled</text>
+<text x="1235" y="1824" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >current setting: NO PUSH</text>
+<path d="M825 1835V1875" fill="none" stroke="#27ae60" stroke-width="2" stroke-linejoin="round" marker-end="url(#a-green)"/>
+<text x="843" y="1861" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="normal" fill="#27ae60" text-anchor="start" >policy permits</text>
+<rect x="510" y="1875" width="630" height="75" rx="8" fill="#ffffff" stroke="#27ae60" stroke-width="1.5"/>
+<rect x="510" y="1889" width="3" height="47" fill="#27ae60"/>
+<text x="530" y="1905" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" font-weight="bold" fill="#27ae60" text-anchor="start" >PUBLISH + POST-RELEASE CHECKS</text>
+<text x="530" y="1930" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="normal" fill="#666666" text-anchor="start" >skill · harness · platform / stop and recover on failure</text>
+<path d="M64 1990H105" fill="none" stroke="#b7bfc5" stroke-width="2" stroke-linejoin="round"/>
+<text x="115" y="1995" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="normal" fill="#666666" text-anchor="start" >normal flow</text>
+<path d="M285 1990H326" fill="none" stroke="#e74c3c" stroke-width="2" stroke-linejoin="round" stroke-dasharray="7 6"/>
+<text x="336" y="1995" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="normal" fill="#666666" text-anchor="start" >repair / evidence return</text>
+<text x="1536" y="1995" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="normal" fill="#666666" text-anchor="end" >Parallel workers · serial integration and publishing · no raw personal traces in releases</text>
+</svg>

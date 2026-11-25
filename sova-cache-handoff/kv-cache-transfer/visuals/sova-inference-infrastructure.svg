@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="904" viewBox="0 0 1440 904"
+     role="img" aria-labelledby="title description">
+  <title id="title">SOVA cross-model KV cache handoff</title>
+  <desc id="description">A proposed inference API lets an agent orchestrator pass a cache handle and a new question to SOVA. The one-GPU prototype translates saved Qwen3 1.7B attention state for Qwen3 8B, which rebuilds the first 256 tokens. The proposed service prefers an existing native 8B cache, then eligible transfer, with full prefill as fallback. A 32-question L40S replay measured 173 milliseconds of mapping, 324 milliseconds to first token from a resident small-model cache, and 2.15 seconds for a native full read. The transfer answered 10 questions correctly and native 8B answered 13.</desc>
+  <defs>
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="#e0e5eb" stroke-width=".8"/>
+    </pattern>
+    <marker id="blue-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto">
+      <path d="M0 0L10 5 0 10z" fill="#2479b1"/>
+    </marker>
+    <marker id="gray-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0L10 5 0 10z" fill="#687987"/>
+    </marker>
+    <style>
+      text { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; fill: #202b36; }
+      .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 2.3px; }
+      .title { font-size: 44px; font-weight: 700; letter-spacing: -2.2px; }
+      .subtitle { font-size: 16px; fill: #546474; }
+      .label { font-size: 12px; font-weight: 700; letter-spacing: 1.6px; }
+      .body { font-size: 15px; fill: #455769; }
+      .note { font-size: 13px; fill: #506274; }
+      .card-title { font-size: 23px; font-weight: 700; letter-spacing: -.7px; }
+      .call { font-size: 17px; font-weight: 700; }
+      .metric { font-size: 35px; font-weight: 700; letter-spacing: -1.6px; }
+      .small-metric { font-size: 29px; font-weight: 700; letter-spacing: -1.5px; }
+      .blue { fill: #176b9e; }
+      .purple { fill: #724394; }
+      .green { fill: #1d7651; }
+      .primary-route { fill: none; stroke: #2479b1; stroke-width: 2.2; marker-end: url(#blue-arrow); }
+      .secondary-route { fill: none; stroke: #687987; stroke-width: 1.6; stroke-dasharray: 6 5; marker-end: url(#gray-arrow); }
+    </style>
+  </defs>
+
+  <rect width="1440" height="904" fill="#fafafa"/>
+  <rect width="1440" height="904" fill="url(#grid)"/>
+  <path d="M56 149H1384" stroke="#cad4dd"/>
+  <rect x="56" y="39" width="8" height="15" fill="#3498db"/>
+  <text x="75" y="51" class="eyebrow">SOVA / INFERENCE INFRASTRUCTURE</text>
+  <text x="56" y="106" class="title">Cross-model KV cache handoff</text>
+  <text x="58" y="134" class="subtitle">Reuse the small model’s reading when an agent escalates to a stronger model.</text>
+  <text x="1384" y="51" text-anchor="end" class="label blue">[ RUNTIME ARCHITECTURE ]</text>
+
+  <!-- The orchestrator calls a proposed API. The arrows follow request order. -->
+  <rect x="56" y="172" width="1328" height="100" rx="9" fill="#fff" stroke="#b7c4cf"/>
+  <text x="80" y="207" class="label">CUSTOMER ORCHESTRATOR</text>
+  <text x="80" y="235" class="body">Owns agent routing and tools</text>
+  <rect x="450" y="188" width="333" height="67" rx="6" fill="#f3f8fc" stroke="#c3d7e7"/>
+  <text x="468" y="209" class="label blue">FIRST READ</text>
+  <text x="468" y="234" class="call">prefill(context) → handle</text>
+  <rect x="811" y="188" width="378" height="67" rx="6" fill="#f3f8fc" stroke="#c3d7e7"/>
+  <text x="829" y="209" class="label blue">MODEL SWITCH</text>
+  <text x="829" y="234" class="call">escalate(handle, new_question)</text>
+  <text x="1358" y="225" class="label blue" text-anchor="end">PROPOSED API</text>
+
+  <!-- Model execution and route selection. -->
+  <rect x="56" y="326" width="1328" height="343" rx="9" fill="#f3f7fa" stroke="#9eb4c5" stroke-dasharray="6 4"/>
+  <rect x="76" y="313" width="151" height="25" rx="4" fill="#e7f2fb" stroke="#c3d7e7"/>
+  <text x="89" y="330" class="label blue">SOVA RUNTIME</text>
+  <text x="1359" y="351" text-anchor="end" class="label">ONE GPU / QWEN3 PAIR</text>
+
+  <path class="primary-route" d="M617 255V285H254V376"/>
+  <path class="primary-route" d="M1000 255V305H556V376"/>
+
+  <g>
+    <rect x="83" y="377" width="272" height="138" rx="7" fill="#fff" stroke="#a9c5da"/>
+    <path d="M84 399V384Q84 378 90 378H112" fill="none" stroke="#3498db" stroke-width="2.5"/>
+    <text x="101" y="405" class="label blue">SOURCE MODEL</text>
+    <text x="101" y="436" class="card-title">Qwen3 1.7B</text>
+    <text x="101" y="464" class="body">Reads the shared prefix</text>
+    <text x="101" y="487" class="body">Keeps its attention cache</text>
+  </g>
+  <path class="primary-route" d="M355 445H416"/>
+  <g>
+    <rect x="417" y="377" width="278" height="138" rx="7" fill="#fff" stroke="#a9c5da"/>
+    <path d="M418 399V384Q418 378 424 378H446" fill="none" stroke="#3498db" stroke-width="2.5"/>
+    <text x="435" y="405" class="label blue">CACHE REGISTRY</text>
+    <text x="435" y="436" class="card-title">Resolve handle</text>
+    <text x="435" y="464" class="body">Match tenant and revision</text>
+    <text x="435" y="487" class="body">Verify exact prefix tokens</text>
+  </g>
+  <path class="primary-route" d="M695 445H756"/>
+  <g>
+    <rect x="757" y="377" width="297" height="138" rx="7" fill="#f9f5fc" stroke="#c7add9"/>
+    <path d="M758 399V384Q758 378 764 378H786" fill="none" stroke="#9b59b6" stroke-width="2.5"/>
+    <text x="775" y="405" class="label purple">PAIR-SPECIFIC MAPPER</text>
+    <text x="775" y="436" class="card-title">Translate K/V</text>
+    <text x="775" y="464" class="body">Affine map + rank-16 update</text>
+    <text x="775" y="487" class="body">Reuses prepared source layers</text>
+  </g>
+  <path class="primary-route" d="M1054 445H1110"/>
+  <g>
+    <rect x="1111" y="377" width="245" height="138" rx="7" fill="#f0f9f4" stroke="#a7cdb7"/>
+    <path d="M1112 399V384Q1112 378 1118 378H1140" fill="none" stroke="#27ae60" stroke-width="2.5"/>
+    <text x="1129" y="405" class="label green">TARGET MODEL</text>
+    <text x="1129" y="436" class="card-title">Qwen3 8B</text>
+    <text x="1129" y="464" class="body">Reads the new question</text>
+    <text x="1129" y="487" class="body">Generates the answer</text>
+  </g>
+
+  <path class="secondary-route" d="M556 515V565"/>
+  <rect x="417" y="567" width="637" height="59" rx="6" fill="#fff" stroke="#aab7c4"/>
+  <text x="435" y="590" class="label">NATIVE PATH</text>
+  <text x="435" y="613" class="body">Prefer an 8B cache hit. Reread if transfer is unavailable.</text>
+  <path class="secondary-route" d="M1054 596H1233V517"/>
+  <text x="83" y="650" class="note">Transfer rebuilds the first 256 tokens in 8B and loads translated state for the rest of the prefix.</text>
+
+  <!-- All four figures use the same measured development replay. -->
+  <rect x="56" y="698" width="1328" height="153" rx="9" fill="#fff" stroke="#b7c4cf"/>
+  <text x="80" y="730" class="label">MEASURED / 32-QUESTION L40S DEVELOPMENT REPLAY</text>
+  <path d="M80 745H1360M382 757V828M706 757V828M1030 757V828" stroke="#dce4ec"/>
+
+  <text x="80" y="794" class="metric blue">173 ms</text>
+  <text x="80" y="822" class="body">Cache translation</text>
+  <text x="406" y="794" class="metric blue">324 ms</text>
+  <text x="406" y="822" class="body">Transfer to first token</text>
+  <text x="730" y="794" class="metric">2.15 s</text>
+  <text x="730" y="822" class="body">Native cold to first token</text>
+  <text x="1054" y="794" class="small-metric">10/32 vs 13/32</text>
+  <text x="1054" y="822" class="body">Correct · transfer vs native</text>
+
+  <text x="56" y="877" class="note">Model-side medians. Transfer starts with an existing 1.7B cache. Native 8B cache hit took 99 ms.</text>
+  <a href="../reports/mapper-accuracy-l40s-v1/result.json">
+    <text x="1384" y="877" text-anchor="end" class="note blue" text-decoration="underline">Benchmark results ↗</text>
+  </a>
+</svg>

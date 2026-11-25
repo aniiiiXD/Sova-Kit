@@ -1,0 +1,7 @@
+.env*
+.next/
+.next-build/
+node_modules/
+out/
+artifacts/
+*.tsbuildinfo

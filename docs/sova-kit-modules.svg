@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="437" viewBox="0 0 1000 437" role="img" aria-labelledby="title description" font-family="monospace" fill="#233247">
+  <title id="title">Sova-Kit</title>
+  <desc id="description">SwitchIt supplies reviewed trace evidence to SwitchUp. Video Harness and Cache Handoff are separate tools in the same kit. Trace and run data live outside the code checkout.</desc>
+  <defs>
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="#e2e7ec" stroke-width=".65"/>
+    </pattern>
+    <style>
+      .title { font-size: 29px; font-weight: 700; letter-spacing: -.8px; }
+      .subtitle { font-size: 15px; fill: #4a5a70; }
+      .tag, .kicker { font-size: 12px; font-weight: 700; letter-spacing: .8px; }
+      .tag { fill: #52647b; }
+      .heading { font-size: 19px; font-weight: 700; letter-spacing: -.3px; }
+      .body { font-size: 14px; fill: #40516a; }
+      .note, .label { font-size: 14px; fill: #475b72; }
+      .strip { fill: #f1f4f7; stroke: #c8d3de; }
+      .flow { fill: none; stroke: #64758a; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+      .dash { stroke-dasharray: 4 4; }
+    </style>
+  </defs>
+
+  <rect width="1000" height="437" fill="#fafafa"/>
+  <rect width="1000" height="437" fill="url(#grid)"/>
+  <text x="36" y="52" class="title">Sova-Kit</text>
+  <text x="36" y="79" class="subtitle">Tools for building, improving, and demonstrating agents</text>
+  <text x="964" y="50" class="tag" text-anchor="end">[ MODULE MAP ]</text>
+  <path d="M36 96H964" stroke="#c8d3de"/>
+
+  <path d="M396 174H601" class="flow"/>
+  <polygon points="592,170 601,174 592,178" fill="#64758a"/>
+
+  <text x="500" y="159" class="label" text-anchor="middle">Reviewed evidence</text>
+
+  <g>
+    <rect x="36" y="118" width="360" height="112" rx="9" fill="#edf5fc" stroke="#a3bfd8" stroke-width="1.2"/>
+    <text x="53" y="143" class="kicker" fill="#255b88">TRACE EVIDENCE</text>
+    <text x="53" y="168" class="heading">SwitchIt</text>
+    <text x="53" y="192" class="body">Capture requests, tools and outcomes</text>
+    <text x="53" y="213" class="body">Inspect the execution graph</text>
+  </g>
+
+  <g>
+    <rect x="604" y="118" width="360" height="112" rx="9" fill="#f6effa" stroke="#cbb7d9" stroke-width="1.2"/>
+    <text x="621" y="143" class="kicker" fill="#64418a">MODEL IMPROVEMENT</text>
+    <text x="621" y="168" class="heading">SwitchUp</text>
+    <text x="621" y="192" class="body">Compare a change on fixed cases</text>
+    <text x="621" y="213" class="body">Prepare a LoRA retraining pilot</text>
+  </g>
+
+  <g>
+    <rect x="36" y="254" width="360" height="112" rx="9" fill="#fff6e9" stroke="#dabb92" stroke-width="1.2"/>
+    <text x="53" y="279" class="kicker" fill="#855420">EDITABLE PRODUCT FILMS</text>
+    <text x="53" y="304" class="heading">Video Harness</text>
+    <text x="53" y="328" class="body">Build from a brief and product captures</text>
+    <text x="53" y="349" class="body">Review and export the editable film</text>
+  </g>
+
+  <g>
+    <rect x="604" y="254" width="360" height="112" rx="9" fill="#edf7f0" stroke="#a6c6b0" stroke-width="1.2"/>
+    <text x="621" y="279" class="kicker" fill="#236547">SHARED MODEL CONTEXT</text>
+    <text x="621" y="304" class="heading">Cache Handoff</text>
+    <text x="621" y="328" class="body">Reuse native KV for a shared prefix</text>
+    <text x="621" y="349" class="body">Give each worker its own cache copy</text>
+  </g>
+
+  <rect x="36" y="381" width="928" height="42" rx="7" class="strip"/>
+  <text x="52" y="407" class="note">Sova-Kit-data/   Recorded traces, per-run artifacts, and local workspace state</text>
+</svg>

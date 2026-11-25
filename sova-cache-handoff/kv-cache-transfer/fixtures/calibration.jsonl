@@ -1,0 +1,2 @@
+{"id":"cal-fixture-1","document_id":"cal-document-1","context":"Fictional sample for software tests. The blue device costs twelve units.","question":"What color is the device?","choices":{"A":"Blue","B":"Red"},"answer":"A","split":"calibration"}
+{"id":"cal-fixture-2","document_id":"cal-document-2","context":"Separate fictional calibration record. A warehouse holds nine crates.","question":"How many crates?","choices":{"A":"Nine","B":"Three"},"answer":"A","split":"calibration"}

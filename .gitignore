@@ -1,7 +1,9 @@
 # Local state created by the harness
 .switchit/
 *.switchit/
+.aegis/
 run/
+/SwitchIt/Traces/collection/
 
 # Build outputs
 dist/
@@ -20,6 +22,21 @@ venv/
 
 # Scrape artifacts (design reference lives in docs/)
 .firecrawl/
+
+# Local design previews and cache-transfer run data
+/SwitchIt/design-lab/workspace/
+/SwitchIt/marketing-next/artifacts/
+/sova-cache-handoff/kv-cache-transfer/datasets/
+/sova-cache-handoff/kv-cache-transfer/prepared-source-manifest.json
+/sova-cache-handoff/kv-cache-transfer/source-audit.json
+/sova-cache-handoff/kv-cache-transfer/research/autonomous-loop/STATE*.md
+/sova-cache-handoff/kv-cache-transfer/research/autonomous-loop/ledger.json
+/sova-cache-handoff/kv-cache-transfer/research/thesis-v1/artifact-metadata/
+/sova-cache-handoff/kv-cache-transfer/research/thesis-v1/council-report-*.html
+/sova-cache-handoff/kv-cache-transfer/research/thesis-v1/council-transcript-*.md
+/sova-cache-handoff/kv-cache-transfer/research/*-preflight.json
+/sova-cache-handoff/kv-cache-transfer/research/failure-analysis-v2-data.json
+/sova-cache-handoff/kv-cache-transfer/research/quality-continuation-missing.json
 
 # Datasets and keys — never commit these
 *.parquet

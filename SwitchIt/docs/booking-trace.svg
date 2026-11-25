@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="307" viewBox="0 0 1000 307" role="img" aria-labelledby="title description" font-family="monospace" fill="#233247">
+  <title id="title">SwitchIt · Follow a booking</title>
+  <desc id="description">A new service call leads to a booking mutation. The booking receipt records acceptance. The simulator later records a company no-show for the same appointment.</desc>
+  <defs>
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="#e2e7ec" stroke-width=".65"/>
+    </pattern>
+    <style>
+      .title { font-size: 29px; font-weight: 700; letter-spacing: -.8px; }
+      .subtitle { font-size: 15px; fill: #4a5a70; }
+      .tag, .kicker { font-size: 12px; font-weight: 700; letter-spacing: .8px; }
+      .tag { fill: #52647b; }
+      .heading { font-size: 19px; font-weight: 700; letter-spacing: -.3px; }
+      .body { font-size: 14px; fill: #40516a; }
+      .note, .label { font-size: 14px; fill: #475b72; }
+      .strip { fill: #f1f4f7; stroke: #c8d3de; }
+      .flow { fill: none; stroke: #64758a; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+      .dash { stroke-dasharray: 4 4; }
+    </style>
+  </defs>
+
+  <rect width="1000" height="307" fill="#fafafa"/>
+  <rect width="1000" height="307" fill="url(#grid)"/>
+  <text x="36" y="52" class="title">SwitchIt · Follow a booking</text>
+  <text x="36" y="79" class="subtitle">Trace the request through its tool receipt and final outcome</text>
+  <text x="964" y="50" class="tag" text-anchor="end">[ TRACE EXAMPLE ]</text>
+  <path d="M36 96H964" stroke="#c8d3de"/>
+
+  <path d="M250 174H271" class="flow"/>
+  <polygon points="262,170 271,174 262,178" fill="#64758a"/>
+
+  <path d="M488 174H509" class="flow"/>
+  <polygon points="500,170 509,174 500,178" fill="#64758a"/>
+
+  <path d="M726 174H747" class="flow dash"/>
+  <polygon points="738,170 747,174 738,178" fill="#64758a"/>
+
+  <g>
+    <rect x="36" y="118" width="214" height="112" rx="9" fill="#edf5fc" stroke="#a3bfd8" stroke-width="1.2"/>
+    <text x="53" y="143" class="kicker" fill="#255b88">REQUEST</text>
+    <text x="53" y="168" class="heading">New service call</text>
+    <text x="53" y="192" class="body">Customer needs</text>
+    <text x="53" y="213" class="body">an appointment</text>
+  </g>
+
+  <g>
+    <rect x="274" y="118" width="214" height="112" rx="9" fill="#edf5fc" stroke="#a3bfd8" stroke-width="1.2"/>
+    <text x="291" y="143" class="kicker" fill="#255b88">TOOL CALL</text>
+    <text x="291" y="168" class="heading">Book a slot</text>
+    <text x="291" y="192" class="body">Agent calls jobs.book</text>
+    <text x="291" y="213" class="body">with the selected slot</text>
+  </g>
+
+  <g>
+    <rect x="512" y="118" width="214" height="112" rx="9" fill="#edf7f0" stroke="#a6c6b0" stroke-width="1.2"/>
+    <text x="529" y="143" class="kicker" fill="#236547">TOOL RECEIPT</text>
+    <text x="529" y="168" class="heading">Booking accepted</text>
+    <text x="529" y="192" class="body">Call and appointment</text>
+    <text x="529" y="213" class="body">IDs are recorded</text>
+  </g>
+
+  <g>
+    <rect x="750" y="118" width="214" height="112" rx="9" fill="#fff6e9" stroke="#dabb92" stroke-width="1.2"/>
+    <text x="767" y="143" class="kicker" fill="#855420">LATER OUTCOME</text>
+    <text x="767" y="168" class="heading">Company no-show</text>
+    <text x="767" y="192" class="body">Final simulator state</text>
+    <text x="767" y="213" class="body">for that appointment</text>
+  </g>
+
+  <rect x="36" y="248" width="928" height="42" rx="7" class="strip"/>
+  <text x="52" y="274" class="note">SwitchIt joins the receipt to the final appointment state when the source supplies it.</text>
+</svg>

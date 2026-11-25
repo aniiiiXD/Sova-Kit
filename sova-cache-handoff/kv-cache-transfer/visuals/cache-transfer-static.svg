@@ -1,0 +1,198 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1050" width="1600" height="1050" role="img" aria-labelledby="title desc">
+<title id="title">SOVA cross-model KV cache transfer architecture</title>
+<desc id="desc">The same prompt is evaluated by a native large-model path and a transfer path. A smaller Qwen3 model reads the prefix; a fitted mapper translates its keys and values; the larger Qwen3 model imports the cache, processes one tail token and generates an answer. A proposed SageMaker GPU worker reads inputs from S3 and returns traces, quality scores and timing to S3. Motion illustrates flow, not measured latency.</desc>
+<defs>
+ <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#dce5ed" stroke-width=".65" /></pattern>
+ <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M1 1L7 4L1 7" fill="none" stroke="#91a7b7" stroke-width="1.3" /></marker>
+ <marker id="blue-arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M1 1L7 4L1 7" fill="none" stroke="#35769a" stroke-width="1.4" /></marker>
+ <marker id="copper-arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M1 1L7 4L1 7" fill="none" stroke="#a96547" stroke-width="1.4" /></marker>
+ <style>text{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}path,rect,circle{vector-effect:non-scaling-stroke}@media(prefers-reduced-motion:reduce){.motion{display:none}}</style>
+</defs>
+<rect width="1600" height="1050" fill="#f6f8fb" />
+<rect width="1600" height="1050" fill="url(#grid)" opacity=".62" />
+
+<text x="60" y="49" font-size="20" fill="#24384c" font-weight="700" text-anchor="start">sova.lab</text>
+<text x="220" y="49" font-size="12" fill="#65798c" font-weight="400" text-anchor="start">[ CACHE STATE HANDOFF ]</text>
+<rect x="1260" y="26" width="280" height="34" rx="7" fill="#e8eef4" stroke="none" />
+<text x="1400" y="48" font-size="12" fill="#65798c" font-weight="400" text-anchor="middle">Experiment design / unmeasured</text>
+<text x="60" y="107" font-size="38" fill="#24384c" font-weight="650" text-anchor="start">Smaller read. Larger decode.</text>
+<text x="60" y="141" font-size="17" fill="#65798c" font-weight="400" text-anchor="start">Translate the prefix state instead of asking the target to read it all again.</text>
+<g id="native-control">
+<rect x="300" y="180" width="1240" height="190" rx="18" fill="#edf1f5" stroke="#dbe3ea" />
+<text x="324" y="208" font-size="13" fill="#65798c" font-weight="400" text-anchor="start">Control / native large model</text>
+<path d="M260 418H280Q300 418 300 398V285H320" fill="none" stroke="#9aaebb" stroke-width="1.8" marker-end="url(#arrow)" />
+<rect x="320" y="230" width="630" height="114" rx="12" fill="#f9fafc" stroke="#d0dbe4" />
+<text x="344" y="264" font-size="21" fill="#5a6d80" font-weight="600" text-anchor="start">Large-model prefill</text>
+<text x="344" y="293" font-size="14" fill="#65798c" font-weight="400" text-anchor="start">Target reads the full N-token prompt.</text>
+<text x="344" y="322" font-size="12" fill="#8192a2" font-weight="400" text-anchor="start">Builds its own cache before answering</text>
+<rect x="738" y="253" width="12" height="16" rx="2" fill="#bdccd9" stroke="none" />
+<rect x="756" y="253" width="12" height="16" rx="2" fill="#d3dde6" stroke="none" />
+<rect x="774" y="253" width="12" height="16" rx="2" fill="#d3dde6" stroke="none" />
+<rect x="792" y="253" width="12" height="16" rx="2" fill="#bdccd9" stroke="none" />
+<rect x="810" y="253" width="12" height="16" rx="2" fill="#d3dde6" stroke="none" />
+<rect x="828" y="253" width="12" height="16" rx="2" fill="#d3dde6" stroke="none" />
+<rect x="846" y="253" width="12" height="16" rx="2" fill="#bdccd9" stroke="none" />
+<rect x="864" y="253" width="12" height="16" rx="2" fill="#d3dde6" stroke="none" />
+<rect x="882" y="253" width="12" height="16" rx="2" fill="#d3dde6" stroke="none" />
+<rect x="900" y="253" width="12" height="16" rx="2" fill="#bdccd9" stroke="none" />
+<rect x="738" y="276" width="12" height="16" rx="2" fill="#bdccd9" stroke="none" />
+<rect x="756" y="276" width="12" height="16" rx="2" fill="#d3dde6" stroke="none" />
+<rect x="774" y="276" width="12" height="16" rx="2" fill="#d3dde6" stroke="none" />
+<rect x="792" y="276" width="12" height="16" rx="2" fill="#bdccd9" stroke="none" />
+<rect x="810" y="276" width="12" height="16" rx="2" fill="#d3dde6" stroke="none" />
+<rect x="828" y="276" width="12" height="16" rx="2" fill="#d3dde6" stroke="none" />
+<rect x="846" y="276" width="12" height="16" rx="2" fill="#bdccd9" stroke="none" />
+<rect x="864" y="276" width="12" height="16" rx="2" fill="#d3dde6" stroke="none" />
+<rect x="882" y="276" width="12" height="16" rx="2" fill="#d3dde6" stroke="none" />
+<rect x="900" y="276" width="12" height="16" rx="2" fill="#bdccd9" stroke="none" />
+<rect x="738" y="299" width="12" height="16" rx="2" fill="#bdccd9" stroke="none" />
+<rect x="756" y="299" width="12" height="16" rx="2" fill="#d3dde6" stroke="none" />
+<rect x="774" y="299" width="12" height="16" rx="2" fill="#d3dde6" stroke="none" />
+<rect x="792" y="299" width="12" height="16" rx="2" fill="#bdccd9" stroke="none" />
+<rect x="810" y="299" width="12" height="16" rx="2" fill="#d3dde6" stroke="none" />
+<rect x="828" y="299" width="12" height="16" rx="2" fill="#d3dde6" stroke="none" />
+<rect x="846" y="299" width="12" height="16" rx="2" fill="#bdccd9" stroke="none" />
+<rect x="864" y="299" width="12" height="16" rx="2" fill="#d3dde6" stroke="none" />
+<rect x="882" y="299" width="12" height="16" rx="2" fill="#d3dde6" stroke="none" />
+<rect x="900" y="299" width="12" height="16" rx="2" fill="#bdccd9" stroke="none" />
+<path d="M950 287H1060" fill="none" stroke="#9aaebb" stroke-width="1.8" marker-end="url(#arrow)" />
+<text x="1005" y="267" font-size="12" fill="#65798c" font-weight="400" text-anchor="middle">KV</text>
+<rect x="1065" y="230" width="310" height="114" rx="12" fill="#f9fafc" stroke="#d0dbe4" />
+<text x="1089" y="265" font-size="21" fill="#5a6d80" font-weight="600" text-anchor="start">Large-model decode</text>
+<text x="1089" y="294" font-size="13" fill="#65798c" font-weight="400" text-anchor="start">Generates tokens one by one</text>
+<text x="1089" y="322" font-size="12" fill="#8192a2" font-weight="400" text-anchor="start">Native quality baseline</text>
+<path d="M1375 287H1440" fill="none" stroke="#9aaebb" stroke-width="1.8" marker-end="url(#arrow)" />
+<text x="1463" y="292" font-size="13" fill="#65798c" font-weight="400" text-anchor="middle">Answer</text>
+</g>
+<rect x="60" y="380" width="200" height="220" rx="14" fill="#fff" stroke="#bdcddb" />
+<text x="82" y="410" font-size="17" fill="#24384c" font-weight="600" text-anchor="start">Same input</text>
+<path d="M91 432H184L207 455V521H91Z" fill="#f7f9fc" stroke="#c8d5e1" /><path d="M184 432V455H207" fill="none" stroke="#c8d5e1" />
+<path d="M104 451h64" stroke="#b2c4d3" stroke-width="3" stroke-linecap="round" />
+<path d="M104 468h92" stroke="#b2c4d3" stroke-width="3" stroke-linecap="round" />
+<path d="M104 485h78" stroke="#b2c4d3" stroke-width="3" stroke-linecap="round" />
+<path d="M104 502h96" stroke="#b2c4d3" stroke-width="3" stroke-linecap="round" />
+<text x="82" y="552" font-size="13" fill="#65798c" font-weight="400" text-anchor="start">Document + query</text>
+<text x="82" y="577" font-size="11" fill="#7d91a3" font-weight="400" text-anchor="start">identical token IDs</text>
+<rect x="300" y="430" width="1240" height="246" rx="18" fill="#eef4f8" stroke="#cfdee9" />
+<text x="324" y="458" font-size="13" fill="#35769a" font-weight="400" text-anchor="start">Transfer / source prefix to target state</text>
+<path d="M260 512H285Q300 512 300 540V548H320" fill="none" stroke="#35769a" stroke-width="1.8" marker-end="url(#blue-arrow)" />
+<rect x="320" y="480" width="250" height="172" rx="12" fill="#fff" stroke="#9fbccc" />
+<text x="344" y="512" font-size="18" fill="#24384c" font-weight="600" text-anchor="start">Small-model prefill</text>
+<text x="344" y="537" font-size="13" fill="#65798c" font-weight="400" text-anchor="start">Reads the N−1 prefix</text>
+<rect x="344" y="554" width="20" height="13" rx="3" fill="#79a9c3" stroke="none" />
+<rect x="372" y="554" width="20" height="13" rx="3" fill="#b7d2e1" stroke="none" />
+<rect x="400" y="554" width="20" height="13" rx="3" fill="#b7d2e1" stroke="none" />
+<rect x="428" y="554" width="20" height="13" rx="3" fill="#79a9c3" stroke="none" />
+<rect x="456" y="554" width="20" height="13" rx="3" fill="#b7d2e1" stroke="none" />
+<rect x="484" y="554" width="20" height="13" rx="3" fill="#b7d2e1" stroke="none" />
+<rect x="512" y="554" width="20" height="13" rx="3" fill="#79a9c3" stroke="none" />
+<rect x="344" y="574" width="20" height="13" rx="3" fill="#b7d2e1" stroke="none" />
+<rect x="372" y="574" width="20" height="13" rx="3" fill="#b7d2e1" stroke="none" />
+<rect x="400" y="574" width="20" height="13" rx="3" fill="#79a9c3" stroke="none" />
+<rect x="428" y="574" width="20" height="13" rx="3" fill="#b7d2e1" stroke="none" />
+<rect x="456" y="574" width="20" height="13" rx="3" fill="#b7d2e1" stroke="none" />
+<rect x="484" y="574" width="20" height="13" rx="3" fill="#79a9c3" stroke="none" />
+<rect x="512" y="574" width="20" height="13" rx="3" fill="#b7d2e1" stroke="none" />
+<rect x="344" y="594" width="20" height="13" rx="3" fill="#b7d2e1" stroke="none" />
+<rect x="372" y="594" width="20" height="13" rx="3" fill="#79a9c3" stroke="none" />
+<rect x="400" y="594" width="20" height="13" rx="3" fill="#b7d2e1" stroke="none" />
+<rect x="428" y="594" width="20" height="13" rx="3" fill="#b7d2e1" stroke="none" />
+<rect x="456" y="594" width="20" height="13" rx="3" fill="#79a9c3" stroke="none" />
+<rect x="484" y="594" width="20" height="13" rx="3" fill="#b7d2e1" stroke="none" />
+<rect x="512" y="594" width="20" height="13" rx="3" fill="#b7d2e1" stroke="none" />
+<text x="344" y="631" font-size="12" fill="#35769a" font-weight="400" text-anchor="start">Source K / V cache</text>
+<path d="M570 564H650" fill="none" stroke="#35769a" stroke-width="1.8" marker-end="url(#blue-arrow)" />
+<text x="611" y="541" font-size="11" fill="#35769a" font-weight="400" text-anchor="middle">K_s / V_s</text>
+<rect x="660" y="480" width="280" height="172" rx="12" fill="#fff" stroke="#94afc3" />
+<text x="684" y="512" font-size="21" fill="#24384c" font-weight="600" text-anchor="start">KV translator</text>
+<text x="684" y="537" font-size="12" fill="#65798c" font-weight="400" text-anchor="start">Fitted once per model pair</text>
+<rect x="687" y="551" width="9" height="9" rx="1.5" fill="#83afc6" stroke="none" />
+<rect x="861" y="551" width="9" height="9" rx="1.5" fill="#c3957e" stroke="none" />
+<rect x="687" y="564" width="9" height="9" rx="1.5" fill="#83afc6" stroke="none" />
+<rect x="861" y="564" width="9" height="9" rx="1.5" fill="#c3957e" stroke="none" />
+<rect x="687" y="577" width="9" height="9" rx="1.5" fill="#83afc6" stroke="none" />
+<rect x="861" y="577" width="9" height="9" rx="1.5" fill="#c3957e" stroke="none" />
+<rect x="700" y="551" width="9" height="9" rx="1.5" fill="#83afc6" stroke="none" />
+<rect x="874" y="551" width="9" height="9" rx="1.5" fill="#c3957e" stroke="none" />
+<rect x="700" y="564" width="9" height="9" rx="1.5" fill="#83afc6" stroke="none" />
+<rect x="874" y="564" width="9" height="9" rx="1.5" fill="#c3957e" stroke="none" />
+<rect x="700" y="577" width="9" height="9" rx="1.5" fill="#83afc6" stroke="none" />
+<rect x="874" y="577" width="9" height="9" rx="1.5" fill="#c3957e" stroke="none" />
+<rect x="713" y="551" width="9" height="9" rx="1.5" fill="#83afc6" stroke="none" />
+<rect x="887" y="551" width="9" height="9" rx="1.5" fill="#c3957e" stroke="none" />
+<rect x="713" y="564" width="9" height="9" rx="1.5" fill="#83afc6" stroke="none" />
+<rect x="887" y="564" width="9" height="9" rx="1.5" fill="#c3957e" stroke="none" />
+<rect x="713" y="577" width="9" height="9" rx="1.5" fill="#83afc6" stroke="none" />
+<rect x="887" y="577" width="9" height="9" rx="1.5" fill="#c3957e" stroke="none" />
+<rect x="726" y="551" width="9" height="9" rx="1.5" fill="#83afc6" stroke="none" />
+<rect x="900" y="551" width="9" height="9" rx="1.5" fill="#c3957e" stroke="none" />
+<rect x="726" y="564" width="9" height="9" rx="1.5" fill="#83afc6" stroke="none" />
+<rect x="900" y="564" width="9" height="9" rx="1.5" fill="#c3957e" stroke="none" />
+<rect x="726" y="577" width="9" height="9" rx="1.5" fill="#83afc6" stroke="none" />
+<rect x="900" y="577" width="9" height="9" rx="1.5" fill="#c3957e" stroke="none" />
+<path d="M745 570H770M830 570H851" fill="none" stroke="#9bafbd" stroke-width="1.5" /><path d="M800 547L824 570L800 593L776 570Z" fill="#edf2f6" stroke="#8ba5ba" />
+<text x="800" y="576" font-size="19" fill="#35769a" font-weight="600" text-anchor="middle">W</text>
+<text x="684" y="617" font-size="12" fill="#65798c" font-weight="400" text-anchor="start">undo RoPE / map / reapply</text>
+<text x="684" y="639" font-size="11" fill="#7e91a3" font-weight="400" text-anchor="start">Affine ridge, per KV head</text>
+<rect x="660" y="391" width="280" height="29" rx="6" fill="#edf1f6" stroke="#d4dfe8" />
+<text x="800" y="410" font-size="11" fill="#65798c" font-weight="400" text-anchor="middle">Offline fit / frozen mapper</text>
+<path d="M800 420V471" fill="none" stroke="#9eafbd" stroke-width="1.8" stroke-dasharray="5 5" marker-end="url(#arrow)" />
+<path d="M940 564H1055" fill="none" stroke="#a96547" stroke-width="1.8" marker-end="url(#copper-arrow)" />
+<text x="998" y="541" font-size="11" fill="#a96547" font-weight="400" text-anchor="middle">K_t / V_t</text>
+<rect x="1065" y="480" width="310" height="172" rx="12" fill="#fff" stroke="#c4ac9d" />
+<text x="1089" y="512" font-size="21" fill="#24384c" font-weight="600" text-anchor="start">Large-model decode</text>
+<text x="1089" y="537" font-size="13" fill="#65798c" font-weight="400" text-anchor="start">Imports N−1 cached positions</text>
+<rect x="1089" y="552" width="260" height="31" rx="5" fill="#f7eee8" stroke="none" />
+<text x="1219" y="572" font-size="11" fill="#a96547" font-weight="400" text-anchor="middle">Processes 1 prompt tail token</text>
+<rect x="1089" y="600" width="38" height="25" rx="4" fill="#f4f6f9" stroke="#dbe3e9" />
+<text x="1108" y="617" font-size="12" fill="#7d8e9f" font-weight="400" text-anchor="middle">t1</text>
+<path d="M1129 613h7" stroke="#b5c3ce" />
+<rect x="1138" y="600" width="38" height="25" rx="4" fill="#f4f6f9" stroke="#dbe3e9" />
+<text x="1157" y="617" font-size="12" fill="#7d8e9f" font-weight="400" text-anchor="middle">t2</text>
+<path d="M1178 613h7" stroke="#b5c3ce" />
+<rect x="1187" y="600" width="38" height="25" rx="4" fill="#f4f6f9" stroke="#dbe3e9" />
+<text x="1206" y="617" font-size="12" fill="#7d8e9f" font-weight="400" text-anchor="middle">t3</text>
+<path d="M1227 613h7" stroke="#b5c3ce" />
+<rect x="1236" y="600" width="38" height="25" rx="4" fill="#f4f6f9" stroke="#dbe3e9" />
+<text x="1255" y="617" font-size="12" fill="#7d8e9f" font-weight="400" text-anchor="middle">t4</text>
+<path d="M1276 613h7" stroke="#b5c3ce" />
+<rect x="1285" y="600" width="38" height="25" rx="4" fill="#f4f6f9" stroke="#dbe3e9" />
+<text x="1304" y="617" font-size="12" fill="#7d8e9f" font-weight="400" text-anchor="middle">t5</text>
+<path d="M1375 564H1440" fill="none" stroke="#a96547" stroke-width="1.8" marker-end="url(#copper-arrow)" />
+<text x="1464" y="516" font-size="13" fill="#24384c" font-weight="600" text-anchor="middle">Answer</text>
+<rect x="1440" y="539" width="50" height="58" rx="7" fill="#fff" stroke="#adc2d1" />
+<path d="M1451 554h27" stroke="#829eaf" stroke-width="2" />
+<path d="M1451 566h20" stroke="#829eaf" stroke-width="2" />
+<path d="M1451 578h27" stroke="#829eaf" stroke-width="2" />
+<text x="320" y="718" font-size="16" fill="#24384c" font-weight="600" text-anchor="start">Time the complete cold request</text>
+<rect x="320" y="735" width="1055" height="56" rx="9" fill="#fff" stroke="#d6e1ea" />
+<text x="344" y="769" font-size="14" fill="#35769a" font-weight="400" text-anchor="start">source prefill</text>
+<text x="584" y="769" font-size="14" fill="#35769a" font-weight="400" text-anchor="start">map + move/import</text>
+<text x="919" y="769" font-size="14" fill="#a96547" font-weight="400" text-anchor="start">target tail + first token</text>
+<text x="548" y="769" font-size="16" fill="#65798c" font-weight="400" text-anchor="start">+</text>
+<text x="883" y="769" font-size="16" fill="#65798c" font-weight="400" text-anchor="start">+</text>
+<text x="320" y="817" font-size="13" fill="#65798c" font-weight="400" text-anchor="start">Native and transferred answers are scored on the same held-out questions.</text>
+<g id="execution-plan">
+<path d="M60 849H1540" stroke="#cfdae4" />
+<text x="60" y="880" font-size="16" fill="#24384c" font-weight="600" text-anchor="start">Where it runs</text>
+<text x="1540" y="880" font-size="11" fill="#65798c" font-weight="400" text-anchor="end">Proposed AWS worker / no deployment launched</text>
+<rect x="60" y="901" width="260" height="80" rx="10" fill="#fff" stroke="#d1dde7" />
+<text x="80" y="932" font-size="15" fill="#24384c" font-weight="600" text-anchor="start">Laptop / submit</text>
+<text x="80" y="958" font-size="11" fill="#65798c" font-weight="400" text-anchor="start">CLI + job monitoring</text>
+<rect x="390" y="901" width="240" height="80" rx="10" fill="#fff" stroke="#d1dde7" />
+<text x="410" y="932" font-size="15" fill="#24384c" font-weight="600" text-anchor="start">S3 / inputs</text>
+<text x="410" y="958" font-size="11" fill="#65798c" font-weight="400" text-anchor="start">checkpoints + data</text>
+<rect x="710" y="901" width="440" height="80" rx="10" fill="#fff" stroke="#d1dde7" />
+<text x="730" y="932" font-size="15" fill="#24384c" font-weight="600" text-anchor="start">SageMaker / GPU job</text>
+<text x="730" y="958" font-size="11" fill="#65798c" font-weight="400" text-anchor="start">calibrate · compare 5 arms · measure</text>
+<rect x="1230" y="901" width="310" height="80" rx="10" fill="#fff" stroke="#d1dde7" />
+<text x="1250" y="932" font-size="15" fill="#24384c" font-weight="600" text-anchor="start">S3 / results</text>
+<text x="1250" y="958" font-size="11" fill="#65798c" font-weight="400" text-anchor="start">traces + quality + memory</text>
+<path d="M320 941H380" fill="none" stroke="#9aaebb" stroke-width="1.8" marker-end="url(#arrow)" />
+<path d="M630 941H700" fill="none" stroke="#9aaebb" stroke-width="1.8" marker-end="url(#arrow)" />
+<path d="M1150 941H1220" fill="none" stroke="#9aaebb" stroke-width="1.8" marker-end="url(#arrow)" />
+<text x="930" y="1005" font-size="11" fill="#65798c" font-weight="400" text-anchor="middle">Job exits after artifacts are saved</text>
+</g>
+<text x="60" y="1032" font-size="11" fill="#65798c" font-weight="400" text-anchor="start">Initial adapter: dense Qwen3. Hybrid Qwen3.5/3.8 needs recurrent-state support.</text>
+<text x="1540" y="1032" font-size="11" fill="#65798c" font-weight="400" text-anchor="end">Motion illustrates sequence, not measured speed.</text>
+</svg>
