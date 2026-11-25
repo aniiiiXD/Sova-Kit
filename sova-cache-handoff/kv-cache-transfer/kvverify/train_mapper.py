@@ -4,7 +4,7 @@ This module is imported only for explicitly scoped Torch work. Training matches
 native target distributions on unlabeled context windows; it never treats a
 cropped document's original answer as a valid training label. Depth neighbors
 are concatenated (fixed top-k, not a learned layer search). The cache adapter
-is experimental and does not reproduce OneTriangle's private implementation.
+is experimental and does not reproduce any vendor's private implementation.
 """
 from dataclasses import asdict
 import hashlib

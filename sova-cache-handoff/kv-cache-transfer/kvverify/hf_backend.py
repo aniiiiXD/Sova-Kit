@@ -2,7 +2,7 @@
 
 Scope: dense Qwen3, batch=1, no padding, standard RoPE, local safetensors.
 The initial mapper is a depth-aligned per-head affine ridge baseline, not an
-implementation of OneTriangle's proprietary/hybrid mapper or top-k layer search.
+implementation of any vendor's proprietary/hybrid mapper or top-k layer search.
 """
 import hashlib
 import importlib.metadata

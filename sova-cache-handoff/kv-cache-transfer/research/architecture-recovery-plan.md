@@ -6,7 +6,7 @@
 
 **Recover an interpretable cross-head, selected-layer ridge baseline before expanding the neural architecture or model size.** In parallel, test the current saved mapper's handoff boundary: training gave the target eight freshly computed suffix tokens, while inference gave it one. We have substantial implementation/protocol differences from the published method and a narrow functional-training distribution. The current result does not establish that the general cache-transfer idea fails.
 
-Three claims must remain separate: reproducing a published method on our smaller pair; reproducing a paper's exact model pair, data and scoring; reproducing OneTriangle's private hybrid-pair service. Today's work is an independent small-pair experiment, not either exact product reproduction.
+Three claims must remain separate: reproducing a published method on our smaller pair; reproducing a paper's exact model pair, data and scoring; reproducing the vendor's private hybrid-pair service. Today's work is an independent small-pair experiment, not either exact product reproduction.
 
 ## What the actual larger run says
 

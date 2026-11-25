@@ -36,7 +36,7 @@ Architecture scope matters in a technical interview: the initial ridge map opera
 
 ## GitHub case-study outline
 
-1. **Question and scope.** Can a small reader's state reduce a larger reader's prefill work? State the exact pair, dense-attention-only support, hardware, precision and context limits. Credit OneTriangle as inspiration; do not imply access to its private mapper or reproduction of its advertised hybrid pair.
+1. **Question and scope.** Can a small reader's state reduce a larger reader's prefill work? State the exact pair, dense-attention-only support, hardware, precision and context limits. Credit the originating vendor as inspiration; do not imply access to its private mapper or reproduction of its advertised hybrid pair.
 2. **Architecture.** Document → small-model prefix cache → pair-specific mapper → target-cache import → one target tail token → autoregressive decode. Link the existing animated diagram and show which stages are included in cold TTFT.
 3. **Controls and data.** Native cold, native warm, source-only, transfer cold, transfer warm; identity-cache parity and zero-cache sensitivity. Show the 64/16/61 document partition and explain why 17 questions about one contract are not 17 independent documents.
 4. **Baseline outcome.** Present all pilot attempts and the 12-question sample size. Show 157.74 ms native cold versus 152.39 ms transfer cold, with the paired ratio 1.031×. Immediately show the generation failures and strict-scoring issue. This is a useful negative result, not an optimization headline.

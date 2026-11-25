@@ -4,7 +4,7 @@ Research date: 18 November 2026. This report audits the code and saved evidence,
 
 ## Assessment
 
-The research direction is sound, but our present implementation is an economical experimental variant, not a faithful reproduction of the original paper or OneTriangle's private mapper. The biggest methodological gaps are the weak same-head ridge baseline, unselected source layers, restricted functional-training coverage, and short continuation supervision. A larger parameter count or longer training run alone would not identify which gap matters.
+The research direction is sound, but our present implementation is an economical experimental variant, not a faithful reproduction of the original paper or any vendor's private mapper. The biggest methodological gaps are the weak same-head ridge baseline, unselected source layers, restricted functional-training coverage, and short continuation supervision. A larger parameter count or longer training run alone would not identify which gap matters.
 
 The useful project is a reproducible study of **when a translated cache preserves a receiver's behavior and when the complete request becomes cheaper**. A credible negative finding with a precise failure diagnosis is valuable ML systems work. An unqualified claim of production-ready cross-model memory is not supported by the present evidence.
 
@@ -28,7 +28,7 @@ These are authors' preprints, not results independently reproduced here. Use the
 - [vLLM's disaggregated-prefill documentation](https://docs.vllm.ai/en/latest/features/disagg_prefill/) is an engine-integration reference. Ordinary same-model cache transport does not itself perform semantic translation between independently trained models; the mapper and correctness gates remain our responsibility.
 - [PyTorch Profiler](https://docs.pytorch.org/tutorials/recipes/recipes/profiler_recipe.html) provides trace tooling for identifying actual kernels, allocations and synchronization. A profiler trace should justify optimization work before introducing a custom kernel.
 
-No original-author mapper-training repository for the papers above was located in this bounded audit. That is an access finding, not proof that none exists. Do not label an unrelated repository as official. No private OneTriangle training implementation was available for inspection.
+No original-author mapper-training repository for the papers above was located in this bounded audit. That is an access finding, not proof that none exists. Do not label an unrelated repository as official. No private vendor training implementation was available for inspection.
 
 ## What our code actually implements
 
@@ -135,7 +135,7 @@ The convincing story is the experimental discipline and systems understanding:
 
 A truthful current project description is: **“Built a bounded research harness for cross-model KV-cache handoff between frozen Qwen models, including nonlinear mapper training, receiver-distribution distillation, document-disjoint evaluation, low-precision overflow recovery, and SageMaker/S3 artifact collection.”**
 
-Do not yet write “production-ready,” “quality preserved,” “100B post-trained,” “10× faster API,” or “reproduced OneTriangle.” Add quantitative outcome claims only after they are directly supported by the final saved reports and an explicitly stated measurement boundary.
+Do not yet write “production-ready,” “quality preserved,” “100B post-trained,” “10× faster API,” or “reproduced the vendor.” Add quantitative outcome claims only after they are directly supported by the final saved reports and an explicitly stated measurement boundary.
 
 ## Scope of this audit
 

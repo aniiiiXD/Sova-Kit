@@ -18,11 +18,11 @@ Question: can a smaller reader plus a cache mapper reduce the time and cost of a
 
 | Finding | Meaning |
 |---|---|
-| OneTriangle documents a hosted mapped-prefill service and model-pair-specific mappers. | An ordinary chat request to an unrelated provider does not test this implementation. |
+| The vendor documents a hosted mapped-prefill service and model-pair-specific mappers. | An ordinary chat request to an unrelated provider does not test this implementation. |
 | The documented 27B SDK call returns a blocking result rather than a token stream. | Client wall time measures total response time. A TTFT claim additionally needs trustworthy first-token instrumentation or a streaming target path. |
-| No OneTriangle credential/base URL was present in the process environment or four conventional SOVA/home environment files checked. | Access has not been configured in the checked locations. This was not an exhaustive keychain audit. |
+| No vendor credential/base URL was present in the process environment or four conventional SOVA/home environment files checked. | Access has not been configured in the checked locations. This was not an exhaustive keychain audit. |
 | The official SDK wheel URL returned HTTP 403 when fetched for archive inspection. | We did not install or execute it. This does not by itself establish why access was denied. |
-| Public independent implementations exist for conventional full-attention Qwen3 pairs. | We can test the general mechanism independently with cache-level control, without claiming to reproduce OneTriangle's private mapper. |
+| Public independent implementations exist for conventional full-attention Qwen3 pairs. | We can test the general mechanism independently with cache-level control, without claiming to reproduce the vendor's private mapper. |
 | Qwen3.5/3.8 are hybrid models with recurrent/convolution state as well as ordinary attention KV. | A full-attention-only mapper is insufficient evidence for the advertised hybrid pair. |
 
 The earlier Fireworks account checks and ParseBench results do not verify cross-model cache transfer. They did not export, translate or import any cache tensors.
@@ -30,7 +30,7 @@ The earlier Fireworks account checks and ParseBench results do not verify cross-
 ## Two distinct claims
 
 1. **General mechanism:** translated model state can enable target decoding with less prompt recomputation. Verify with a controllable open-model runtime.
-2. **OneTriangle product/headline:** their particular Qwen3.5-4B -> Qwen3.8-27B service delivers its stated speed, quality and cost. Verify that exact service or packaged mapper against a matched native target. Success on a different pair is not verification of this claim.
+2. **Vendor product/headline:** the vendor's particular Qwen3.5-4B -> Qwen3.8-27B service delivers its stated speed, quality and cost. Verify that exact service or packaged mapper against a matched native target. Success on a different pair is not verification of this claim.
 
 The current vendor Qwen 4B -> 27B timing table shows 3.9x at 1M as a projection, with measurements through 64K. Do not attribute every advertised peak to this pair or label projected results as measured. Their task-trained mapper and generic mapper quality tables are separate experiments; do not mix them into one comparison.
 
@@ -96,7 +96,7 @@ Outcomes are **pass, fail or inconclusive**, separately for latency, quality and
 
 ## Practical routes
 
-**Direct product test:** obtain OneTriangle API access or its packaged mapper. Require a native comparator, actual mapped-pair identity, fallback metadata and first-token timing. Without those, a black-box test can assess answer quality and end-to-end response time, but cannot independently establish cache-level causality or true TTFT through the blocking SDK alone.
+**Direct product test:** obtain vendor API access or its packaged mapper. Require a native comparator, actual mapped-pair identity, fallback metadata and first-token timing. Without those, a black-box test can assess answer quality and end-to-end response time, but cannot independently establish cache-level causality or true TTFT through the blocking SDK alone.
 
 **Independent mechanism test:** start with a matched-tokenizer, matched-KV-geometry full-attention Qwen3 pair in an instrumented GPU runtime. Run identity/import controls, fit a pair-specific mapper using independent calibration data, and run the arms above. Public implementations are candidate starting points; their reported numbers and tests have not been rerun by us. Exact code revisions must be pinned and reviewed before installation/execution. Then tackle the advertised hybrid pair with a compatible full-state mapper; do not assume the first adapter transfers unchanged.
 
@@ -108,9 +108,6 @@ The user authorized the offline smoke and bounded GPU pilot on 18 November. The 
 
 ## Evidence and sources
 
-- [OneTriangle timings: measured versus projected](https://onetriangle.ai/)
-- [Prefill SDK and streaming limitations](https://onetriangle.ai/prefill-sdk)
-- [Task-trained mapper product and benchmark protocol](https://onetriangle.ai/mapper-api)
 - [NVIDIA cross-model KV mapping paper](https://arxiv.org/abs/2608.03893)
 - [Hybrid state-transfer paper](https://arxiv.org/abs/2611.08133)
 - [Independent HF implementation](https://github.com/Susmith4710/kvtransfer)

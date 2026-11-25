@@ -97,7 +97,7 @@ Its quadratic attention work and cache payload are therefore similar; parameter
 ratio alone cannot promise a large prefill speedup. The first goal is recovered
 behavior, followed by profiling and a better model pair if needed.
 
-No exact OneTriangle replication is claimed: our pair, sampled questions and
+No exact vendor replication is claimed: our pair, sampled questions and
 some prompt/scoring choices differ from its published campaigns.
 
 ## Verification and compute policy

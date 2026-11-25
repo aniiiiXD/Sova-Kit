@@ -50,9 +50,9 @@ If the command fails, preserve its report. A changed command or rerun needs its 
 
 ## Real model path
 
-The first mechanism reproduction supports **dense, full-attention Qwen3 only**. A Qwen3-0.6B -> Qwen3-1.7B pair has matching 8 KV heads and head dimension 128, according to their official configs. Larger matching dense Qwen3 pairs can follow the same adapter after a memory check. Qwen3.5, Qwen3.8 hybrids, MoE, sliding-window attention and scaled/dynamic RoPE are rejected. A hybrid-state implementation is required to test OneTriangle's exact production pair.
+The first mechanism reproduction supports **dense, full-attention Qwen3 only**. A Qwen3-0.6B -> Qwen3-1.7B pair has matching 8 KV heads and head dimension 128, according to their official configs. Larger matching dense Qwen3 pairs can follow the same adapter after a memory check. Qwen3.5, Qwen3.8 hybrids, MoE, sliding-window attention and scaled/dynamic RoPE are rejected. A hybrid-state implementation is required to test the vendor's exact production pair.
 
-The initial mapper is an explicit **depth-aligned, per-head affine ridge baseline (k=1)**. It undoes source RoPE, fits centered ridge maps for keys/values on independent calibration documents, then restores target RoPE. This is not top-k layer selection, nonlinear mapping, or OneTriangle's task-trained residual mapper. A negative result on this baseline does not disprove all cross-model transfer methods.
+The initial mapper is an explicit **depth-aligned, per-head affine ridge baseline (k=1)**. It undoes source RoPE, fits centered ridge maps for keys/values on independent calibration documents, then restores target RoPE. This is not top-k layer selection, nonlinear mapping, or any vendor's task-trained residual mapper. A negative result on this baseline does not disprove all cross-model transfer methods.
 
 Model run commands are guarded by `--execute`, require a CUDA worker and use local safetensors directories. They cannot download models, execute remote model code, start servers or provision GPUs. Both checkpoint weights and tokenizer files are hashed. Source and target tokenizers must match, and every evaluation prompt's token IDs are compared.
 

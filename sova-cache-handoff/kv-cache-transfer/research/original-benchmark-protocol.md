@@ -21,9 +21,9 @@ The [training summary](../reports/sova-kv-full-20261118-132341-7daf/collected/tr
 
 ## There are three different “original” comparisons
 
-### A. OneTriangle generic mapper, task-specific mapper and newer API campaign
+### A. Vendor generic mapper, task-specific mapper and newer API campaign
 
-The vendor's [benchmark page](https://onetriangle.ai/blog/transfer-benchmarks?pair=qwen-hybrid) loads its numeric protocol from a public [JavaScript data asset](https://onetriangle.ai/_astro/transfer-benchmarks.astro_astro_type_script_index_0_lang.qDAGDqAu.js). This audit read that asset as text; it did not execute downloaded code. The following are distinct displayed campaigns:
+The vendor's benchmark page loads its numeric protocol from a public JavaScript data asset. This audit read that asset as text; it did not execute downloaded code. The following are distinct displayed campaigns:
 
 | Vendor campaign | Published pair/protocol | Selected published result |
 |---|---|---|
@@ -31,11 +31,11 @@ The vendor's [benchmark page](https://onetriangle.ai/blog/transfer-benchmarks?pa
 | Task-specific dense pair | Separate benchmark-trained adapters; QuALITY listed as 209 training “documents,” n=500, reasoning on | 63.8% source, 72.0% transfer, 83.8% native |
 | Generic hybrid headline | Qwen3.5-4B → Qwen3.8-27B; headline n=100 | QuALITY 78% source, 84% transfer, 94% native |
 
-The separate [fine-tuned mapper API page](https://onetriangle.ai/mapper-api) advertises task-trained hybrid QuALITY at 85% source, 90% mapper, 90% native, with 100 held-out questions and document-grouped intervals. It describes teacher-generated task answers and a rank-16 adapter, recommends at least 1,000 questions over 50 documents, and says gold references are for evaluation. Those figures do not replace the generic campaign above.
+The vendor's separate fine-tuned mapper API page advertises task-trained hybrid QuALITY at 85% source, 90% mapper, 90% native, with 100 held-out questions and document-grouped intervals. It describes teacher-generated task answers and a rank-16 adapter, recommends at least 1,000 questions over 50 documents, and says gold references are for evaluation. Those figures do not replace the generic campaign above.
 
-The newer downloadable [hybrid benchmark bundle](https://onetriangle.ai/benchmarks/qwen-27/2026-11-13/qwen-27-latest-benchmarks.zip), generated 16 November with an expanded-results snapshot dated 13 November, reports ContractNLI 61/100 mapped versus 79/100 native. Its task-matched τ2 slice is 25/51 mapped versus 46/51 native; the source comparison uses an explicitly labeled 9B proxy. These are useful counterexamples to a universal quality-preservation claim. They are not our scores and not the task-trained QuALITY campaign.
+The vendor's newer downloadable hybrid benchmark bundle, generated 16 November with an expanded-results snapshot dated 13 November, reports ContractNLI 61/100 mapped versus 79/100 native. Its task-matched τ2 slice is 25/51 mapped versus 46/51 native; the source comparison uses an explicitly labeled 9B proxy. These are useful counterexamples to a universal quality-preservation claim. They are not our scores and not the task-trained QuALITY campaign.
 
-The vendor's [benchmark analysis](https://onetriangle.ai/blog/transfer-benchmarks-analysis?pair=glm-53) explicitly distinguishes generic and task-specific training. Choosing a convenient score from one campaign and timing from another would not constitute a reproduction.
+The vendor's benchmark analysis explicitly distinguishes generic and task-specific training. Choosing a convenient score from one campaign and timing from another would not constitute a reproduction.
 
 ### B. Original NVIDIA paper
 
@@ -45,7 +45,7 @@ This is the cleaner public mechanism reference, but our same-head k1 ridge, fixe
 
 ### C. Independent implementation of our exact small pair
 
-[alesha-pro/vllm-cross-model-kv](https://github.com/alesha-pro/vllm-cross-model-kv) independently implements Qwen3-0.6B → 1.7B with a selected-layer k8 mapper and 500-sequence calibration. Its HellaSwag and tail-perplexity protocol is a useful external implementation target. It is not the NVIDIA authors' release or OneTriangle's implementation, and its reported outcomes have not been reproduced by us.
+[alesha-pro/vllm-cross-model-kv](https://github.com/alesha-pro/vllm-cross-model-kv) independently implements Qwen3-0.6B → 1.7B with a selected-layer k8 mapper and 500-sequence calibration. Its HellaSwag and tail-perplexity protocol is a useful external implementation target. It is not the NVIDIA authors' release or the vendor's implementation, and its reported outcomes have not been reproduced by us.
 
 ## What we can and cannot match now
 
@@ -61,7 +61,7 @@ This is the cleaner public mechanism reference, but our same-head k1 ridge, fixe
 
 One unresolved detail is important: official QuALITY v1.0.1 training has 150 distinct `article_id` values, whereas the vendor dense task-specific tab describes 209 training “documents.” The latter could refer to a different grouping or partition; this audit cannot resolve it. Do not silently equate those numbers.
 
-The [Prefill SDK](https://onetriangle.ai/prefill-sdk) is a hosted client, not training code or raw cache access. Its 27B interface is blocking, so client wall time is total completion latency unless an independently documented server trace exposes first-token timing. We have not obtained that service's credentials or private mapper internals.
+The vendor's Prefill SDK is a hosted client, not training code or raw cache access. Its 27B interface is blocking, so client wall time is total completion latency unless an independently documented server trace exposes first-token timing. We have not obtained that service's credentials or private mapper internals.
 
 ## Recommended next benchmark: official QuALITY train → development
 
@@ -79,7 +79,7 @@ Two writer records can share an article. Grouping by record or question instead 
 ### Frozen prospective protocol
 
 1. Preserve all 2,523 official training questions and 150 article groups. Separate a train-only article-group validation split for mapper selection before training. Do not deduplicate away all but one question per article in the functional-training index.
-2. Freeze **100 questions from 100 distinct official development articles**, seed 19, one seeded question per selected article. Record every article/question ID, hard flag, context hash and full token length. This is a reproducible independent n=100 slice, not “the same 100 as OneTriangle.”
+2. Freeze **100 questions from 100 distinct official development articles**, seed 19, one seeded question per selected article. Record every article/question ID, hard flag, context hash and full token length. This is a reproducible independent n=100 slice, not “the same 100 as the vendor.”
 3. For a task-trained mapper, generate target teacher answers on the training questions with a declared reasoning mode and sufficient output budget; use those traces for receiver-level distillation. Do not assume eight arbitrary next-text positions train the target's answer behavior. Retain a generic FineWeb-Edu calibration-only mapper as a separately named control if budget permits.
 4. Transfer the shared article prefix, then let the receiver read the fresh question and four options. Log how many receiver tokens are recomputed; this is distinct from our earlier one-tail-token protocol. All variants get identical article/question text and tokenization.
 5. Declare the decision scorer before running: select the maximum A/B/C/D option logit with option probability mass recorded, and report unconstrained generation separately using an anchored label parser plus explicit invalid/truncated categories. A strict-one-letter metric may remain a product-contract diagnostic; it must not be presented as the only semantic accuracy metric.

@@ -34,7 +34,7 @@ Prepared 18 November 2026 by parallel framework, method-audit and career-positio
 - [Completed results](../reports/sova-kv-full-20261118-132341-7daf/RESULTS.md): full quality, timing and compute evidence; the candidate does not pass acceptance.
 - [Failure analysis](failure-analysis-v2.md): actual prediction collapse, question coverage and length/hypothesis diagnostics.
 - [Architecture recovery plan](architecture-recovery-plan.md): handoff-boundary mismatch, stronger baselines and controlled repairs.
-- [Original benchmark protocols](original-benchmark-protocol.md): OneTriangle versus paper campaigns, official QuALITY/HellaSwag reference data and scoring.
+- [Original benchmark protocols](original-benchmark-protocol.md): vendor versus paper campaigns, official QuALITY/HellaSwag reference data and scoring.
 
 ## Project positioning
 

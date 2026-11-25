@@ -67,7 +67,7 @@ The following are research precedents, not independently reproduced SOVA results
 | [KV-Lingo](https://arxiv.org/html/2609.32610v1) | Functional distillation can improve simple maps. Crucially, its released shape-matched Qwen pairs show competitive head-wise mapping, and mixed CE+KL is not universally worse than KL. Neither wider heads nor changing the loss is a proven fix for us. Its switching latency assumes the source cache already exists. |
 | [Hybrid-state handoff](https://arxiv.org/abs/2611.08133) | Hybrid models require more than ordinary K/V transport. Recurrent and convolutional state introduce a separate problem; defer it until the dense reference works. |
 
-[OneTriangle's task-specific service](https://onetriangle.ai/mapper-api) reports favorable held-out results for a different, larger pair and workload. That is vendor evidence of a possible product direction, not a controlled comparison to our implementation. Its [homepage](https://onetriangle.ai/) distinguishes measured campaigns from projections; a projected million-token speedup must not become a measured SOVA claim.
+The vendor's task-specific service reports favorable held-out results for a different, larger pair and workload. That is vendor evidence of a possible product direction, not a controlled comparison to our implementation. The vendor's homepage distinguishes measured campaigns from projections; a projected million-token speedup must not become a measured SOVA claim.
 
 Our potential contribution is an independently auditable quality/latency tradeoff, a clear diagnosis of when handoff fails, and an eventual useful integration. Linear cache translation, distillation, and cache connectors already have prior art. See the [literature review](literature-review.md).
 

@@ -6,7 +6,7 @@
 
 Keep the completed ContractNLI result as a negative development result. Add **QuALITY** as the vendor-style long-document reference and **HellaSwag continuation likelihood** as the paper-style mechanism reference. Test the handoff mismatch on the saved mapper before retraining. Then compare a stronger cross-head ridge baseline and a repaired question-conditioned training protocol.
 
-OneTriangle already reports ContractNLI alongside QuALITY, so the dataset name does not explain our failure by itself. Its generic, task-specific and newer hybrid campaigns use different model pairs, datasets and scoring settings. Our frozen samples are independent reference slices, not the vendor's unpublished exact items. See the [primary-source protocol audit](original-benchmark-protocol.md).
+The vendor already reports ContractNLI alongside QuALITY, so the dataset name does not explain our failure by itself. Its generic, task-specific and newer hybrid campaigns use different model pairs, datasets and scoring settings. Our frozen samples are independent reference slices, not the vendor's unpublished exact items. See the [primary-source protocol audit](original-benchmark-protocol.md).
 
 ## Evidence motivating this order
 
@@ -43,7 +43,7 @@ The probe is an API callable for a separately configured GPU worker; it does not
 
 1. **Check the oracle, then probe the boundary.** At representative lengths, the target's own prefix cache plus suffix must reproduce its full-prompt result. Then compare current learned-cache suffix lengths 1, 8 and 32. A large recovery at 8 supports aligning the training/deployment handoff; no recovery redirects attention to representation fidelity.
 2. **Restore question diversity.** Deduplicate document storage and covariance statistics, but keep each document's complete question pool for functional training/selection. Record actual question-type consumption.
-3. **Align task supervision.** Use full-context answer-boundary/teacher-answer distillation with the same native suffix policy that inference will use. OneTriangle publicly describes task-answer distillation; our cropped next-text objective is a different experiment. Mapping only the shared document prefix and allowing the target to read the fresh query is a separate measured alternative.
+3. **Align task supervision.** Use full-context answer-boundary/teacher-answer distillation with the same native suffix policy that inference will use. The vendor publicly describes task-answer distillation; our cropped next-text objective is a different experiment. Mapping only the shared document prefix and allowing the target to read the fresh query is a separate measured alternative.
 4. **Establish a stronger linear reference.** Compare same-head versus all-head features, predictive layer choice and explicit regularization units. Isolate key-RMS normalization rather than changing it together with the mapper and loss.
 5. **Run the frozen benchmark protocol.** Verify a sensible native baseline first. Evaluate the chosen method on the same frozen items and preserve every error. Keep current ContractNLI results as a separate regression test. Model pair, prompt, reasoning mode and scoring must be stated before comparing to published numbers.
 6. **Optimize only a behavior-preserving candidate.** Profile mapper/import/kernel overhead and choose a production connector after quality passes; a faster degenerate answer is not the product target.
