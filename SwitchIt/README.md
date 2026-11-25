@@ -2,7 +2,7 @@
 
 SwitchIt is Sova-Kit's trace module. Follow an agent run from the original request through its decisions, tool receipts, and eventual outcome. Review the source evidence before deciding what to replay or improve. [Trace collectors](Traces/README.md)
 
-![SwitchIt booking trace showing a request, the booking tool call, an accepted receipt, and a later company no-show.](docs/booking-trace.svg)
+![SwitchIt links TradesBench call 8 to appointment 5 and follows the dispatch timeline to the no-show cutoff and scheduled arrival.](docs/booking-trace.svg)
 
 ## Use cases
 

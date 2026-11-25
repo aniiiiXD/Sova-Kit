@@ -2,7 +2,7 @@
 
 Cache Handoff is Sova-Kit's module for reusing shared model context. Workers using the same model can reuse KV state for an identical starting sequence of tokens. Share chat history, source files, or tool results, then append a worker-specific task. Each worker gets an independent cache copy. An uncached request starts from position zero.
 
-![Cache Handoff primes one shared context prefix and gives two workers separate copies of the native KV state.](docs/shared-prefix.svg)
+![Cache Handoff compares cold, partial, and warm runs of the byte-token fixture, showing which tokens are reused and which the engine processes.](docs/shared-prefix.svg)
 
 ## Use case
 

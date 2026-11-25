@@ -2,7 +2,7 @@
 
 Sova-Kit is a toolkit for teams building agents. Inspect how an agent handled a task, verify a change against the outcomes that matter, reuse model context across workers, and make editable films that show the product in action.
 
-![Sova-Kit module map showing the trace handoff from SwitchIt to SwitchUp, plus Video Harness and Cache Handoff.](docs/sova-kit-modules.svg)
+![Sova-Kit architecture showing how captured events become reviewed evidence, how SwitchUp replays a change, and where trace and run data are stored.](docs/sova-kit-modules.svg)
 
 ## Modules
 

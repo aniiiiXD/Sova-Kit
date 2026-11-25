@@ -2,7 +2,7 @@
 
 Video Harness is Sova-Kit's toolkit for editable product journeys, wireframe walkthroughs and launch films. Bring a product brief, design files, brand and assets, then work with your preferred agent to build and revise the film. MCP exposes the same tools over local stdio or authenticated HTTP.
 
-![Video Harness turns a brief and product captures into an editable timeline, a reviewed preview, and an MP4.](docs/film-workflow.svg)
+![Video Harness maps the 31-second Relay starter from its authored files to six frame-accurate scenes, then to preview and MP4 export.](docs/film-workflow.svg)
 
 **This is an early developer release.** The source includes project/build/import commands, six starter scene types, portable skills, image search, a Smallest.ai TTS adapter and an optional Suno host adapter. The agent handles narrative and custom scene design; the harness validates and renders that work. There is no publicly hosted service yet.
 

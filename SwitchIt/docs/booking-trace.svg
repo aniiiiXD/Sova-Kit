@@ -1,72 +1,135 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="307" viewBox="0 0 1000 307" role="img" aria-labelledby="title description" font-family="monospace" fill="#233247">
-  <title id="title">SwitchIt · Follow a booking</title>
-  <desc id="description">A new service call leads to a booking mutation. The booking receipt records acceptance. The simulator later records a company no-show for the same appointment.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1032" viewBox="0 0 1400 1032" font-family="Menlo, Consolas, monospace" role="img" aria-labelledby="booking-run-title booking-run-desc">
+  <title id="booking-run-title">Follow a booking to its outcome</title>
+  <desc id="booking-run-desc">At 12:06 the agent booked appointment 5 for technician 1 in the 15:00 to 17:00 window. The tool returned accepted. SwitchIt matches invocation 9 and call 8, then joins job 5 to appointment 5 in the final database. The previous job ended at 15:01. A no-show was applied at 17:00 and the scheduled arrival was 17:17. The booking decision has enough evidence to investigate, and verifying an alternative requires reconstruction of the decision-time state.</desc>
   <defs>
-    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
-      <path d="M24 0H0V24" fill="none" stroke="#e2e7ec" stroke-width=".65"/>
+    <pattern id="booking-run-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#e3e7e6" stroke-width=".75"/>
     </pattern>
-    <style>
-      .title { font-size: 29px; font-weight: 700; letter-spacing: -.8px; }
-      .subtitle { font-size: 15px; fill: #4a5a70; }
-      .tag, .kicker { font-size: 12px; font-weight: 700; letter-spacing: .8px; }
-      .tag { fill: #52647b; }
-      .heading { font-size: 19px; font-weight: 700; letter-spacing: -.3px; }
-      .body { font-size: 14px; fill: #40516a; }
-      .note, .label { font-size: 14px; fill: #475b72; }
-      .strip { fill: #f1f4f7; stroke: #c8d3de; }
-      .flow { fill: none; stroke: #64758a; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-      .dash { stroke-dasharray: 4 4; }
-    </style>
   </defs>
+  <rect width="1400" height="1032" fill="#f7f7f3"/>
+  <rect width="1400" height="1032" fill="url(#booking-run-grid)"/>
+  <rect width="1400" height="8" fill="#152d40"/>
+  <text x="48" y="49" font-size="16" font-weight="700" fill="#23637e" letter-spacing="1.1">SOVA-KIT  /  SWITCHIT</text>
+  <text x="1352" y="49" font-size="16" font-weight="700" fill="#536576" text-anchor="end" letter-spacing="1.1">TRACE AUDIT  ·  CALL 8</text>
+  <text x="48" y="108" font-size="43" font-weight="700" fill="#182b3c" letter-spacing="-1.3">Follow a booking to its outcome</text>
+  <text x="50" y="147" font-size="21" font-weight="400" fill="#536576">A published TradesBench run · GPT-6.1 Sol · seed 5 · simulator-local times</text>
+  <line x1="48" y1="177" x2="1352" y2="177" stroke="#b5c4cb" stroke-width="1"/>
+  <rect x="48" y="205" width="604" height="278" rx="12" fill="#e8f3f6" stroke="#a9cbd5" stroke-width="1.2"/>
+  <rect x="49" y="218" width="4" height="252" rx="2" fill="#23637e" stroke="none" stroke-width="1.2"/>
 
-  <rect width="1000" height="307" fill="#fafafa"/>
-  <rect width="1000" height="307" fill="url(#grid)"/>
-  <text x="36" y="52" class="title">SwitchIt · Follow a booking</text>
-  <text x="36" y="79" class="subtitle">Trace the request through its tool receipt and final outcome</text>
-  <text x="964" y="50" class="tag" text-anchor="end">[ TRACE EXAMPLE ]</text>
-  <path d="M36 96H964" stroke="#c8d3de"/>
+  <text x="73" y="242" font-size="16" font-weight="700" fill="#23637e" letter-spacing="1.1">AGENT LOG  /  12:06</text>
 
-  <path d="M250 174H271" class="flow"/>
-  <polygon points="262,170 271,174 262,178" fill="#64758a"/>
+  <text x="73" y="278" font-size="26" font-weight="700" fill="#182b3c">The booking action</text>
 
-  <path d="M488 174H509" class="flow"/>
-  <polygon points="500,170 509,174 500,178" fill="#64758a"/>
+  <rect x="73" y="300" width="554" height="78" rx="8" fill="#152d40" stroke="none" stroke-width="1.2"/>
 
-  <path d="M726 174H747" class="flow dash"/>
-  <polygon points="738,170 747,174 738,178" fill="#64758a"/>
+  <text x="92" y="329" font-size="19" font-weight="400" fill="#edf6f8">jobs.book(call_id=8, technician_id=1)</text>
+  <text x="92" y="357" font-size="19" font-weight="400" fill="#edf6f8">window  15:00–17:00</text>
 
-  <g>
-    <rect x="36" y="118" width="214" height="112" rx="9" fill="#edf5fc" stroke="#a3bfd8" stroke-width="1.2"/>
-    <text x="53" y="143" class="kicker" fill="#255b88">REQUEST</text>
-    <text x="53" y="168" class="heading">New service call</text>
-    <text x="53" y="192" class="body">Customer needs</text>
-    <text x="53" y="213" class="body">an appointment</text>
-  </g>
+  <text x="73" y="411" font-size="21" font-weight="700" fill="#1e664f">Receipt      accepted</text>
 
-  <g>
-    <rect x="274" y="118" width="214" height="112" rx="9" fill="#edf5fc" stroke="#a3bfd8" stroke-width="1.2"/>
-    <text x="291" y="143" class="kicker" fill="#255b88">TOOL CALL</text>
-    <text x="291" y="168" class="heading">Book a slot</text>
-    <text x="291" y="192" class="body">Agent calls jobs.book</text>
-    <text x="291" y="213" class="body">with the selected slot</text>
-  </g>
+  <text x="73" y="441" font-size="19" font-weight="400" fill="#182b3c">invocation_id=9  call_id=8</text>
 
-  <g>
-    <rect x="512" y="118" width="214" height="112" rx="9" fill="#edf7f0" stroke="#a6c6b0" stroke-width="1.2"/>
-    <text x="529" y="143" class="kicker" fill="#236547">TOOL RECEIPT</text>
-    <text x="529" y="168" class="heading">Booking accepted</text>
-    <text x="529" y="192" class="body">Call and appointment</text>
-    <text x="529" y="213" class="body">IDs are recorded</text>
-  </g>
+  <text x="73" y="469" font-size="17" font-weight="400" fill="#536576">Route from job 4 checked at 53.3 mi</text>
 
-  <g>
-    <rect x="750" y="118" width="214" height="112" rx="9" fill="#fff6e9" stroke="#dabb92" stroke-width="1.2"/>
-    <text x="767" y="143" class="kicker" fill="#855420">LATER OUTCOME</text>
-    <text x="767" y="168" class="heading">Company no-show</text>
-    <text x="767" y="192" class="body">Final simulator state</text>
-    <text x="767" y="213" class="body">for that appointment</text>
-  </g>
+  <rect x="748" y="205" width="604" height="278" rx="12" fill="#ffffff" stroke="#b5c4cb" stroke-width="1.2"/>
+  <rect x="749" y="218" width="4" height="252" rx="2" fill="#23637e" stroke="none" stroke-width="1.2"/>
 
-  <rect x="36" y="248" width="928" height="42" rx="7" class="strip"/>
-  <text x="52" y="274" class="note">SwitchIt joins the receipt to the final appointment state when the source supplies it.</text>
+  <text x="774" y="242" font-size="16" font-weight="700" fill="#23637e" letter-spacing="1.1">FINAL SIMULATOR DATABASE</text>
+
+  <text x="774" y="278" font-size="25" font-weight="700" fill="#182b3c">Join the booked appointment</text>
+
+  <line x1="774" y1="297" x2="1324" y2="297" stroke="#b5c4cb" stroke-width="1"/>
+
+  <text x="774" y="329" font-size="20" font-weight="700" fill="#182b3c">Call 8</text>
+
+  <text x="1016" y="329" font-size="20" font-weight="400" fill="#182b3c">Job 5 → appointment 5</text>
+
+  <line x1="774" y1="347" x2="1324" y2="347" stroke="#b5c4cb" stroke-width="1"/>
+
+  <text x="774" y="379" font-size="20" font-weight="700" fill="#182b3c">Appointment 5</text>
+
+  <text x="1016" y="379" font-size="20" font-weight="700" fill="#984939">status = no_show</text>
+
+  <line x1="774" y1="397" x2="1324" y2="397" stroke="#b5c4cb" stroke-width="1"/>
+
+  <text x="774" y="429" font-size="20" font-weight="700" fill="#182b3c">Job 5</text>
+
+  <text x="1016" y="429" font-size="20" font-weight="400" fill="#984939">no_show_company</text>
+
+  <text x="774" y="469" font-size="17" font-weight="400" fill="#536576">Preserve the source and the matching IDs.</text>
+
+  <path d="M652 394L745 394" fill="none" stroke="#23637e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <polygon points="745,394 734,388.5 734,399.5" fill="#23637e"/>
+
+  <text x="700" y="358" font-size="16" font-weight="400" fill="#23637e" text-anchor="middle">match</text>
+
+  <text x="700" y="379" font-size="16" font-weight="400" fill="#23637e" text-anchor="middle">IDs</text>
+
+  <rect x="48" y="512" width="1304" height="359" rx="12" fill="#ffffff" stroke="#b5c4cb" stroke-width="1.2"/>
+
+  <text x="73" y="551" font-size="16" font-weight="700" fill="#23637e" letter-spacing="1.1">APPOINTMENT 5  /  ARRIVAL WINDOW</text>
+
+  <text x="73" y="587" font-size="24" font-weight="700" fill="#182b3c">The previous job and travel consumed the booked window</text>
+
+  <text x="73" y="650" font-size="16" font-weight="700" fill="#536576" letter-spacing="1.1">CLOCK</text>
+
+  <line x1="360" y1="646" x2="1260" y2="646" stroke="#b5c4cb" stroke-width="1.5"/>
+
+  <line x1="360" y1="638" x2="360" y2="654" stroke="#b5c4cb" stroke-width="1.4"/>
+  <text x="360" y="629" font-size="18" font-weight="400" fill="#3c566a" text-anchor="middle">15:00</text>
+
+  <line x1="720" y1="638" x2="720" y2="654" stroke="#b5c4cb" stroke-width="1.4"/>
+  <text x="720" y="629" font-size="18" font-weight="400" fill="#3c566a" text-anchor="middle">16:00</text>
+
+  <line x1="1080" y1="638" x2="1080" y2="654" stroke="#b5c4cb" stroke-width="1.4"/>
+  <text x="1080" y="629" font-size="18" font-weight="700" fill="#984939" text-anchor="middle">17:00</text>
+
+  <line x1="1182" y1="638" x2="1182" y2="654" stroke="#b5c4cb" stroke-width="1.4"/>
+  <text x="1182" y="629" font-size="18" font-weight="400" fill="#3c566a" text-anchor="middle">17:17</text>
+
+  <line x1="1260" y1="638" x2="1260" y2="654" stroke="#b5c4cb" stroke-width="1.4"/>
+  <text x="1260" y="629" font-size="18" font-weight="400" fill="#3c566a" text-anchor="middle">17:30</text>
+
+  <text x="73" y="702" font-size="16" font-weight="700" fill="#536576" letter-spacing="1.1">BOOKED WINDOW</text>
+
+  <rect x="360" y="676" width="720" height="36" rx="5" fill="#e8f3f6" stroke="#a9cbd5" stroke-width="1.2"/>
+
+  <text x="720" y="700" font-size="17" font-weight="700" fill="#23637e" text-anchor="middle">15:00–17:00 accepted window</text>
+
+  <rect x="1080" y="676" width="102" height="36" rx="5" fill="#fbece7" stroke="#d8b0a6" stroke-width="1.2"/>
+
+  <text x="1131" y="700" font-size="17" font-weight="700" fill="#984939" text-anchor="middle">+17 min</text>
+
+  <text x="73" y="761" font-size="16" font-weight="700" fill="#536576" letter-spacing="1.1">DISPATCH → ETA</text>
+
+  <path d="M366 754L1080 754" fill="none" stroke="#23637e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <polygon points="1080,754 1069,748.5 1069,759.5" fill="#23637e"/>
+
+  <path d="M1080 754L1182 754" fill="none" stroke="#984939" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 4"/>
+  <polygon points="1182,754 1171,748.5 1171,759.5" fill="#984939"/>
+
+  <circle cx="366" cy="754" r="6" fill="#23637e" stroke="#fff" stroke-width="2"/>
+
+  <line x1="1080" y1="669" x2="1080" y2="784" stroke="#984939" stroke-width="2" stroke-dasharray="5 4"/>
+
+  <circle cx="1080" cy="754" r="6" fill="#984939" stroke="#fff" stroke-width="2"/>
+
+  <circle cx="1182" cy="754" r="6" fill="#984939" stroke="#fff" stroke-width="2"/>
+
+  <text x="360" y="799" font-size="18" font-weight="400" fill="#23637e">15:01  Job 4 ends and dispatch begins</text>
+
+  <text x="1064" y="799" font-size="18" font-weight="700" fill="#984939" text-anchor="end">17:00 No-show</text>
+
+  <text x="1064" y="823" font-size="16" font-weight="400" fill="#984939" text-anchor="end">event 49</text>
+
+  <text x="1326" y="799" font-size="18" font-weight="700" fill="#984939" text-anchor="end">17:17 Scheduled arrival</text>
+
+  <text x="1326" y="823" font-size="16" font-weight="400" fill="#984939" text-anchor="end">event 65</text>
+
+  <rect x="48" y="904" width="1304" height="82" rx="12" fill="#faf0dd" stroke="#d9bc86" stroke-width="1.2"/>
+
+  <text x="73" y="936" font-size="16" font-weight="700" fill="#7f521a" letter-spacing="1.1">TO VERIFY A CORRECTION</text>
+
+  <text x="73" y="967" font-size="21" font-weight="400" fill="#182b3c">Rebuild the booking-time state and compare a feasible slot under the same rules.</text>
 </svg>

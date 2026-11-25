@@ -2,7 +2,9 @@
 
 SwitchUp is Sova-Kit's improvement module. Start with a reviewed correction, then compare the active and proposed behavior on the same cases. An instruction change becomes eligible for activation after it repairs an observed failure and passes every required check. [SwitchUp guide](docs/switchup.md)
 
-![SwitchUp compares Dream instruction revisions and LoRA adapters through separate replay paths.](docs/improvement-paths.svg)
+![SwitchUp replays one illustrative order case with identical starting state, compares the resulting order states, and shows the activation checks and LoRA pilot.](docs/improvement-paths.svg)
+
+[Connected runtime architecture](docs/switchup-architecture.svg)
 
 ## Use cases
 

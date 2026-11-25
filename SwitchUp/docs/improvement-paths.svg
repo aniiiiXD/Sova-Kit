@@ -1,105 +1,155 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="426" viewBox="0 0 1040 426" role="img" aria-labelledby="title description" font-family="monospace" fill="#233247">
-  <title id="title">SwitchUp · Compare a model change</title>
-  <desc id="description">Reviewed evidence leads to either a Dream instruction revision or a LoRA retraining pilot. Dream compares prompts and can activate an eligible revision with rollback. The pilot compares base and adapter and saves weights and a replay report.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1090" viewBox="0 0 1400 1090" font-family="Menlo, Consolas, monospace" role="img" aria-labelledby="switchup-loop-title switchup-loop-desc">
+  <title id="switchup-loop-title">Turn a correction into a checked update</title>
+  <desc id="switchup-loop-desc">A reviewed trace and a held-out suite are pinned before comparing the active prompt and a candidate. The illustrative order case starts both executions with an open order and approval pending. The baseline attempts a cancellation and the candidate asks for confirmation. Activation requires complete runs, a repaired failure, and candidate passes on all required checks. The separate SageMaker pilot trains and evaluates an adapter.</desc>
   <defs>
-    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
-      <path d="M24 0H0V24" fill="none" stroke="#e2e7ec" stroke-width=".65"/>
+    <pattern id="switchup-loop-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#e3e7e6" stroke-width=".75"/>
     </pattern>
-    <style>
-      .title { font-size: 29px; font-weight: 700; letter-spacing: -.8px; }
-      .subtitle { font-size: 15px; fill: #4a5a70; }
-      .tag, .kicker { font-size: 12px; font-weight: 700; letter-spacing: .8px; }
-      .tag { fill: #52647b; }
-      .heading { font-size: 19px; font-weight: 700; letter-spacing: -.3px; }
-      .body { font-size: 14px; fill: #40516a; }
-      .note, .label { font-size: 14px; fill: #475b72; }
-      .strip { fill: #f1f4f7; stroke: #c8d3de; }
-      .flow { fill: none; stroke: #64758a; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-      .dash { stroke-dasharray: 4 4; }
-    </style>
   </defs>
+  <rect width="1400" height="1090" fill="#f7f7f3"/>
+  <rect width="1400" height="1090" fill="url(#switchup-loop-grid)"/>
+  <rect width="1400" height="8" fill="#152d40"/>
+  <text x="48" y="49" font-size="16" font-weight="700" fill="#23637e" letter-spacing="1.1">SOVA-KIT  /  SWITCHUP</text>
+  <text x="1352" y="49" font-size="16" font-weight="700" fill="#536576" text-anchor="end" letter-spacing="1.1">DREAM  ·  RETRAINING PILOT</text>
+  <text x="48" y="108" font-size="43" font-weight="700" fill="#182b3c" letter-spacing="-1.3">Turn a correction into a checked update</text>
+  <text x="50" y="147" font-size="21" font-weight="400" fill="#536576">SwitchUp pins the evidence, replays both versions, and records the decision.</text>
+  <line x1="48" y1="177" x2="1352" y2="177" stroke="#b5c4cb" stroke-width="1"/>
+  <rect x="48" y="205" width="410" height="143" rx="12" fill="#e8f3f6" stroke="#a9cbd5" stroke-width="1.2"/>
+  <rect x="49" y="218" width="4" height="117" rx="2" fill="#23637e" stroke="none" stroke-width="1.2"/>
 
-  <rect width="1040" height="426" fill="#fafafa"/>
-  <rect width="1040" height="426" fill="url(#grid)"/>
-  <text x="36" y="52" class="title">SwitchUp · Compare a model change</text>
-  <text x="36" y="79" class="subtitle">Pin the cases and checks before improving the agent</text>
-  <text x="1004" y="50" class="tag" text-anchor="end">[ IMPROVEMENT ]</text>
-  <path d="M36 96H1004" stroke="#c8d3de"/>
+  <text x="71" y="239" font-size="16" font-weight="700" fill="#23637e" letter-spacing="1.1">LEARNING EVIDENCE</text>
 
-  <path d="M248 230H266V173H283" class="flow"/>
-  <polygon points="274,169 283,173 274,177" fill="#64758a"/>
+  <text x="71" y="275" font-size="25" font-weight="700" fill="#182b3c">Reviewed trace</text>
 
-  <path d="M266 230V299H283" class="flow"/>
-  <polygon points="274,295 283,299 274,303" fill="#64758a"/>
+  <text x="71" y="306" font-size="18" font-weight="400" fill="#182b3c">Decision and observed outcome</text>
+  <text x="71" y="330" font-size="18" font-weight="400" fill="#182b3c">Correction cites event IDs</text>
 
-  <path d="M486 173H517" class="flow"/>
-  <polygon points="508,169 517,173 508,177" fill="#64758a"/>
+  <rect x="479" y="205" width="410" height="143" rx="12" fill="#faf0dd" stroke="#d9bc86" stroke-width="1.2"/>
+  <rect x="480" y="218" width="4" height="117" rx="2" fill="#7f521a" stroke="none" stroke-width="1.2"/>
 
-  <path d="M742 173H775" class="flow"/>
-  <polygon points="766,169 775,173 766,177" fill="#64758a"/>
+  <text x="502" y="239" font-size="16" font-weight="700" fill="#7f521a" letter-spacing="1.1">EVALUATION INPUT</text>
 
-  <path d="M486 299H517" class="flow"/>
-  <polygon points="508,295 517,299 508,303" fill="#64758a"/>
+  <text x="502" y="275" font-size="25" font-weight="700" fill="#182b3c">Pinned replay suite</text>
 
-  <path d="M742 299H775" class="flow"/>
-  <polygon points="766,295 775,299 766,303" fill="#64758a"/>
+  <text x="502" y="306" font-size="18" font-weight="400" fill="#182b3c">Case IDs, fixtures, and checks</text>
+  <text x="502" y="330" font-size="18" font-weight="400" fill="#182b3c">Holdout stays outside learning</text>
 
-  <g>
-    <rect x="36" y="174" width="212" height="112" rx="9" fill="#edf5fc" stroke="#a3bfd8" stroke-width="1.2"/>
-    <text x="53" y="199" class="kicker" fill="#255b88">LEARNING INPUT</text>
-    <text x="53" y="224" class="heading">Trace evidence</text>
-    <text x="53" y="248" class="body">Original decision</text>
-    <text x="53" y="269" class="body">Outcome + correction</text>
-  </g>
+  <rect x="910" y="205" width="442" height="143" rx="12" fill="#f2edf7" stroke="#cbbada" stroke-width="1.2"/>
+  <rect x="911" y="218" width="4" height="117" rx="2" fill="#66457d" stroke="none" stroke-width="1.2"/>
 
-  <g>
-    <rect x="286" y="117" width="200" height="112" rx="9" fill="#f6effa" stroke="#cbb7d9" stroke-width="1.2"/>
-    <text x="303" y="142" class="kicker" fill="#64418a">DREAM</text>
-    <text x="303" y="167" class="heading">Revise prompt</text>
-    <text x="303" y="191" class="body">Propose an updated</text>
-    <text x="303" y="212" class="body">agent prompt</text>
-  </g>
+  <text x="933" y="239" font-size="16" font-weight="700" fill="#66457d" letter-spacing="1.1">DREAM CANDIDATE</text>
 
-  <g>
-    <rect x="520" y="117" width="222" height="112" rx="9" fill="#f6effa" stroke="#cbb7d9" stroke-width="1.2"/>
-    <text x="537" y="142" class="kicker" fill="#64418a">PAIRED REPLAY</text>
-    <text x="537" y="167" class="heading">Compare prompts</text>
-    <text x="537" y="191" class="body">Active and candidate</text>
-    <text x="537" y="212" class="body">use the same checks</text>
-  </g>
+  <text x="933" y="275" font-size="25" font-weight="700" fill="#182b3c">Proposed instructions</text>
 
-  <g>
-    <rect x="778" y="117" width="226" height="112" rx="9" fill="#edf7f0" stroke="#a6c6b0" stroke-width="1.2"/>
-    <text x="795" y="142" class="kicker" fill="#236547">ON VERIFIED PASS</text>
-    <text x="795" y="167" class="heading">Activate prompt</text>
-    <text x="795" y="191" class="body">Record the decision</text>
-    <text x="795" y="212" class="body">and support rollback</text>
-  </g>
+  <text x="933" y="306" font-size="18" font-weight="400" fill="#182b3c">Prompt, rationale, and evidence IDs</text>
+  <text x="933" y="330" font-size="18" font-weight="400" fill="#182b3c">Bound to the current generation</text>
 
-  <g>
-    <rect x="286" y="243" width="200" height="112" rx="9" fill="#fff6e9" stroke="#dabb92" stroke-width="1.2"/>
-    <text x="303" y="268" class="kicker" fill="#855420">LORA ROUTE PILOT</text>
-    <text x="303" y="293" class="heading">Train adapter</text>
-    <text x="303" y="317" class="body">Train on corrections</text>
-    <text x="303" y="338" class="body">on a frozen base</text>
-  </g>
+  <path d="M253 348L253 373" fill="none" stroke="#23637e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <polygon points="253,373 258.5,362 247.5,362" fill="#23637e"/>
 
-  <g>
-    <rect x="520" y="243" width="222" height="112" rx="9" fill="#f6effa" stroke="#cbb7d9" stroke-width="1.2"/>
-    <text x="537" y="268" class="kicker" fill="#64418a">PAIRED REPLAY</text>
-    <text x="537" y="293" class="heading">Compare models</text>
-    <text x="537" y="317" class="body">Base and adapter use</text>
-    <text x="537" y="338" class="body">the same cases</text>
-  </g>
+  <path d="M684 348L684 373" fill="none" stroke="#7f521a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <polygon points="684,373 689.5,362 678.5,362" fill="#7f521a"/>
 
-  <g>
-    <rect x="778" y="243" width="226" height="112" rx="9" fill="#edf7f0" stroke="#a6c6b0" stroke-width="1.2"/>
-    <text x="795" y="268" class="kicker" fill="#236547">PILOT ARTIFACTS</text>
-    <text x="795" y="293" class="heading">Save the result</text>
-    <text x="795" y="317" class="body">Adapter and replay</text>
-    <text x="795" y="338" class="body">report go to S3</text>
-  </g>
+  <path d="M1130 348L1130 373" fill="none" stroke="#66457d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <polygon points="1130,373 1135.5,362 1124.5,362" fill="#66457d"/>
 
-  <rect x="36" y="365" width="968" height="42" rx="7" class="strip"/>
-  <text x="52" y="391" class="note">Record the checks and both outcomes so the decision can be reviewed case by case.</text>
+  <rect x="48" y="376" width="1304" height="411" rx="12" fill="#ffffff" stroke="#b5c4cb" stroke-width="1.2"/>
+
+  <text x="73" y="412" font-size="16" font-weight="700" fill="#66457d" letter-spacing="1.1">PAIRED REPLAY  /  ILLUSTRATIVE SUPPORT CASE</text>
+
+  <text x="73" y="447" font-size="26" font-weight="700" fill="#182b3c">One unconfirmed order, two isolated replays</text>
+
+  <text x="73" y="479" font-size="19" font-weight="400" fill="#536576">Same starting state  order=open  ·  approval=pending  ·  expected action ASK</text>
+
+  <rect x="73" y="502" width="608" height="177" rx="12" fill="#edf1f4" stroke="#c0cdd3" stroke-width="1.2"/>
+  <rect x="74" y="515" width="4" height="151" rx="2" fill="#3c566a" stroke="none" stroke-width="1.2"/>
+
+  <text x="96" y="537" font-size="16" font-weight="700" fill="#3c566a" letter-spacing="1.1">ACTIVE INSTRUCTIONS</text>
+
+  <line x1="96" y1="551" x2="658" y2="551" stroke="#b5c4cb" stroke-width="1"/>
+
+  <text x="96" y="583" font-size="18" font-weight="400" fill="#536576">Action</text>
+
+  <text x="220" y="583" font-size="21" font-weight="700" fill="#182b3c">Simulate cancel_order</text>
+
+  <text x="96" y="627" font-size="18" font-weight="400" fill="#536576">Final state</text>
+
+  <text x="248" y="627" font-size="21" font-weight="700" fill="#984939">order=cancelled</text>
+
+  <rect x="546" y="604" width="112" height="36" rx="4" fill="#fbece7" stroke="none" stroke-width="1.2"/>
+  <text x="602" y="628" font-size="17" font-weight="700" fill="#984939" text-anchor="middle">FAIL</text>
+
+  <text x="96" y="658" font-size="17" font-weight="400" fill="#984939">The order changed before approval.</text>
+
+  <rect x="718" y="502" width="609" height="177" rx="12" fill="#f2edf7" stroke="#cbbada" stroke-width="1.2"/>
+  <rect x="719" y="515" width="4" height="151" rx="2" fill="#66457d" stroke="none" stroke-width="1.2"/>
+
+  <text x="741" y="537" font-size="16" font-weight="700" fill="#66457d" letter-spacing="1.1">DREAM CANDIDATE</text>
+
+  <line x1="741" y1="551" x2="1304" y2="551" stroke="#b5c4cb" stroke-width="1"/>
+
+  <text x="741" y="583" font-size="18" font-weight="400" fill="#536576">Action</text>
+
+  <text x="865" y="583" font-size="21" font-weight="700" fill="#182b3c">Ask for confirmation</text>
+
+  <text x="741" y="627" font-size="18" font-weight="400" fill="#536576">Final state</text>
+
+  <text x="893" y="627" font-size="21" font-weight="700" fill="#1e664f">order=open</text>
+
+  <rect x="1192" y="604" width="112" height="36" rx="4" fill="#e9f4eb" stroke="none" stroke-width="1.2"/>
+  <text x="1248" y="628" font-size="17" font-weight="700" fill="#1e664f" text-anchor="middle">PASS</text>
+
+  <text x="741" y="658" font-size="17" font-weight="400" fill="#1e664f">The order stays open while approval is pending.</text>
+
+  <rect x="73" y="706" width="1254" height="59" rx="8" fill="#152d40" stroke="none" stroke-width="1.2"/>
+
+  <text x="94" y="731" font-size="16" font-weight="700" fill="#dbe9eb" letter-spacing="1.1">ACTIVATION CHECK</text>
+
+  <text x="94" y="754" font-size="18" font-weight="400" fill="#f0f6f7">Complete both runs · repair a baseline failure · pass every required check</text>
+
+  <line x1="1017" y1="716" x2="1017" y2="755" stroke="#527183" stroke-width="1"/>
+
+  <text x="1304" y="742" font-size="19" font-weight="700" fill="#f0f6f7" text-anchor="end">Activate or roll back</text>
+
+  <rect x="48" y="817" width="1304" height="228" rx="12" fill="#faf0dd" stroke="#d9bc86" stroke-width="1.2"/>
+  <rect x="49" y="830" width="4" height="202" rx="2" fill="#7f521a" stroke="none" stroke-width="1.2"/>
+
+  <text x="73" y="853" font-size="16" font-weight="700" fill="#7f521a" letter-spacing="1.1">LORA ROUTE  /  SAGEMAKER PILOT</text>
+
+  <text x="73" y="888" font-size="25" font-weight="700" fill="#182b3c">Weight update on a frozen base</text>
+
+  <rect x="73" y="912" width="282" height="102" rx="7" fill="#ffffff" stroke="#d9bc86" stroke-width="1.2"/>
+  <text x="86" y="936" font-size="16" font-weight="700" fill="#7f521a" letter-spacing="1.1">LABELED INPUTS</text>
+  <text x="86" y="960" font-size="20" font-weight="700" fill="#182b3c">Corrections</text>
+  <text x="86" y="985" font-size="16" font-weight="400" fill="#536576">Expected actions</text>
+  <text x="86" y="1005" font-size="16" font-weight="400" fill="#536576">for supervised LoRA</text>
+
+  <rect x="398" y="912" width="282" height="102" rx="7" fill="#ffffff" stroke="#d9bc86" stroke-width="1.2"/>
+  <text x="411" y="936" font-size="16" font-weight="700" fill="#7f521a" letter-spacing="1.1">TRAIN</text>
+  <text x="411" y="960" font-size="20" font-weight="700" fill="#182b3c">LoRA adapter</text>
+  <text x="411" y="985" font-size="16" font-weight="400" fill="#536576">Keep base weights frozen</text>
+  <text x="411" y="1005" font-size="16" font-weight="400" fill="#536576">while fitting the adapter</text>
+
+  <rect x="723" y="912" width="282" height="102" rx="7" fill="#ffffff" stroke="#d9bc86" stroke-width="1.2"/>
+  <text x="736" y="936" font-size="16" font-weight="700" fill="#7f521a" letter-spacing="1.1">COMPARE</text>
+  <text x="736" y="960" font-size="20" font-weight="700" fill="#182b3c">Paired replay</text>
+  <text x="736" y="985" font-size="16" font-weight="400" fill="#536576">Base and saved adapter</text>
+  <text x="736" y="1005" font-size="16" font-weight="400" fill="#536576">use the same cases</text>
+
+  <rect x="1048" y="912" width="279" height="102" rx="7" fill="#ffffff" stroke="#d9bc86" stroke-width="1.2"/>
+  <text x="1061" y="936" font-size="16" font-weight="700" fill="#7f521a" letter-spacing="1.1">RETAIN</text>
+  <text x="1061" y="960" font-size="20" font-weight="700" fill="#182b3c">S3 artifacts</text>
+  <text x="1061" y="985" font-size="16" font-weight="400" fill="#536576">Adapter weights and</text>
+  <text x="1061" y="1005" font-size="16" font-weight="400" fill="#536576">per-case replay report</text>
+
+  <path d="M355 963L395 963" fill="none" stroke="#7f521a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <polygon points="395,963 384,957.5 384,968.5" fill="#7f521a"/>
+
+  <path d="M680 963L720 963" fill="none" stroke="#7f521a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <polygon points="720,963 709,957.5 709,968.5" fill="#7f521a"/>
+
+  <path d="M1005 963L1045 963" fill="none" stroke="#7f521a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <polygon points="1045,963 1034,957.5 1034,968.5" fill="#7f521a"/>
+
+  <text x="73" y="1035" font-size="17" font-weight="400" fill="#7f521a">The launch bundle pins the base revision, training inputs, and replay suite.</text>
 </svg>

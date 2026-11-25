@@ -1,68 +1,129 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="437" viewBox="0 0 1000 437" role="img" aria-labelledby="title description" font-family="monospace" fill="#233247">
-  <title id="title">Sova-Kit</title>
-  <desc id="description">SwitchIt supplies reviewed trace evidence to SwitchUp. Video Harness and Cache Handoff are separate tools in the same kit. Trace and run data live outside the code checkout.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1046" viewBox="0 0 1400 1046" font-family="Menlo, Consolas, monospace" role="img" aria-labelledby="kit-map-title kit-map-desc">
+  <title id="kit-map-title">Sova-Kit</title>
+  <desc id="kit-map-desc">The execution log is captured by SwitchIt. Reviewed evidence and pinned cases enter SwitchUp, where the active and candidate recipes use independent copies of the same state. A verified instruction revision can activate for future requests and its generation is recorded on later traces. The data folder is a sibling of the checkout. Video Harness and Cache Handoff have their own inputs and outputs.</desc>
   <defs>
-    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
-      <path d="M24 0H0V24" fill="none" stroke="#e2e7ec" stroke-width=".65"/>
+    <pattern id="kit-map-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#e3e7e6" stroke-width=".75"/>
     </pattern>
-    <style>
-      .title { font-size: 29px; font-weight: 700; letter-spacing: -.8px; }
-      .subtitle { font-size: 15px; fill: #4a5a70; }
-      .tag, .kicker { font-size: 12px; font-weight: 700; letter-spacing: .8px; }
-      .tag { fill: #52647b; }
-      .heading { font-size: 19px; font-weight: 700; letter-spacing: -.3px; }
-      .body { font-size: 14px; fill: #40516a; }
-      .note, .label { font-size: 14px; fill: #475b72; }
-      .strip { fill: #f1f4f7; stroke: #c8d3de; }
-      .flow { fill: none; stroke: #64758a; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-      .dash { stroke-dasharray: 4 4; }
-    </style>
   </defs>
+  <rect width="1400" height="1046" fill="#f7f7f3"/>
+  <rect width="1400" height="1046" fill="url(#kit-map-grid)"/>
+  <rect width="1400" height="8" fill="#152d40"/>
+  <text x="48" y="49" font-size="16" font-weight="700" fill="#23637e" letter-spacing="1.1">SOVA-KIT  /  ARCHITECTURE</text>
+  <text x="1352" y="49" font-size="16" font-weight="700" fill="#536576" text-anchor="end" letter-spacing="1.1">TRACE EVIDENCE  ·  PAIRED REPLAY</text>
+  <text x="48" y="108" font-size="43" font-weight="700" fill="#182b3c" letter-spacing="-1.3">Sova-Kit</text>
+  <text x="50" y="147" font-size="21" font-weight="400" fill="#536576">From recorded agent work to a change you can verify and ship.</text>
+  <line x1="48" y1="177" x2="1352" y2="177" stroke="#b5c4cb" stroke-width="1"/>
+  <rect x="48" y="205" width="1304" height="446" rx="12" fill="#ffffff" stroke="#b5c4cb" stroke-width="1.2"/>
 
-  <rect width="1000" height="437" fill="#fafafa"/>
-  <rect width="1000" height="437" fill="url(#grid)"/>
-  <text x="36" y="52" class="title">Sova-Kit</text>
-  <text x="36" y="79" class="subtitle">Tools for building, improving, and demonstrating agents</text>
-  <text x="964" y="50" class="tag" text-anchor="end">[ MODULE MAP ]</text>
-  <path d="M36 96H964" stroke="#c8d3de"/>
+  <text x="74" y="242" font-size="16" font-weight="700" fill="#536576" letter-spacing="1.1">TRACE-TO-UPDATE PATH</text>
 
-  <path d="M396 174H601" class="flow"/>
-  <polygon points="592,170 601,174 592,178" fill="#64758a"/>
+  <text x="1326" y="242" font-size="16" font-weight="700" fill="#23637e" text-anchor="end" letter-spacing="1.1">RECORDED RUNS  →  REVIEWED DECISIONS</text>
 
-  <text x="500" y="159" class="label" text-anchor="middle">Reviewed evidence</text>
+  <rect x="74" y="278" width="332" height="210" rx="12" fill="#edf1f4" stroke="#c0cdd3" stroke-width="1.2"/>
+  <rect x="75" y="291" width="4" height="184" rx="2" fill="#3c566a" stroke="none" stroke-width="1.2"/>
 
-  <g>
-    <rect x="36" y="118" width="360" height="112" rx="9" fill="#edf5fc" stroke="#a3bfd8" stroke-width="1.2"/>
-    <text x="53" y="143" class="kicker" fill="#255b88">TRACE EVIDENCE</text>
-    <text x="53" y="168" class="heading">SwitchIt</text>
-    <text x="53" y="192" class="body">Capture requests, tools and outcomes</text>
-    <text x="53" y="213" class="body">Inspect the execution graph</text>
-  </g>
+  <text x="95" y="312" font-size="16" font-weight="700" fill="#3c566a" letter-spacing="1.1">CONNECTED WORKFLOW</text>
 
-  <g>
-    <rect x="604" y="118" width="360" height="112" rx="9" fill="#f6effa" stroke="#cbb7d9" stroke-width="1.2"/>
-    <text x="621" y="143" class="kicker" fill="#64418a">MODEL IMPROVEMENT</text>
-    <text x="621" y="168" class="heading">SwitchUp</text>
-    <text x="621" y="192" class="body">Compare a change on fixed cases</text>
-    <text x="621" y="213" class="body">Prepare a LoRA retraining pilot</text>
-  </g>
+  <text x="95" y="350" font-size="27" font-weight="700" fill="#182b3c">Agent execution</text>
 
-  <g>
-    <rect x="36" y="254" width="360" height="112" rx="9" fill="#fff6e9" stroke="#dabb92" stroke-width="1.2"/>
-    <text x="53" y="279" class="kicker" fill="#855420">EDITABLE PRODUCT FILMS</text>
-    <text x="53" y="304" class="heading">Video Harness</text>
-    <text x="53" y="328" class="body">Build from a brief and product captures</text>
-    <text x="53" y="349" class="body">Review and export the editable film</text>
-  </g>
+  <text x="95" y="387" font-size="20" font-weight="400" fill="#182b3c">Request and model turns</text>
+  <text x="95" y="414" font-size="20" font-weight="400" fill="#182b3c">Tool calls and receipts</text>
+  <text x="95" y="441" font-size="20" font-weight="400" fill="#182b3c">Observed outcome</text>
 
-  <g>
-    <rect x="604" y="254" width="360" height="112" rx="9" fill="#edf7f0" stroke="#a6c6b0" stroke-width="1.2"/>
-    <text x="621" y="279" class="kicker" fill="#236547">SHARED MODEL CONTEXT</text>
-    <text x="621" y="304" class="heading">Cache Handoff</text>
-    <text x="621" y="328" class="body">Reuse native KV for a shared prefix</text>
-    <text x="621" y="349" class="body">Give each worker its own cache copy</text>
-  </g>
+  <text x="95" y="470" font-size="17" font-weight="700" fill="#3c566a">recipe_id + generation</text>
 
-  <rect x="36" y="381" width="928" height="42" rx="7" class="strip"/>
-  <text x="52" y="407" class="note">Sova-Kit-data/   Recorded traces, per-run artifacts, and local workspace state</text>
+  <rect x="486" y="278" width="346" height="210" rx="12" fill="#e8f3f6" stroke="#a9cbd5" stroke-width="1.2"/>
+  <rect x="487" y="291" width="4" height="184" rx="2" fill="#23637e" stroke="none" stroke-width="1.2"/>
+
+  <text x="509" y="312" font-size="16" font-weight="700" fill="#23637e" letter-spacing="1.1">SWITCHIT</text>
+
+  <text x="509" y="350" font-size="27" font-weight="700" fill="#182b3c">Trace evidence</text>
+
+  <text x="509" y="387" font-size="20" font-weight="400" fill="#182b3c">Link events by identity.</text>
+  <text x="509" y="414" font-size="20" font-weight="400" fill="#182b3c">Join calls to final state.</text>
+  <text x="509" y="441" font-size="20" font-weight="400" fill="#182b3c">Mark inferred links.</text>
+
+  <text x="509" y="470" font-size="17" font-weight="700" fill="#23637e">trace_id / event_id / source</text>
+
+  <rect x="912" y="278" width="414" height="210" rx="12" fill="#f2edf7" stroke="#cbbada" stroke-width="1.2"/>
+  <rect x="913" y="291" width="4" height="184" rx="2" fill="#66457d" stroke="none" stroke-width="1.2"/>
+
+  <text x="936" y="312" font-size="16" font-weight="700" fill="#66457d" letter-spacing="1.1">SWITCHUP</text>
+
+  <text x="936" y="350" font-size="27" font-weight="700" fill="#182b3c">One proposed change</text>
+
+  <text x="936" y="387" font-size="20" font-weight="400" fill="#182b3c">Review a correction.</text>
+  <text x="936" y="414" font-size="20" font-weight="400" fill="#182b3c">Pin cases and checks.</text>
+  <text x="936" y="441" font-size="20" font-weight="400" fill="#182b3c">Dream → instruction revision</text>
+
+  <text x="936" y="470" font-size="17" font-weight="700" fill="#7f521a">LoRA Route → adapter pilot</text>
+
+  <path d="M406 391L483 391" fill="none" stroke="#23637e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <polygon points="483,391 472,385.5 472,396.5" fill="#23637e"/>
+
+  <text x="447" y="377" font-size="16" font-weight="400" fill="#23637e" text-anchor="middle">log</text>
+
+  <path d="M832 391L909 391" fill="none" stroke="#66457d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <polygon points="909,391 898,385.5 898,396.5" fill="#66457d"/>
+
+  <text x="872" y="377" font-size="16" font-weight="400" fill="#66457d" text-anchor="middle">review</text>
+
+  <path d="M1118 488L1118 512" fill="none" stroke="#66457d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <polygon points="1118,512 1123.5,501 1112.5,501" fill="#66457d"/>
+
+  <rect x="486" y="517" width="840" height="67" rx="8" fill="#152d40" stroke="none" stroke-width="1.2"/>
+
+  <text x="509" y="544" font-size="16" font-weight="700" fill="#dbe9eb" letter-spacing="1.1">PAIRED REPLAY</text>
+
+  <text x="509" y="570" font-size="18" font-weight="400" fill="#f0f6f7">Active vs candidate · same cases · independent state copies</text>
+
+  <path d="M486 552L243 552L243 491" fill="none" stroke="#1e664f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 5"/>
+  <polygon points="243,491 237.5,502 248.5,502" fill="#1e664f"/>
+
+  <text x="365" y="530" font-size="17" font-weight="400" fill="#1e664f" text-anchor="middle">activate after review</text>
+
+  <text x="318" y="606" font-size="16" font-weight="400" fill="#1e664f" text-anchor="middle">Activation stamps the next run with its version.</text>
+
+  <text x="1302" y="615" font-size="17" font-weight="400" fill="#536576" text-anchor="end">Record results and the release decision</text>
+
+  <rect x="48" y="674" width="1304" height="128" rx="12" fill="#152d40" stroke="#152d40" stroke-width="1.2"/>
+
+  <text x="73" y="711" font-size="16" font-weight="700" fill="#dbe9eb" letter-spacing="1.1">SOVA-KIT-DATA  /  SIBLING TO THE CHECKOUT</text>
+
+  <line x1="471" y1="728" x2="471" y2="779" stroke="#527183" stroke-width="1"/>
+
+  <line x1="888" y1="728" x2="888" y2="779" stroke="#527183" stroke-width="1"/>
+
+  <text x="73" y="746" font-size="21" font-weight="700" fill="#ffffff">traces/</text>
+
+  <text x="73" y="776" font-size="17" font-weight="400" fill="#dbe9eb">Source evidence and audits</text>
+
+  <text x="496" y="746" font-size="21" font-weight="700" fill="#ffffff">workspace/</text>
+
+  <text x="496" y="776" font-size="17" font-weight="400" fill="#dbe9eb">Local jobs and improvement rounds</text>
+
+  <text x="915" y="746" font-size="21" font-weight="700" fill="#ffffff">runs/sagemaker/</text>
+
+  <text x="915" y="776" font-size="17" font-weight="400" fill="#dbe9eb">Per-job inputs and launch metadata</text>
+
+  <rect x="48" y="832" width="634" height="168" rx="12" fill="#faf0dd" stroke="#d9bc86" stroke-width="1.2"/>
+  <rect x="49" y="845" width="4" height="142" rx="2" fill="#7f521a" stroke="none" stroke-width="1.2"/>
+
+  <text x="73" y="866" font-size="16" font-weight="700" fill="#7f521a" letter-spacing="1.1">VIDEO HARNESS  /  PRODUCT FILMS</text>
+
+  <text x="73" y="902" font-size="24" font-weight="700" fill="#182b3c">From a brief to an editable cut</text>
+
+  <text x="73" y="938" font-size="19" font-weight="400" fill="#182b3c">Reviewed captures → film.json + React</text>
+  <text x="73" y="965" font-size="19" font-weight="400" fill="#182b3c">Same timeline → Studio preview or MP4</text>
+
+  <rect x="712" y="832" width="640" height="168" rx="12" fill="#e9f4eb" stroke="#a6c7ad" stroke-width="1.2"/>
+  <rect x="713" y="845" width="4" height="142" rx="2" fill="#1e664f" stroke="none" stroke-width="1.2"/>
+
+  <text x="737" y="866" font-size="16" font-weight="700" fill="#1e664f" letter-spacing="1.1">CACHE HANDOFF  /  MODEL RUNTIME</text>
+
+  <text x="737" y="902" font-size="24" font-weight="700" fill="#182b3c">Reuse an identical prefix</text>
+
+  <text x="737" y="938" font-size="19" font-weight="400" fill="#182b3c">Scoped native KV → private worker copy</text>
+  <text x="737" y="965" font-size="19" font-weight="400" fill="#182b3c">Engine processes the uncached tokens</text>
 </svg>
